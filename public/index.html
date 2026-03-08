@@ -93,12 +93,30 @@
       margin-left: auto;
       display: flex; align-items: center; gap: .75rem;
     }
-    .header-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--emerald);
-      box-shadow: 0 0 8px var(--emerald);
+
+    .credits-badge {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .78rem; font-weight: 700;
+      padding: 5px 14px; border-radius: 999px;
+      border: 1px solid rgba(0,229,160,.25);
+      background: var(--emerald2); color: var(--emerald);
     }
-    .header-status { font-size: .75rem; color: var(--dim); }
+    .plan-badge {
+      font-size: .68rem; font-weight: 700;
+      padding: 3px 10px; border-radius: 999px;
+      text-transform: uppercase; letter-spacing: .04em;
+    }
+    .plan-free { background: rgba(74,106,136,.12); color: var(--dim); border: 1px solid rgba(74,106,136,.3); }
+    .plan-pro { background: var(--cyan-glow); color: var(--cyan); border: 1px solid rgba(0,200,248,.2); }
+    .plan-business { background: var(--purple2); color: var(--purple); border: 1px solid var(--purple3); }
+
+    .hdr-btn {
+      background: var(--surface); border: 1px solid var(--border2);
+      color: var(--dim); padding: 6px 14px; border-radius: 8px;
+      font-size: .78rem; font-weight: 600; cursor: pointer;
+      transition: all .15s; font-family: inherit; text-decoration: none;
+    }
+    .hdr-btn:hover { border-color: var(--cyan); color: var(--cyan); }
 
     /* ── MAIN ── */
     main { max-width: 1240px; margin: 0 auto; padding: 2.5rem 1.5rem; }
@@ -257,17 +275,6 @@
     }
     .l-title { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; color: var(--text); }
     .l-sub   { color: var(--muted); font-size: .82rem; margin-bottom: 1rem; }
-    .city-chips {
-      display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem;
-      max-width: 520px; margin: 0 auto;
-    }
-    .chip {
-      font-size: .7rem; padding: 3px 11px; border-radius: 999px;
-      border: 1px solid var(--border2); color: var(--muted); background: var(--surface);
-      transition: all .2s;
-    }
-    .chip.loading { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-glow); }
-    .chip.done    { border-color: var(--emerald); color: var(--emerald); background: var(--emerald2); }
 
     /* ── RESULTS ── */
     .res-bar {
@@ -314,15 +321,16 @@
     .sel option { background: var(--surface); }
 
     .btn-csv {
-      padding: .65rem 1.25rem;
-      background: transparent;
-      border: 1px solid var(--border2);
-      color: var(--dim);
-      border-radius: 10px; font-size: .85rem; font-weight: 600;
-      cursor: pointer; display: flex; align-items: center; gap: .4rem;
-      transition: all .15s; font-family: inherit;
+      padding: .75rem 1.5rem;
+      background: linear-gradient(135deg, var(--cyan), #0080c8);
+      border: 1px solid var(--cyan);
+      color: #fff;
+      border-radius: 12px; font-size: .95rem; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; gap: .5rem;
+      transition: all .2s; font-family: inherit;
+      box-shadow: 0 0 20px rgba(0,200,248,.25);
     }
-    .btn-csv:hover { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-glow2); }
+    .btn-csv:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,200,248,.4); background: linear-gradient(135deg, var(--cyan2), #00a0e8); }
 
     /* Table */
     .tbl-wrap {
@@ -380,6 +388,22 @@
       color: var(--purple); font-size: .85rem;
     }
     .btn-pitch:hover { background: rgba(157,110,255,.22); border-color: var(--purple); }
+    .btn-fiche {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 9px; border: 1px solid;
+      cursor: pointer; transition: all .15s;
+      background: var(--amber2); border-color: rgba(255,184,0,.3);
+      color: var(--amber); font-size: .85rem;
+    }
+    .btn-fiche:hover { background: rgba(255,184,0,.22); border-color: var(--amber); }
+    .btn-del {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; border-radius: 9px; border: 1px solid;
+      cursor: pointer; transition: all .15s;
+      background: var(--red-bg); border-color: var(--red-bd);
+      color: var(--red-tx); font-size: .85rem;
+    }
+    .btn-del:hover { background: rgba(255,65,65,.18); border-color: #ff8585; }
 
     /* Status badges */
     .status {
@@ -495,8 +519,6 @@
 
     /* Pitch */
     .pitch-desc { font-size: .82rem; color: var(--dim); margin-bottom: 1.25rem; line-height: 1.6; }
-    .pitch-key-row { display: flex; gap: .5rem; margin-bottom: 1.25rem; align-items: center; }
-    .pitch-key-row .inp { flex: 1; }
     .btn-gen {
       padding: .7rem 1.2rem;
       background: linear-gradient(135deg, var(--purple) 0%, #6e3fff 100%);
@@ -568,6 +590,111 @@
       content: ''; flex: 1; height: 1px; background: var(--border);
     }
 
+    /* ── STATS ROW ── */
+    .stats-row {
+      display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem;
+    }
+    .stat-chip {
+      display: flex; align-items: center; gap: .4rem;
+      padding: .5rem 1rem; border-radius: 10px;
+      font-size: .78rem; font-weight: 600;
+      border: 1px solid transparent;
+    }
+    .stat-n { font-weight: 900; font-size: 1rem; }
+    .sc-total  { background: var(--cyan-glow2); border-color: rgba(0,200,248,.15); color: var(--cyan); }
+    .sc-todo   { background: rgba(74,106,136,.08); border-color: rgba(74,106,136,.2); color: var(--dim); }
+    .sc-called { background: var(--amber2); border-color: rgba(255,184,0,.2); color: var(--amber); }
+    .sc-client { background: var(--emerald2); border-color: rgba(0,229,160,.2); color: var(--emerald); }
+    .sc-nope   { background: var(--red-bg); border-color: var(--red-bd); color: var(--red-tx); }
+
+    /* ── REGEN BTN ── */
+    .btn-regen {
+      margin-top: .5rem; padding: .6rem 1.1rem;
+      background: transparent; border: 1px solid var(--border2); color: var(--dim);
+      border-radius: 9px; font-size: .8rem; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: .4rem; transition: all .15s; font-family: inherit;
+    }
+    .btn-regen:hover { border-color: var(--purple); color: var(--purple); background: var(--purple2); }
+
+    /* ── FICHE ── */
+    .fiche-out {
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 12px; padding: 1.4rem; line-height: 1.8;
+      font-size: .88rem; white-space: pre-wrap; color: var(--text2);
+    }
+    .fiche-out strong { color: var(--amber); }
+    .btn-fiche-gen {
+      width: 100%; padding: .85rem;
+      background: linear-gradient(135deg, var(--amber) 0%, #d49800 100%);
+      color: #020b18; border: none; border-radius: 10px;
+      font-size: .92rem; font-weight: 800; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+      transition: opacity .15s, box-shadow .15s; font-family: inherit;
+      box-shadow: 0 4px 20px rgba(255,184,0,.25);
+    }
+    .btn-fiche-gen:hover:not(:disabled) { opacity: .88; box-shadow: 0 6px 30px rgba(255,184,0,.4); }
+    .btn-fiche-gen:disabled { opacity: .45; cursor: not-allowed; }
+
+    /* ── PITCH TYPE SELECT ── */
+    .pitch-type-row {
+      display: flex; gap: .4rem; margin-bottom: 1rem; flex-wrap: wrap;
+    }
+    .pitch-type-btn {
+      padding: .5rem .9rem; border-radius: 8px;
+      background: var(--surface); border: 1px solid var(--border2);
+      color: var(--muted); font-size: .78rem; font-weight: 600;
+      cursor: pointer; transition: all .15s; font-family: inherit;
+    }
+    .pitch-type-btn:hover { border-color: var(--purple); color: var(--text2); }
+    .pitch-type-btn.on {
+      background: var(--purple2); border-color: var(--purple);
+      color: var(--purple); box-shadow: 0 0 10px var(--purple2);
+    }
+
+    /* ── SETTINGS MODAL ── */
+    .settings-bd {
+      position: fixed; inset: 0; z-index: 600;
+      background: rgba(2,11,24,.8); backdrop-filter: blur(8px);
+      display: none; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .settings-bd.on { display: flex; }
+    .settings-box {
+      background: var(--card); border: 1px solid var(--border2);
+      border-radius: 20px; width: 100%; max-width: 480px;
+      padding: 2rem; position: relative;
+      box-shadow: 0 40px 80px rgba(0,0,0,.6);
+    }
+    .settings-box::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      border-radius: 20px 20px 0 0;
+    }
+    .settings-title {
+      font-size: 1.1rem; font-weight: 800; margin-bottom: 1.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .settings-title button {
+      background: var(--surface); border: 1px solid var(--border2);
+      color: var(--muted); cursor: pointer; font-size: 1.1rem; line-height: 1;
+      padding: .4rem .55rem; border-radius: 8px;
+      transition: all .15s; font-family: inherit;
+    }
+    .settings-title button:hover { color: var(--text); border-color: var(--cyan); }
+    .settings-field { margin-bottom: 1.25rem; }
+    .settings-field label { display: block; margin-bottom: .4rem; }
+    .settings-save {
+      width: 100%; padding: .85rem;
+      background: linear-gradient(135deg, var(--cyan) 0%, #0096d4 100%);
+      color: #020b18; border: none; border-radius: 10px;
+      font-size: .92rem; font-weight: 800; cursor: pointer;
+      font-family: inherit; box-shadow: 0 4px 20px rgba(0,200,248,.25);
+      transition: opacity .15s;
+    }
+    .settings-save:hover { opacity: .9; }
+    .settings-msg { font-size: .8rem; color: var(--emerald); text-align: center; margin-top: .75rem; opacity: 0; transition: opacity .3s; }
+    .settings-msg.show { opacity: 1; }
+
     @media (max-width: 680px) {
       .row2          { grid-template-columns: 1fr; }
       main           { padding: 1.5rem 1rem; }
@@ -575,6 +702,8 @@
       .kpi-n         { font-size: 1.9rem; }
       .calc-grid     { grid-template-columns: 1fr; }
       .ctry-row      { flex-wrap: wrap; }
+      .header-right  { gap: .4rem; }
+      .credits-badge { font-size: .7rem; padding: 4px 10px; }
     }
   </style>
 </head>
@@ -589,10 +718,14 @@
     </svg>
   </div>
   <span class="logo-text"><span>Prospect</span>Hunter</span>
-  <span class="header-badge">B2B Prospection</span>
+  <span class="header-badge" id="header-plan">FREE</span>
   <div class="header-right">
-    <div class="header-dot"></div>
-    <span class="header-status">Prêt</span>
+    <div class="credits-badge" id="credits-badge">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
+      <span id="hdr-credits">-</span> crédits
+    </div>
+    <a class="hdr-btn" href="/admin" id="admin-link" style="display:none">Admin</a>
+    <button class="hdr-btn" onclick="logout()" style="color:var(--red-tx)">Déconnexion</button>
   </div>
 </header>
 
@@ -609,39 +742,68 @@
   <div class="card">
     <div class="card-title">Configurer la recherche</div>
 
-    <div class="row2">
-      <div class="field">
-        <label>Niche / Secteur d'activité</label>
-        <input class="inp" id="niche" type="text" placeholder="plombier, coiffeur, électricien…" />
-      </div>
-      <div class="field">
-        <label>Clé API Google Places</label>
-        <div class="inp-wrap">
-          <input class="inp" id="apikey" type="password" placeholder="AIzaSy…" />
-          <button class="eye" onclick="toggleVis('apikey')" title="Afficher / masquer">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-            </svg>
-          </button>
-        </div>
-      </div>
+    <div class="field" style="margin-bottom:1.25rem">
+      <label>Niche / Secteur d'activité</label>
+      <input class="inp" id="niche" type="text" placeholder="plombier, coiffeur, électricien…" autocomplete="off" />
     </div>
 
     <div class="field" style="margin-bottom:1.5rem">
-      <label>Pays cible</label>
+      <label>Zone de recherche</label>
       <div class="ctry-row">
         <button class="ctry on" id="btn-fr" onclick="setCountry('fr')">🇫🇷 France</button>
         <button class="ctry"    id="btn-ch" onclick="setCountry('ch')">🇨🇭 Suisse</button>
         <button class="ctry"    id="btn-be" onclick="setCountry('be')">🇧🇪 Belgique</button>
+        <button class="ctry"    id="btn-geo" onclick="activateGeoloc()" style="border-color:var(--green);">📍 Autour de moi</button>
+      </div>
+      <div id="geo-options" style="display:none;margin-top:.75rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--green);border-radius:10px;">
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;">
+          <span style="font-size:.8rem;color:var(--green);font-weight:700;">📍 Position détectée</span>
+          <span id="geo-city" style="font-size:.75rem;color:var(--text2);"></span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem;">
+          <label style="font-size:.72rem;font-weight:600;color:var(--muted);white-space:nowrap;">Rayon :</label>
+          <input type="range" id="geo-radius" min="5" max="100" value="30" step="5" oninput="updateRadiusLabel()" style="flex:1;accent-color:var(--green);cursor:pointer;" />
+          <span id="geo-radius-label" style="font-size:.85rem;font-weight:800;color:var(--green);min-width:50px;text-align:right;">30 km</span>
+        </div>
       </div>
     </div>
 
-    <button class="btn-search" id="btn-go" onclick="runSearch()">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-      Lancer la recherche
-    </button>
+    <div style="margin-bottom:1rem;">
+      <label style="display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.85rem;color:var(--text2);font-weight:600;">
+        <input type="checkbox" id="strict-filter" onchange="strictFilter=this.checked" style="width:18px;height:18px;accent-color:var(--amber);cursor:pointer;" />
+        Filtre intelligent IA — ne garde que les vrais commerces de ta niche
+      </label>
+      <div style="font-size:.72rem;color:var(--muted);margin-top:.3rem;margin-left:1.6rem;">
+        Utilise Claude pour comprendre ta niche et virer les résultats hors-sujet (nécessite clé API Anthropic dans les paramètres).
+      </div>
+    </div>
+
+    <div style="margin-bottom:1.25rem;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;">
+        <label style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;">Nombre de prospects souhaités</label>
+        <div style="display:flex;align-items:center;gap:.5rem;">
+          <span id="prospects-count" style="font-size:1.2rem;font-weight:900;color:var(--cyan);">5</span>
+          <span style="font-size:.75rem;color:var(--muted);">prospects</span>
+          <span style="font-size:.75rem;color:var(--dim);">=</span>
+          <span id="credits-cost" style="font-size:1.2rem;font-weight:900;color:var(--amber);">5</span>
+          <span style="font-size:.75rem;color:var(--muted);">crédits</span>
+        </div>
+      </div>
+      <input type="range" id="prospects-slider" min="1" max="50" value="5" oninput="updateProspectsSlider()" style="width:100%;accent-color:var(--cyan);cursor:pointer;" />
+      <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-top:.3rem;">
+        <span>1 prospect</span>
+        <span id="prospects-max-label">50 prospects (max)</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:.75rem;">
+      <button class="btn-search" id="btn-go" onclick="runSearch()" style="flex:1">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Lancer la recherche
+      </button>
+    </div>
   </div>
 
   <div class="alert" id="alert">
@@ -658,37 +820,83 @@
         <circle class="fill" id="ring-fill" cx="30" cy="30" r="22"/>
       </svg>
     </div>
-    <div class="l-title" id="l-title">Initialisation…</div>
-    <div class="l-sub"   id="l-sub">Veuillez patienter</div>
-    <div class="city-chips" id="chips"></div>
+    <div class="l-title" id="l-title">Recherche en cours…</div>
+    <div class="l-sub"   id="l-sub">Veuillez patienter, cela peut prendre quelques minutes</div>
+  </div>
+
+  <!-- Search History -->
+  <div id="search-history" style="display:none;margin-bottom:1.5rem;">
+    <div class="section-divider">Historique des recherches</div>
+    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
+        <span style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;">Mes recherches</span>
+        <button id="btn-clear-filter" onclick="clearSearchFilter()" style="display:none;background:var(--cyan);color:#000;border:none;border-radius:6px;padding:.3rem .7rem;font-size:.7rem;font-weight:700;cursor:pointer;font-family:inherit;">Tout afficher</button>
+      </div>
+      <div id="history-list" style="max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:.4rem;"></div>
+      <div id="history-empty" style="color:var(--dim);font-size:.8rem;text-align:center;padding:.5rem 0;">Aucune recherche pour le moment.</div>
+    </div>
   </div>
 
   <div id="res" style="display:none">
     <div class="section-divider">Résultats</div>
+
+    <div class="stats-row" id="stats-row">
+      <div class="stat-chip sc-total"><span class="stat-n" id="stat-total">0</span> Total</div>
+      <div class="stat-chip sc-todo"><span class="stat-n" id="stat-todo">0</span> À appeler</div>
+      <div class="stat-chip sc-called"><span class="stat-n" id="stat-called">0</span> Appelés</div>
+      <div class="stat-chip sc-client"><span class="stat-n" id="stat-client">0</span> Clients</div>
+      <div class="stat-chip sc-nope"><span class="stat-n" id="stat-nope">0</span> Refusés</div>
+    </div>
+
     <div class="res-bar">
       <div class="kpi">
         <div class="kpi-n" id="counter">0</div>
         <div>
-          <div class="kpi-label">Prospects trouvés</div>
-          <div class="kpi-sub">sans site web · avec téléphone</div>
+          <div class="kpi-label">Prospects affichés</div>
+          <div class="kpi-sub">après filtres appliqués</div>
         </div>
       </div>
       <div class="res-actions">
         <div class="filter-wrap">
+          <span>Niche</span>
+          <select class="sel" id="filter-niche" onchange="applyFilter()">
+            <option value="all">Toutes</option>
+          </select>
+        </div>
+        <div class="filter-wrap">
           <span>Min. étoiles</span>
           <select class="sel" id="min-stars" onchange="applyFilter()">
             <option value="0">Toutes</option>
-            <option value="3">★★★+ (3+)</option>
-            <option value="3.5">★★★½ (3.5+)</option>
-            <option value="4">★★★★+ (4+)</option>
-            <option value="4.5">★★★★½ (4.5+)</option>
+            <option value="3">3+</option>
+            <option value="3.5">3.5+</option>
+            <option value="4">4+</option>
+            <option value="4.5">4.5+</option>
+          </select>
+        </div>
+        <div class="filter-wrap">
+          <span>Statut</span>
+          <select class="sel" id="filter-status" onchange="applyFilter()">
+            <option value="all">Tous</option>
+            <option value="todo">À appeler</option>
+            <option value="called">Appelé</option>
+            <option value="nope">Pas intéressé</option>
+            <option value="client">Client</option>
+          </select>
+        </div>
+        <div class="filter-wrap">
+          <span>Ancienneté</span>
+          <select class="sel" id="filter-age" onchange="applyFilter()">
+            <option value="all">Tous</option>
+            <option value="new">Nouveau (&lt; 50 avis)</option>
+            <option value="mid">Établi (50-200)</option>
+            <option value="old">Ancien (200+)</option>
           </select>
         </div>
         <button class="btn-csv" onclick="exportCSV()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
-          Exporter CSV
+          Télécharger Excel
         </button>
       </div>
     </div>
@@ -701,9 +909,9 @@
             <th>Entreprise</th>
             <th>Téléphone</th>
             <th>Adresse</th>
-            <th class="sortable" id="th-rating"  onclick="sortBy('rating')">Note <span class="si" id="si-rating">↕</span></th>
-            <th class="sortable" id="th-reviews" onclick="sortBy('reviews')">Avis <span class="si" id="si-reviews">↕</span></th>
-            <th class="sortable active" id="th-heat" onclick="sortBy('heat')">Chaleur <span class="si" id="si-heat">↓</span></th>
+            <th class="sortable" id="th-rating"  onclick="sortBy('rating')">Note <span class="si" id="si-rating">&#8597;</span></th>
+            <th class="sortable" id="th-reviews" onclick="sortBy('reviews')">Avis <span class="si" id="si-reviews">&#8597;</span></th>
+            <th class="sortable active" id="th-heat" onclick="sortBy('heat')">Chaleur <span class="si" id="si-heat">&#8595;</span></th>
             <th>Statut</th>
             <th></th>
           </tr>
@@ -721,7 +929,7 @@
   </div>
 </main>
 
-<!-- ── MODAL ── -->
+<!-- ── PROSPECT MODAL ── -->
 <div class="modal-bd" id="modal-bd" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
@@ -729,24 +937,36 @@
         <div class="modal-title" id="m-name">—</div>
         <div class="modal-sub"  id="m-meta">—</div>
       </div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
+      <button class="modal-close" onclick="closeModal()">&#10005;</button>
     </div>
 
     <div class="tabs">
-      <button class="tab on" data-tab="calc"  onclick="showTab('calc')">📊 Calculateur</button>
-      <button class="tab"    data-tab="crm"   onclick="showTab('crm')">📋 CRM</button>
-      <button class="tab"    data-tab="pitch" onclick="showTab('pitch')">✨ Pitch IA</button>
+      <button class="tab on" data-tab="calc"  onclick="showTab('calc')">Calculateur</button>
+      <button class="tab"    data-tab="fiche" onclick="showTab('fiche')">Fiche</button>
+      <button class="tab"    data-tab="crm"   onclick="showTab('crm')">CRM</button>
+      <button class="tab"    data-tab="pitch" onclick="showTab('pitch')">Pitch IA</button>
     </div>
 
     <div class="tab-panel on" data-tab="calc">
       <div id="calc-content"></div>
     </div>
 
+    <div class="tab-panel" data-tab="fiche">
+      <p class="pitch-desc">Recherche automatique d'infos sur ce prospect (spécialité, type, clientèle…) pour préparer ton appel.</p>
+      <button class="btn-fiche-gen" id="btn-fiche-gen" onclick="generateFiche()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Rechercher les infos
+      </button>
+      <div id="fiche-zone" style="margin-top:1rem"></div>
+    </div>
+
     <div class="tab-panel" data-tab="crm">
       <div class="crm-field">
         <label>Notes</label>
         <textarea class="crm-ta" id="m-notes" placeholder="Informations, objections, suivi…" oninput="debounceSave()"></textarea>
-        <div class="crm-saved" id="crm-saved">✓ Sauvegardé</div>
+        <div class="crm-saved" id="crm-saved">&#10003; Sauvegardé</div>
       </div>
       <div class="crm-field">
         <label>Date de rappel</label>
@@ -755,140 +975,324 @@
     </div>
 
     <div class="tab-panel" data-tab="pitch">
-      <p class="pitch-desc">Génère un script d'appel personnalisé pour ce prospect via Claude IA.</p>
-      <div class="pitch-key-row">
-        <input class="inp" id="anthr-key" type="password" placeholder="sk-ant-…  (clé API Anthropic)" />
-        <button class="eye" onclick="toggleVis('anthr-key')" title="Afficher / masquer" style="position:static;transform:none;margin-left:-2.5rem;">
+      <p class="pitch-desc">Génère un message personnalisé pour ce prospect via Claude IA.</p>
+      <div class="pitch-type-row">
+        <button class="pitch-type-btn on" data-type="appel" onclick="setPitchType('appel')">Appel</button>
+        <button class="pitch-type-btn" data-type="email" onclick="setPitchType('email')">Email</button>
+        <button class="pitch-type-btn" data-type="sms" onclick="setPitchType('sms')">SMS</button>
+        <button class="pitch-type-btn" data-type="linkedin" onclick="setPitchType('linkedin')">LinkedIn</button>
+      </div>
+      <button class="btn-gen" id="btn-gen" onclick="generatePitch()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+        </svg>
+        Générer le pitch
+      </button>
+      <div id="pitch-zone"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SETTINGS MODAL ── -->
+<div class="settings-bd" id="settings-bd" onclick="if(event.target===this)closeSettings()">
+  <div class="settings-box">
+    <div class="settings-title">
+      <span>Paramètres</span>
+      <button onclick="closeSettings()">&#10005;</button>
+    </div>
+    <div class="settings-field">
+      <label>Clé API Google Places</label>
+      <div class="inp-wrap">
+        <input class="inp" id="set-google" type="password" placeholder="AIzaSy…" />
+        <button class="eye" onclick="toggleVis('set-google')" title="Afficher / masquer">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
           </svg>
         </button>
-        <button class="btn-gen" id="btn-gen" onclick="generatePitch()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+      </div>
+    </div>
+    <div class="settings-field">
+      <label>Clé API Anthropic (Claude IA)</label>
+      <div class="inp-wrap">
+        <input class="inp" id="set-anthropic" type="password" placeholder="sk-ant-…  (pour pitch + fiche + filtre IA)" />
+        <button class="eye" onclick="toggleVis('set-anthropic')" title="Afficher / masquer">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
           </svg>
-          Générer
         </button>
       </div>
-      <div id="pitch-zone"></div>
     </div>
+    <button class="settings-save" onclick="saveSettings()">Enregistrer les clés</button>
+    <div class="settings-msg" id="settings-msg">&#10003; Clés sauvegardées avec succès</div>
   </div>
 </div>
 
 <script>
 'use strict';
 
-const CIRC = 2 * Math.PI * 22;
+/* ── Auth check ── */
+const token = localStorage.getItem('ph_token');
+if (!token) window.location.href = '/login';
 
-const CITIES = {
-  fr: [
-    { name:'Paris',             lat:48.8566, lng: 2.3522 },
-    { name:'Lyon',              lat:45.7640, lng: 4.8357 },
-    { name:'Marseille',         lat:43.2965, lng: 5.3698 },
-    { name:'Toulouse',          lat:43.6047, lng: 1.4442 },
-    { name:'Nice',              lat:43.7102, lng: 7.2620 },
-    { name:'Nantes',            lat:47.2184, lng:-1.5536 },
-    { name:'Strasbourg',        lat:48.5734, lng: 7.7521 },
-    { name:'Montpellier',       lat:43.6108, lng: 3.8767 },
-    { name:'Bordeaux',          lat:44.8378, lng:-0.5792 },
-    { name:'Lille',             lat:50.6292, lng: 3.0573 },
-    { name:'Rennes',            lat:48.1173, lng:-1.6778 },
-    { name:'Reims',             lat:49.2583, lng: 4.0317 },
-    { name:'Le Havre',          lat:49.4944, lng: 0.1079 },
-    { name:'Saint-Étienne',     lat:45.4397, lng: 4.3872 },
-    { name:'Toulon',            lat:43.1242, lng: 5.9280 },
-    { name:'Grenoble',          lat:45.1885, lng: 5.7245 },
-    { name:'Dijon',             lat:47.3220, lng: 5.0415 },
-    { name:'Angers',            lat:47.4784, lng:-0.5632 },
-    { name:'Nîmes',             lat:43.8367, lng: 4.3601 },
-    { name:'Villeurbanne',      lat:45.7676, lng: 4.8802 },
-    { name:'Le Mans',           lat:47.9960, lng: 0.1966 },
-    { name:'Aix-en-Provence',   lat:43.5298, lng: 5.4474 },
-    { name:'Clermont-Ferrand',  lat:45.7772, lng: 3.0870 },
-    { name:'Brest',             lat:48.3904, lng:-4.4861 },
-    { name:'Tours',             lat:47.3941, lng: 0.6848 },
-    { name:'Amiens',            lat:49.8942, lng: 2.2957 },
-    { name:'Limoges',           lat:45.8315, lng: 1.2578 },
-    { name:'Metz',              lat:49.1193, lng: 6.1757 },
-    { name:'Besançon',          lat:47.2378, lng: 6.0241 },
-    { name:'Caen',              lat:49.1829, lng:-0.3707 },
-  ],
-  ch: [
-    { name:'Zurich',             lat:47.3769, lng: 8.5417 },
-    { name:'Genève',             lat:46.2044, lng: 6.1432 },
-    { name:'Bâle',               lat:47.5596, lng: 7.5886 },
-    { name:'Berne',              lat:46.9480, lng: 7.4474 },
-    { name:'Lausanne',           lat:46.5197, lng: 6.6323 },
-    { name:'Winterthour',        lat:47.5000, lng: 8.7242 },
-    { name:'Lucerne',            lat:47.0502, lng: 8.3093 },
-    { name:'Saint-Gall',         lat:47.4245, lng: 9.3767 },
-    { name:'Lugano',             lat:46.0037, lng: 8.9511 },
-    { name:'Bienne',             lat:47.1368, lng: 7.2467 },
-    { name:'Thoune',             lat:46.7540, lng: 7.6280 },
-    { name:'Köniz',              lat:46.9242, lng: 7.4098 },
-    { name:'La Chaux-de-Fonds',  lat:47.0996, lng: 6.8259 },
-    { name:'Schaffhouse',        lat:47.6960, lng: 8.6340 },
-    { name:'Fribourg',           lat:46.8065, lng: 7.1618 },
-    { name:'Chur',               lat:46.8499, lng: 9.5329 },
-    { name:'Vernier',            lat:46.2172, lng: 6.0850 },
-    { name:'Neuchâtel',          lat:46.9929, lng: 6.9293 },
-    { name:'Uster',              lat:47.3478, lng: 8.7177 },
-    { name:'Sion',               lat:46.2281, lng: 7.3597 },
-  ],
-  be: [
-    { name:'Bruxelles',   lat:50.8503, lng:4.3517 },
-    { name:'Anvers',      lat:51.2194, lng:4.4025 },
-    { name:'Gand',        lat:51.0543, lng:3.7174 },
-    { name:'Charleroi',   lat:50.4108, lng:4.4446 },
-    { name:'Liège',       lat:50.6292, lng:5.5797 },
-    { name:'Bruges',      lat:51.2093, lng:3.2247 },
-    { name:'Namur',       lat:50.4669, lng:4.8674 },
-    { name:'Louvain',     lat:50.8798, lng:4.7005 },
-    { name:'Mons',        lat:50.4541, lng:3.9521 },
-    { name:'Aalst',       lat:50.9376, lng:4.0363 },
-    { name:'Hasselt',     lat:50.9306, lng:5.3378 },
-    { name:'Sint-Niklaas',lat:51.1572, lng:4.1432 },
-    { name:'Courtrai',    lat:50.8281, lng:3.2648 },
-    { name:'Ostende',     lat:51.2298, lng:2.9154 },
-    { name:'Tournai',     lat:50.6055, lng:3.3884 },
-    { name:'Genk',        lat:50.9651, lng:5.4993 },
-    { name:'Seraing',     lat:50.5906, lng:5.5067 },
-    { name:'Mouscron',    lat:50.7452, lng:3.2127 },
-    { name:'Verviers',    lat:50.5891, lng:5.8651 },
-    { name:'Mechelen',    lat:51.0281, lng:4.4777 },
-  ],
+const AUTH_HEADERS = {
+  'Content-Type': 'application/json',
+  'Authorization': 'Bearer ' + token,
 };
 
-const COUNTRY_NAMES = { fr:'France', ch:'Suisse', be:'Belgique' };
+/* ── State ── */
+const CIRC = 2 * Math.PI * 22;
 const STATUS_CYCLE  = ['todo','called','nope','client'];
 const STATUS_LABEL  = { todo:'À appeler', called:'Appelé', nope:'Pas intéressé', client:'Client' };
 const STATUS_CLASS  = { todo:'s-todo', called:'s-called', nope:'s-nope', client:'s-client' };
 
 let country         = 'fr';
 let prospects       = [];
-let seenPhones      = new Set();
 let currentNiche    = '';
 let currentProspect = null;
 let sortCol         = 'heat';
 let sortDir         = 'desc';
 let minStars        = 0;
+let filterStatus    = 'all';
+let filterAge       = 'all';
+let filterNiche     = 'all';
+let filterSearchId  = null;
+let geoMode         = false;
+let geoLat          = null;
+let geoLng          = null;
+let geoRadius       = 30;
 let saveTimer       = null;
+let pitchType       = 'appel';
+let strictFilter    = false;
+let userCredits     = 0;
+let userPlan        = 'free';
 
-function loadCrm() {
-  try { return JSON.parse(localStorage.getItem('ph_crm') || '{}'); } catch { return {}; }
-}
-function saveCrmData(phone, data) {
-  const crm = loadCrm();
-  crm[phone] = { ...crm[phone], ...data };
-  localStorage.setItem('ph_crm', JSON.stringify(crm));
-}
-function getCrmFor(phone) {
-  return loadCrm()[phone] || { status:'todo', notes:'', rappel:'' };
+/* ── Load user info ── */
+async function loadUser() {
+  try {
+    const res = await fetch('/api/me', { headers: AUTH_HEADERS });
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem('ph_token');
+      window.location.href = '/login';
+      return;
+    }
+    const data = await res.json();
+    const user = data.user;
+    userCredits = user.credits;
+    userPlan = user.plan;
+
+    // Update header
+    document.getElementById('hdr-credits').textContent = user.credits;
+    const planBadge = document.getElementById('header-plan');
+    planBadge.textContent = user.plan.toUpperCase();
+    planBadge.className = 'header-badge plan-' + user.plan;
+
+    // Show admin link if admin
+    if (user.is_admin) {
+      document.getElementById('admin-link').style.display = '';
+    }
+
+    // Init cities slider based on credits
+    updateProspectsSlider();
+  } catch {
+    console.error('Failed to load user');
+  }
 }
 
+function logout() {
+  localStorage.removeItem('ph_token');
+  localStorage.removeItem('ph_user');
+  window.location.href = '/login';
+}
+
+/* ── Settings ── */
+function openSettings() {
+  document.getElementById('settings-bd').classList.add('on');
+}
+function closeSettings() {
+  document.getElementById('settings-bd').classList.remove('on');
+  document.getElementById('settings-msg').classList.remove('show');
+}
+async function saveSettings() {
+  const google_key = document.getElementById('set-google').value.trim();
+  const anthropic_key = document.getElementById('set-anthropic').value.trim();
+  try {
+    await fetch('/api/me/keys', {
+      method: 'PUT',
+      headers: AUTH_HEADERS,
+      body: JSON.stringify({ google_key, anthropic_key }),
+    });
+    const msg = document.getElementById('settings-msg');
+    msg.classList.add('show');
+    setTimeout(() => msg.classList.remove('show'), 3000);
+  } catch {
+    alert('Erreur lors de la sauvegarde.');
+  }
+}
+
+/* ── Load prospects from server ── */
+async function loadProspects() {
+  try {
+    const res = await fetch('/api/prospects', { headers: AUTH_HEADERS });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.length) {
+      prospects = data.map((p, i) => ({ ...p, _idx: i }));
+      document.getElementById('res').style.display = 'block';
+      populateNicheFilter();
+      renderTable();
+      renderStats();
+    }
+  } catch {}
+}
+
+/* ── Niche filter dropdown ── */
+function populateNicheFilter() {
+  const sel = document.getElementById('filter-niche');
+  const niches = [...new Set(prospects.map(p => p.niche).filter(Boolean))];
+  sel.innerHTML = '<option value="all">Toutes</option>';
+  niches.forEach(n => {
+    const opt = document.createElement('option');
+    opt.value = n; opt.textContent = n.charAt(0).toUpperCase() + n.slice(1);
+    sel.appendChild(opt);
+  });
+}
+
+/* ── Search history ── */
+const COUNTRY_FLAGS = { fr: '\u{1F1EB}\u{1F1F7}', ch: '\u{1F1E8}\u{1F1ED}', be: '\u{1F1E7}\u{1F1EA}', geo: '📍' };
+
+async function loadSearchHistory() {
+  try {
+    const res = await fetch('/api/prospects/searches', { headers: AUTH_HEADERS });
+    if (!res.ok) return;
+    const searches = await res.json();
+    const wrap = document.getElementById('search-history');
+    const list = document.getElementById('history-list');
+    const empty = document.getElementById('history-empty');
+
+    if (!searches.length) {
+      wrap.style.display = 'block';
+      list.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+
+    wrap.style.display = 'block';
+    empty.style.display = 'none';
+    list.innerHTML = searches.map(s => {
+      const flag = COUNTRY_FLAGS[s.country] || '';
+      const date = new Date(s.created_at);
+      const ago = timeAgo(date);
+      const active = filterSearchId === s.id ? 'background:var(--cyan-glow2);border-color:var(--cyan);' : '';
+      return `<div onclick="filterBySearch(${s.id},'${esc(s.niche)}')" style="display:flex;justify-content:space-between;align-items:center;padding:.55rem .8rem;border-radius:8px;border:1px solid var(--border2);cursor:pointer;transition:all .15s;${active}" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='${filterSearchId === s.id ? 'var(--cyan)' : 'var(--border2)'}'">`
+        + `<div style="display:flex;align-items:center;gap:.6rem;">`
+        + `<span style="font-size:1.1rem;">${flag}</span>`
+        + `<span style="font-weight:700;color:var(--text);font-size:.85rem;">${esc(s.niche)}</span>`
+        + `</div>`
+        + `<div style="display:flex;align-items:center;gap:.8rem;">`
+        + `<span style="font-size:.75rem;color:var(--cyan);font-weight:700;">${s.results_count || 0} prospects</span>`
+        + `<span style="font-size:.7rem;color:var(--dim);">${ago}</span>`
+        + `</div></div>`;
+    }).join('');
+  } catch {}
+}
+
+function timeAgo(date) {
+  const s = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (s < 60) return "à l'instant";
+  if (s < 3600) return Math.floor(s / 60) + ' min';
+  if (s < 86400) return Math.floor(s / 3600) + ' h';
+  if (s < 2592000) return Math.floor(s / 86400) + ' j';
+  return date.toLocaleDateString('fr-FR');
+}
+
+function filterBySearch(searchId, niche) {
+  filterSearchId = searchId;
+  filterNiche = niche || 'all';
+  document.getElementById('filter-niche').value = niche || 'all';
+  document.getElementById('btn-clear-filter').style.display = '';
+  renderTable();
+  renderStats();
+  loadSearchHistory(); // re-render to highlight active
+}
+
+function clearSearchFilter() {
+  filterSearchId = null;
+  filterNiche = 'all';
+  document.getElementById('filter-niche').value = 'all';
+  document.getElementById('btn-clear-filter').style.display = 'none';
+  renderTable();
+  renderStats();
+  loadSearchHistory();
+}
+
+/* ── Prospects slider ── */
+function updateProspectsSlider() {
+  const slider = document.getElementById('prospects-slider');
+  const maxAllowed = userCredits || 1;
+  slider.max = maxAllowed;
+  if (parseInt(slider.value) > maxAllowed) slider.value = maxAllowed;
+  const val = parseInt(slider.value);
+  document.getElementById('prospects-count').textContent = val;
+  document.getElementById('credits-cost').textContent = val;
+  document.getElementById('prospects-max-label').textContent = maxAllowed + ' prospects (max)';
+}
+
+/* ── Country / Geolocation ── */
 function setCountry(c) {
   country = c;
+  geoMode = false;
+  geoLat = null;
+  geoLng = null;
   ['fr','ch','be'].forEach(x => document.getElementById('btn-'+x).classList.toggle('on', x === c));
+  document.getElementById('btn-geo').classList.remove('on');
+  document.getElementById('geo-options').style.display = 'none';
+}
+
+function activateGeoloc() {
+  if (!navigator.geolocation) {
+    return showAlert('Votre navigateur ne supporte pas la géolocalisation.');
+  }
+  setLoader(true, 'Détection de votre position…', 'Autorisez la géolocalisation dans votre navigateur.');
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      geoLat = pos.coords.latitude;
+      geoLng = pos.coords.longitude;
+      geoMode = true;
+      geoRadius = parseInt(document.getElementById('geo-radius').value);
+
+      // UI: highlight geo button, unhighlight countries
+      ['fr','ch','be'].forEach(x => document.getElementById('btn-'+x).classList.remove('on'));
+      document.getElementById('btn-geo').classList.add('on');
+      document.getElementById('geo-options').style.display = 'block';
+
+      // Reverse geocode to show city name
+      fetchCityName(geoLat, geoLng);
+      setLoader(false);
+    },
+    (err) => {
+      setLoader(false);
+      showAlert('Impossible de vous localiser. Vérifiez les permissions de votre navigateur.');
+    },
+    { enableHighAccuracy: true, timeout: 10000 }
+  );
+}
+
+async function fetchCityName(lat, lng) {
+  try {
+    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=fr`);
+    const d = await r.json();
+    const city = d.address?.city || d.address?.town || d.address?.village || d.address?.municipality || '';
+    const dept = d.address?.county || d.address?.state || '';
+    document.getElementById('geo-city').textContent = city ? `${city}${dept ? ', ' + dept : ''}` : `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  } catch {
+    document.getElementById('geo-city').textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+  }
+}
+
+function updateRadiusLabel() {
+  const val = parseInt(document.getElementById('geo-radius').value);
+  geoRadius = val;
+  document.getElementById('geo-radius-label').textContent = val + ' km';
 }
 
 function toggleVis(id) {
@@ -907,128 +1311,82 @@ function setLoader(show, title, sub) {
   if (title !== undefined) document.getElementById('l-title').textContent = title;
   if (sub   !== undefined) document.getElementById('l-sub').textContent   = sub;
 }
-function setProgress(done, total) {
-  if (!total) return;
-  document.getElementById('ring-fill').style.strokeDashoffset = CIRC * (1 - done / total);
-}
-const delay = ms => new Promise(r => setTimeout(r, ms));
 
-function initChips(cities) {
-  document.getElementById('chips').innerHTML =
-    cities.map(c => `<span class="chip" id="chip-${c.name}">${c.name}</span>`).join('');
-}
-function setChip(name, state) {
-  const el = document.getElementById(`chip-${name}`);
-  if (el) el.className = `chip ${state}`;
-}
-
-async function fetchPage(niche, apiKey, city, pageToken = null) {
-  const body = {
-    textQuery: `${niche} ${city.name}`,
-    languageCode: 'fr',
-    regionCode: country,
-    locationBias: { circle: { center: { latitude:city.lat, longitude:city.lng }, radius:50000 } },
-    maxResultCount: 20,
-  };
-  if (pageToken) body.pageToken = pageToken;
-
-  const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
-    method: 'POST',
-    headers: {
-      'Content-Type':    'application/json',
-      'X-Goog-Api-Key':  apiKey,
-      'X-Goog-FieldMask':'places.displayName,places.formattedAddress,places.nationalPhoneNumber,places.internationalPhoneNumber,places.websiteUri,places.rating,places.userRatingCount,nextPageToken',
-    },
-    body: JSON.stringify(body),
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    const msg = data?.error?.message || `HTTP ${res.status}`;
-    if (res.status === 403) throw new Error(`Accès refusé (403) : ${msg} — Activez "Places API (New)" dans Google Cloud Console.`);
-    throw new Error(`Erreur API (${res.status}) : ${msg}`);
-  }
-  return { places: data.places || [], nextToken: data.nextPageToken || null };
-}
-
+/* ── SEARCH (server-side) ── */
 async function runSearch() {
-  const niche  = document.getElementById('niche').value.trim();
-  const apikey = document.getElementById('apikey').value.trim();
+  const niche = document.getElementById('niche').value.trim();
   hideAlert();
-  if (!niche)  return showAlert("Veuillez saisir une niche ou un secteur d'activité.");
-  if (!apikey) return showAlert('Veuillez saisir votre clé API Google Places.');
+  if (!niche) return showAlert("Veuillez saisir une niche ou un secteur d'activité.");
+
+  if (userCredits <= 0) {
+    return showAlert('Plus de crédits disponibles. Passez à un plan supérieur.');
+  }
 
   currentNiche = niche;
-  document.getElementById('btn-go').disabled = true;
+  const btn = document.getElementById('btn-go');
+  btn.disabled = true;
+
+  // Load smart keywords if filter enabled
+  let smartKw = [];
+  if (strictFilter) {
+    setLoader(true, 'Analyse de la niche par l\'IA…', 'Claude génère les mots-clés de filtrage');
+    try {
+      const kwRes = await fetch('/api/pitch/keywords', {
+        method: 'POST',
+        headers: AUTH_HEADERS,
+        body: JSON.stringify({ niche }),
+      });
+      const kwData = await kwRes.json();
+      if (kwData.keywords && kwData.keywords.length) {
+        smartKw = kwData.keywords;
+        setLoader(true, `${smartKw.length} mots-clés trouvés`, 'Filtrage intelligent activé');
+        await new Promise(r => setTimeout(r, 800));
+      }
+    } catch { smartKw = []; }
+  }
+
+  const numProspects = parseInt(document.getElementById('prospects-slider').value);
+  const geoLabel = geoMode ? ` autour de vous (${geoRadius} km)` : '';
+  setLoader(true, `Recherche « ${niche} » en cours…${geoLabel}`, `Recherche de ${numProspects} prospect${numProspects > 1 ? 's' : ''}. Cela peut prendre 1 à 3 minutes.`);
+
   document.getElementById('res').style.display = 'none';
   document.getElementById('empty').classList.remove('on');
   document.getElementById('counter').textContent = '0';
   document.getElementById('ring-fill').style.strokeDashoffset = CIRC;
   document.getElementById('min-stars').value = '0';
   document.getElementById('tbody').innerHTML = '';
-  prospects = []; seenPhones.clear();
   sortCol = 'heat'; sortDir = 'desc'; minStars = 0;
   updateSortHeaders();
 
-  const cities = CITIES[country];
-  const pays   = COUNTRY_NAMES[country];
-  setLoader(true, `Recherche : « ${niche} » en ${pays}`, `0 / ${cities.length} villes traitées`);
-  initChips(cities);
-
-  const crm = loadCrm();
-
   try {
-    for (let i = 0; i < cities.length; i++) {
-      const city = cities[i];
-      setChip(city.name, 'loading');
-      setProgress(i, cities.length);
+    const res = await fetch('/api/search', {
+      method: 'POST',
+      headers: AUTH_HEADERS,
+      body: JSON.stringify({
+        niche,
+        country,
+        smartKeywords: smartKw,
+        numProspects: parseInt(document.getElementById('prospects-slider').value),
+        geoMode,
+        geoLat,
+        geoLng,
+        geoRadius,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`);
 
-      let pageToken = null;
-      let cityTotal = 0;
+    // Update credits in header + slider
+    userCredits = data.credits;
+    document.getElementById('hdr-credits').textContent = data.credits;
+    updateProspectsSlider();
 
-      for (let page = 1; page <= 3; page++) {
-        setLoader(true,
-          `${city.name} (${i+1}/${cities.length}) — Page ${page}/3…`,
-          `${prospects.length} prospects trouvés`);
+    // Reload full prospects list from server (includes IDs from DB)
+    await loadProspects();
+    await loadSearchHistory();
 
-        const { places, nextToken } = await fetchPage(niche, apikey, city, pageToken);
-        cityTotal += places.length;
-
-        places.forEach(place => {
-          const name    = place.displayName?.text || '';
-          const phone   = place.nationalPhoneNumber || place.internationalPhoneNumber || null;
-          const website = place.websiteUri || null;
-          if (!phone || website || seenPhones.has(phone)) return;
-
-          seenPhones.add(phone);
-          const saved = crm[phone] || {};
-          prospects.push({
-            id:      prospects.length,
-            name,   phone,
-            address: place.formattedAddress || '',
-            rating:  place.rating ?? null,
-            reviews: place.userRatingCount ?? 0,
-            city:    city.name,
-            status:  saved.status || 'todo',
-            notes:   saved.notes  || '',
-            rappel:  saved.rappel || '',
-          });
-        });
-
-        pageToken = nextToken;
-        if (!pageToken || places.length === 0) break;
-        if (page < 3) await delay(500);
-      }
-
-      setChip(city.name, 'done');
-      if (prospects.length > 0) {
-        document.getElementById('res').style.display = 'block';
-        renderTable();
-      }
-      if (i < cities.length - 1) await delay(200);
-    }
-
-    setProgress(cities.length, cities.length);
     setLoader(false);
+
     if (!prospects.length) {
       document.getElementById('res').style.display = 'none';
       document.getElementById('empty').classList.add('on');
@@ -1037,15 +1395,16 @@ async function runSearch() {
     setLoader(false);
     showAlert(err.message || 'Une erreur inconnue est survenue.');
   } finally {
-    document.getElementById('btn-go').disabled = false;
+    btn.disabled = false;
   }
 }
 
+/* ── Heat score ── */
 const HEAT_DATA = [
-  { label:'❄️ Froid',      cls:'h-cold', score:0 },
-  { label:'🌤️ Tiède',     cls:'h-mild', score:1 },
-  { label:'♨️ Chaud',      cls:'h-warm', score:2 },
-  { label:'🔥 Très chaud', cls:'h-hot',  score:3 },
+  { label:'Froid',      cls:'h-cold', score:0 },
+  { label:'Tiède',      cls:'h-mild', score:1 },
+  { label:'Chaud',      cls:'h-warm', score:2 },
+  { label:'Très chaud', cls:'h-hot',  score:3 },
 ];
 function heatScore(p) {
   const r = p.rating  ?? 0;
@@ -1058,19 +1417,23 @@ function heatScore(p) {
 function renderHeat(p) {
   const s = heatScore(p);
   const h = HEAT_DATA[s];
-  const rStr = p.rating  != null ? `★ ${p.rating.toFixed(1)}` : 'pas de note';
-  const vStr = p.reviews > 0      ? `${p.reviews} avis`       : 'aucun avis';
-  const tips = [
-    'Moins de 20 avis ou note sous 3.5',
-    'Note 3.5+ et entre 20 et 50 avis',
-    'Note 4.0+ et entre 50 et 200 avis',
-    'Note 4.5+ et plus de 200 avis — prospect idéal',
-  ];
-  return `<span class="heat ${h.cls}" title="${h.label} — ${tips[s]}\nCe prospect : ${rStr}, ${vStr}">${h.label}</span>`;
+  const rStr = p.rating  != null ? `${p.rating.toFixed(1)}` : 'pas de note';
+  const vStr = p.reviews > 0 ? `${p.reviews} avis` : 'aucun avis';
+  return `<span class="heat ${h.cls}" title="${h.label} — ${rStr}, ${vStr}">${h.label}</span>`;
 }
 
+/* ── Table ── */
 function renderTable() {
-  let list = prospects.filter(p => minStars === 0 || (p.rating != null && p.rating >= minStars));
+  let list = prospects.filter(p => {
+    if (filterSearchId && p.search_id !== filterSearchId) return false;
+    if (filterNiche !== 'all' && p.niche !== filterNiche) return false;
+    if (minStars > 0 && (p.rating == null || p.rating < minStars)) return false;
+    if (filterStatus !== 'all' && p.status !== filterStatus) return false;
+    if (filterAge === 'new' && (p.reviews || 0) >= 50) return false;
+    if (filterAge === 'mid' && ((p.reviews || 0) < 50 || (p.reviews || 0) >= 200)) return false;
+    if (filterAge === 'old' && (p.reviews || 0) < 200) return false;
+    return true;
+  });
   if (sortCol) {
     list = [...list].sort((a, b) => {
       const av = sortCol === 'heat' ? heatScore(a) : (a[sortCol] ?? -1);
@@ -1091,7 +1454,7 @@ function renderTable() {
       <td>${renderStars(p.rating)}</td>
       <td>${p.reviews > 0 ? p.reviews.toLocaleString('fr-FR') : '<span class="nd">—</span>'}</td>
       <td>${renderHeat(p)}</td>
-      <td><span class="status ${STATUS_CLASS[p.status]}" id="s-${p.id}" onclick="cycleStatus(${p.id},event)">${STATUS_LABEL[p.status]}</span></td>
+      <td><span class="status ${STATUS_CLASS[p.status]}" onclick="cycleStatus(${p.id},event)">${STATUS_LABEL[p.status]}</span></td>
       <td>
         <div class="row-actions">
           <a class="btn-call" href="tel:${p.phone.replace(/\s/g,'')}" onclick="event.stopPropagation()" title="Appeler">
@@ -1099,7 +1462,9 @@ function renderTable() {
               <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.22 2 2 0 012.22.04L5.22.04a2 2 0 012 1.72c.13 1 .36 1.97.72 2.9a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.14-1.14a2 2 0 012.11-.45c.93.36 1.9.59 2.9.72a2 2 0 011.76 2.03z"/>
             </svg>
           </a>
-          <button class="btn-pitch" onclick="openModal(${p.id},'pitch');event.stopPropagation()" title="Générer pitch IA">✨</button>
+          <button class="btn-fiche" onclick="openModal(${p.id},'fiche');event.stopPropagation()" title="Fiche prospect">F</button>
+          <button class="btn-pitch" onclick="openModal(${p.id},'pitch');event.stopPropagation()" title="Générer pitch IA">P</button>
+          <button class="btn-del" onclick="deleteProspect(${p.id},event)" title="Supprimer">&#10005;</button>
         </div>
       </td>`;
     tbody.appendChild(tr);
@@ -1119,34 +1484,67 @@ function updateSortHeaders() {
     const si = document.getElementById(`si-${col}`);
     if (!th||!si) return;
     th.classList.toggle('active', sortCol === col);
-    si.textContent = sortCol !== col ? '↕' : sortDir === 'desc' ? '↓' : '↑';
+    si.textContent = sortCol !== col ? '\u2195' : sortDir === 'desc' ? '\u2193' : '\u2191';
   });
 }
 function applyFilter() {
   minStars = parseFloat(document.getElementById('min-stars').value) || 0;
+  filterStatus = document.getElementById('filter-status').value;
+  filterAge = document.getElementById('filter-age').value;
+  const nicheVal = document.getElementById('filter-niche').value;
+  if (nicheVal !== filterNiche) {
+    filterNiche = nicheVal;
+    filterSearchId = null; // reset search filter when niche changes manually
+    document.getElementById('btn-clear-filter').style.display = filterNiche !== 'all' ? '' : 'none';
+    loadSearchHistory();
+  }
   renderTable();
 }
 
-function cycleStatus(id, event) {
+/* ── Status cycle (API) ── */
+async function cycleStatus(id, event) {
   if (event) event.stopPropagation();
-  const p = prospects[id];
+  const p = prospects.find(x => x.id === id);
   if (!p) return;
-  p.status = STATUS_CYCLE[(STATUS_CYCLE.indexOf(p.status) + 1) % STATUS_CYCLE.length];
-  const badge = document.getElementById(`s-${id}`);
-  if (badge) { badge.textContent = STATUS_LABEL[p.status]; badge.className = `status ${STATUS_CLASS[p.status]}`; }
-  saveCrmData(p.phone, { status: p.status });
+  const newStatus = STATUS_CYCLE[(STATUS_CYCLE.indexOf(p.status) + 1) % STATUS_CYCLE.length];
+  p.status = newStatus;
+  renderTable();
+  renderStats();
+  try {
+    await fetch(`/api/prospects/${id}/status`, {
+      method: 'PUT',
+      headers: AUTH_HEADERS,
+      body: JSON.stringify({ status: newStatus }),
+    });
+  } catch {}
 }
 
+/* ── Delete prospect (API) ── */
+async function deleteProspect(id, event) {
+  if (event) event.stopPropagation();
+  if (!confirm('Supprimer ce prospect ?')) return;
+  try {
+    await fetch(`/api/prospects/${id}`, {
+      method: 'DELETE',
+      headers: AUTH_HEADERS,
+    });
+    prospects = prospects.filter(p => p.id !== id);
+    renderTable();
+    renderStats();
+  } catch {}
+}
+
+/* ── Modal ── */
 function openModal(id, tab) {
-  currentProspect = prospects[id];
+  currentProspect = prospects.find(x => x.id === id);
   if (!currentProspect) return;
   const p = currentProspect;
   document.getElementById('m-name').textContent = p.name;
-  document.getElementById('m-meta').textContent = `${p.phone} · ${p.city}${p.rating ? ' · ★ ' + p.rating.toFixed(1) : ''}`;
+  document.getElementById('m-meta').textContent = `${p.phone} · ${p.city || ''}${p.rating ? ' · ' + p.rating.toFixed(1) : ''}`;
   document.getElementById('m-notes').value  = p.notes  || '';
   document.getElementById('m-rappel').value = p.rappel || '';
   document.getElementById('pitch-zone').innerHTML = '';
-  document.getElementById('anthr-key').value = localStorage.getItem('ph_anthr_key') || '';
+  document.getElementById('fiche-zone').innerHTML = '';
   document.getElementById('modal-bd').classList.add('on');
   showTab(tab || 'calc');
 }
@@ -1160,6 +1558,7 @@ function showTab(name) {
   if (name === 'calc' && currentProspect) renderCalc(currentProspect);
 }
 
+/* ── Calculator ── */
 function calculateLoss(p) {
   const reviews = p.reviews || 0;
   const rating  = p.rating  || 3.5;
@@ -1194,41 +1593,51 @@ function renderCalc(p) {
       </div>
     </div>
     <div class="calc-card hi" style="margin-bottom:1rem;text-align:center;">
-      <div class="calc-n" style="font-size:2.1rem;">~${r.lostRevenue.toLocaleString('fr-FR')} €</div>
+      <div class="calc-n" style="font-size:2.1rem;">~${r.lostRevenue.toLocaleString('fr-FR')} &euro;</div>
       <div class="calc-l" style="font-size:.78rem;">chiffre d'affaires perdu estimé chaque mois</div>
     </div>
     <p class="calc-note">* Estimations basées sur les benchmarks locaux Google Maps : taux de clic 20 %, abandon sans site 72 %, taux de conversion 6 %, panier moyen 400 €.</p>`;
 }
 
+/* ── CRM save (API) ── */
 function debounceSave() {
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveCrmNow, 800);
 }
-function saveCrmNow() {
+async function saveCrmNow() {
   if (!currentProspect) return;
-  currentProspect.notes  = document.getElementById('m-notes').value;
-  currentProspect.rappel = document.getElementById('m-rappel').value;
-  saveCrmData(currentProspect.phone, { notes: currentProspect.notes, rappel: currentProspect.rappel });
-  const saved = document.getElementById('crm-saved');
-  saved.classList.add('show');
-  setTimeout(() => saved.classList.remove('show'), 2000);
+  const notes  = document.getElementById('m-notes').value;
+  const rappel = document.getElementById('m-rappel').value;
+  currentProspect.notes  = notes;
+  currentProspect.rappel = rappel;
+  try {
+    await fetch(`/api/prospects/${currentProspect.id}/notes`, {
+      method: 'PUT',
+      headers: AUTH_HEADERS,
+      body: JSON.stringify({ notes, rappel }),
+    });
+    const saved = document.getElementById('crm-saved');
+    saved.classList.add('show');
+    setTimeout(() => saved.classList.remove('show'), 2000);
+  } catch {}
 }
 
+/* ── Pitch type ── */
+function setPitchType(type) {
+  pitchType = type;
+  document.querySelectorAll('.pitch-type-btn').forEach(b => b.classList.toggle('on', b.dataset.type === type));
+}
+
+/* ── Pitch generation (server uses stored API key) ── */
 async function generatePitch() {
-  const apiKey = document.getElementById('anthr-key').value.trim();
-  if (!apiKey) {
-    document.getElementById('pitch-zone').innerHTML = `<div class="pitch-err">Veuillez saisir votre clé API Anthropic (sk-ant-…).</div>`;
-    return;
-  }
-  localStorage.setItem('ph_anthr_key', apiKey);
   const btn = document.getElementById('btn-gen');
   btn.disabled = true;
   document.getElementById('pitch-zone').innerHTML = `<div class="pitch-loading"><div class="mini-spin"></div> Génération du script en cours…</div>`;
   try {
     const res = await fetch('/api/pitch', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prospect: currentProspect, niche: currentNiche, apiKey }),
+      headers: AUTH_HEADERS,
+      body: JSON.stringify({ prospect: currentProspect, niche: currentNiche, pitchType }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error?.message || data.error || `Erreur ${res.status}`);
@@ -1236,12 +1645,26 @@ async function generatePitch() {
     if (!text) throw new Error('Réponse vide de Claude');
     document.getElementById('pitch-zone').innerHTML = `
       <div class="pitch-out on" id="pitch-text">${esc(text).replace(/\n/g,'<br>')}</div>
-      <button class="btn-copy" onclick="copyPitch()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-        </svg>
-        Copier le script
-      </button>`;
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <button class="btn-copy" onclick="copyPitch()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copier le script
+        </button>
+        <button class="btn-copy" onclick="downloadPitch()" style="border-color:rgba(0,200,248,.25);color:var(--cyan);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Télécharger .txt
+        </button>
+        <button class="btn-regen" onclick="generatePitch()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
+          </svg>
+          Régénérer
+        </button>
+      </div>`;
     document.getElementById('pitch-text').dataset.raw = text;
   } catch (err) {
     document.getElementById('pitch-zone').innerHTML = `<div class="pitch-err">${esc(err.message)}</div>`;
@@ -1250,54 +1673,150 @@ async function generatePitch() {
   }
 }
 
+/* ── Fiche generation (server uses stored API key) ── */
+async function generateFiche() {
+  const btn = document.getElementById('btn-fiche-gen');
+  btn.disabled = true;
+  document.getElementById('fiche-zone').innerHTML = `<div class="pitch-loading"><div class="mini-spin"></div> Recherche d'infos en cours…</div>`;
+  try {
+    const res = await fetch('/api/pitch', {
+      method: 'POST',
+      headers: AUTH_HEADERS,
+      body: JSON.stringify({ prospect: currentProspect, niche: currentNiche, pitchType: 'fiche' }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || data.error || `Erreur ${res.status}`);
+    const text = data.content?.[0]?.text || '';
+    if (!text) throw new Error('Réponse vide de Claude');
+    document.getElementById('fiche-zone').innerHTML = `
+      <div class="fiche-out">${esc(text).replace(/\n/g,'<br>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem;">
+        <button class="btn-copy" onclick="copyFiche()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+          </svg>
+          Copier la fiche
+        </button>
+        <button class="btn-regen" onclick="generateFiche()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
+          </svg>
+          Relancer
+        </button>
+      </div>`;
+    document.getElementById('fiche-zone').querySelector('.fiche-out').dataset.raw = text;
+  } catch (err) {
+    document.getElementById('fiche-zone').innerHTML = `<div class="pitch-err">${esc(err.message)}</div>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function copyFiche() {
+  const el = document.querySelector('.fiche-out');
+  if (!el) return;
+  navigator.clipboard.writeText(el.dataset.raw || el.innerText).then(() => {
+    const btn = document.querySelector('#fiche-zone .btn-copy');
+    if (btn) {
+      btn.textContent = '\u2713 Copié !';
+      setTimeout(() => btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copier la fiche`, 2500);
+    }
+  });
+}
+
 function copyPitch() {
   const el = document.getElementById('pitch-text');
   if (!el) return;
   navigator.clipboard.writeText(el.dataset.raw || el.innerText).then(() => {
-    const btn = document.querySelector('.btn-copy');
+    const btn = document.querySelector('#pitch-zone .btn-copy');
     if (btn) {
-      btn.textContent = '✓ Copié !';
+      btn.textContent = '\u2713 Copié !';
       setTimeout(() => btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copier le script`, 2500);
     }
   });
 }
 
+function downloadPitch() {
+  const el = document.getElementById('pitch-text');
+  if (!el) return;
+  const text = el.dataset.raw || el.innerText;
+  const name = currentProspect ? currentProspect.name.replace(/[^a-zA-Z0-9àâäéèêëïîôùûüçÀÂÄÉÈÊËÏÎÔÙÛÜÇ -]/g, '') : 'prospect';
+  const filename = `${pitchType}_${name}.txt`;
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ── Stats ── */
+function renderStats() {
+  const total = prospects.length;
+  const todo   = prospects.filter(p => p.status === 'todo').length;
+  const called = prospects.filter(p => p.status === 'called').length;
+  const client = prospects.filter(p => p.status === 'client').length;
+  const nope   = prospects.filter(p => p.status === 'nope').length;
+  document.getElementById('stat-total').textContent  = total;
+  document.getElementById('stat-todo').textContent   = todo;
+  document.getElementById('stat-called').textContent = called;
+  document.getElementById('stat-client').textContent = client;
+  document.getElementById('stat-nope').textContent   = nope;
+}
+
 function renderStars(r) {
-  if (r == null) return '<span class="nd">—</span>';
+  if (r == null) return '<span class="nd">\u2014</span>';
   const n = Math.round(r);
-  return `<span class="stars">${'★'.repeat(n)}${'☆'.repeat(5-n)}</span><span class="rval">${r.toFixed(1)}</span>`;
+  return `<span class="stars">${'\u2605'.repeat(n)}${'\u2606'.repeat(5-n)}</span><span class="rval">${r.toFixed(1)}</span>`;
 }
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+/* ── Export CSV ── */
 function exportCSV() {
-  if (!prospects.length) return;
-  const header = ['Nom','Téléphone','Adresse','Note',"Nb d'avis",'Statut','Notes CRM','Rappel','Ville'];
-  const rows   = prospects.map(p => [
-    `"${p.name.replace(/"/g,'""')}"`,
-    `"${p.phone.replace(/"/g,'""')}"`,
-    `"${p.address.replace(/"/g,'""')}"`,
-    p.rating != null ? p.rating.toFixed(1) : '',
-    p.reviews,
-    STATUS_LABEL[p.status],
-    `"${(p.notes||'').replace(/"/g,'""')}"`,
-    p.rappel || '',
-    p.city,
-  ]);
-  const csv  = '\uFEFF' + [header,...rows].map(r => r.join(';')).join('\r\n');
-  const blob = new Blob([csv], { type:'text/csv;charset=utf-8' });
-  const a    = Object.assign(document.createElement('a'), {
+  if (!prospects.length) { alert('Aucun prospect à exporter.'); return; }
+  const header = ['#','Nom','Téléphone','Adresse','Ville','Note','Nb d\'avis','Chaleur','Statut','Notes CRM','Rappel'];
+  const heatLabels = {3:'Très chaud',2:'Chaud',1:'Tiède',0:'Froid'};
+  const rows = prospects.map((p,i) => {
+    const s = heatScore(p);
+    return [
+      i+1, p.name, p.phone, p.address, p.city || '',
+      p.rating != null ? p.rating.toFixed(1) : '',
+      p.reviews,
+      heatLabels[s] || '\u2014',
+      STATUS_LABEL[p.status],
+      p.notes || '',
+      p.rappel || '',
+    ];
+  });
+
+  let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
+  html += '<head><meta charset="utf-8"/><style>td,th{padding:6px 10px;border:1px solid #ccc;font-family:Calibri,Arial;font-size:12pt} th{background:#0078d4;color:#fff;font-weight:bold} tr:nth-child(even){background:#f2f7fc}</style></head><body><table>';
+  html += '<tr>' + header.map(h => `<th>${h}</th>`).join('') + '</tr>';
+  rows.forEach(r => {
+    html += '<tr>' + r.map(c => `<td>${String(c).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</td>`).join('') + '</tr>';
+  });
+  html += '</table></body></html>';
+
+  const blob = new Blob(['\uFEFF' + html], { type:'application/vnd.ms-excel;charset=utf-8' });
+  const niche = document.getElementById('niche').value.replace(/\s+/g,'_') || 'prospects';
+  const a = Object.assign(document.createElement('a'), {
     href: URL.createObjectURL(blob),
-    download: `prospects_${document.getElementById('niche').value.replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.csv`
+    download: `prospects_${niche}_${new Date().toISOString().slice(0,10)}.xls`
   });
   a.click();
   URL.revokeObjectURL(a.href);
 }
 
-['niche','apikey'].forEach(id =>
-  document.getElementById(id).addEventListener('keydown', e => { if (e.key==='Enter') runSearch(); })
-);
+/* ── Enter key ── */
+document.getElementById('niche').addEventListener('keydown', e => { if (e.key==='Enter') runSearch(); });
+
+/* ── Init ── */
+loadUser();
+loadProspects();
+loadSearchHistory();
 </script>
 </body>
 </html>

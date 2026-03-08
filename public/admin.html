@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProspectHunter — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #020b18; --surface: #061222; --card: #081830;
+      --border: #0f2d50; --border2: #163558;
+      --cyan: #00c8f8; --cyan-glow: rgba(0,200,248,.12);
+      --emerald: #00e5a0; --emerald2: rgba(0,229,160,.1);
+      --purple: #9d6eff; --purple2: rgba(157,110,255,.12);
+      --amber: #ffb800; --amber2: rgba(255,184,0,.12);
+      --text: #ddeeff; --text2: #a8c4e0; --muted: #4a6a88; --dim: #7a9ab8;
+      --red-tx: #ff8585;
+    }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; min-height: 100vh; }
+
+    header {
+      position: sticky; top: 0; z-index: 100; height: 64px;
+      background: rgba(2,11,24,.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem; display: flex; align-items: center; gap: 1rem;
+    }
+    .logo-text { font-size: 1.15rem; font-weight: 800; }
+    .logo-text span { color: var(--cyan); }
+    .badge { font-size: .68rem; font-weight: 600; background: rgba(255,65,65,.1); color: var(--red-tx); border: 1px solid rgba(255,65,65,.2); padding: 3px 10px; border-radius: 999px; }
+    .header-right { margin-left: auto; display: flex; gap: 1rem; align-items: center; }
+    .header-right a { color: var(--cyan); text-decoration: none; font-size: .85rem; font-weight: 600; }
+
+    main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat {
+      background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+      padding: 1.25rem; position: relative; overflow: hidden;
+    }
+    .stat::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; border-radius: 2px; }
+    .stat:nth-child(1)::after { background: var(--cyan); }
+    .stat:nth-child(2)::after { background: var(--emerald); }
+    .stat:nth-child(3)::after { background: var(--purple); }
+    .stat:nth-child(4)::after { background: var(--amber); }
+    .stat-n { font-size: 2rem; font-weight: 900; line-height: 1; margin-bottom: .3rem; }
+    .stat:nth-child(1) .stat-n { color: var(--cyan); }
+    .stat:nth-child(2) .stat-n { color: var(--emerald); }
+    .stat:nth-child(3) .stat-n { color: var(--purple); }
+    .stat:nth-child(4) .stat-n { color: var(--amber); }
+    .stat-l { font-size: .75rem; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 2rem; }
+    .card-title { font-size: .85rem; font-weight: 700; color: var(--cyan); padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: .06em; }
+
+    table { width: 100%; border-collapse: collapse; }
+    th { padding: .8rem 1rem; text-align: left; font-size: .7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; background: var(--surface); border-bottom: 1px solid var(--border); }
+    td { padding: .8rem 1rem; font-size: .85rem; border-bottom: 1px solid var(--border); }
+    tr:last-child td { border-bottom: none; }
+    tbody tr:hover td { background: rgba(0,200,248,.03); }
+
+    .plan-badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: .7rem; font-weight: 700; text-transform: uppercase; }
+    .plan-free { background: rgba(74,106,136,.12); color: var(--dim); }
+    .plan-pro { background: var(--cyan-glow); color: var(--cyan); }
+    .plan-business { background: var(--purple2); color: var(--purple); }
+
+    .btn-sm {
+      padding: 5px 12px; border-radius: 7px; font-size: .75rem; font-weight: 700;
+      cursor: pointer; border: 1px solid; font-family: inherit; transition: all .15s;
+    }
+    .btn-cyan { background: var(--cyan-glow); border-color: rgba(0,200,248,.2); color: var(--cyan); }
+    .btn-cyan:hover { border-color: var(--cyan); }
+    .btn-emerald { background: var(--emerald2); border-color: rgba(0,229,160,.2); color: var(--emerald); }
+    .btn-emerald:hover { border-color: var(--emerald); }
+    .btn-amber { background: var(--amber2); border-color: rgba(255,184,0,.2); color: var(--amber); }
+    .btn-amber:hover { border-color: var(--amber); }
+
+    .credits-input { width: 60px; background: var(--surface); border: 1px solid var(--border2); border-radius: 6px; padding: 4px 8px; color: var(--text); font-size: .85rem; text-align: center; outline: none; }
+    .credits-input:focus { border-color: var(--cyan); }
+
+    select.plan-select { background: var(--surface); border: 1px solid var(--border2); border-radius: 6px; padding: 4px 8px; color: var(--text); font-size: .8rem; outline: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo-text">Prospect<span>Hunter</span></div>
+    <span class="badge">ADMIN</span>
+    <div class="header-right">
+      <a href="/">&#8592; Retour app</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="stats" id="stats">
+      <div class="stat"><div class="stat-n" id="s-users">-</div><div class="stat-l">Utilisateurs</div></div>
+      <div class="stat"><div class="stat-n" id="s-searches">-</div><div class="stat-l">Recherches</div></div>
+      <div class="stat"><div class="stat-n" id="s-prospects">-</div><div class="stat-l">Prospects</div></div>
+      <div class="stat"><div class="stat-n" id="s-pro">-</div><div class="stat-l">Abonnés Pro+</div></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Utilisateurs</div>
+      <table>
+        <thead>
+          <tr><th>#</th><th>Email</th><th>Plan</th><th>Credits</th><th>Recherches</th><th>Prospects</th><th>Inscrit le</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="users-body"></tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Recherches recentes</div>
+      <table>
+        <thead>
+          <tr><th>Email</th><th>Niche</th><th>Pays</th><th>Resultats</th><th>Date</th></tr>
+        </thead>
+        <tbody id="searches-body"></tbody>
+      </table>
+    </div>
+  </main>
+
+<script>
+const token = localStorage.getItem('ph_token');
+if (!token) window.location.href = '/login';
+
+const headers = { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token };
+
+async function loadAll() {
+  try {
+    const [statsRes, usersRes, searchesRes] = await Promise.all([
+      fetch('/api/admin/stats', { headers }),
+      fetch('/api/admin/users', { headers }),
+      fetch('/api/admin/searches', { headers }),
+    ]);
+
+    if (statsRes.status === 403 || usersRes.status === 403) {
+      alert('Accès refusé. Vous devez être administrateur.');
+      window.location.href = '/';
+      return;
+    }
+
+    const stats = await statsRes.json();
+    const users = await usersRes.json();
+    const searches = await searchesRes.json();
+
+    // Stats
+    document.getElementById('s-users').textContent = stats.totalUsers;
+    document.getElementById('s-searches').textContent = stats.totalSearches;
+    document.getElementById('s-prospects').textContent = stats.totalProspects;
+    const proPlus = (stats.planCounts || []).filter(p => p.plan !== 'free').reduce((a, b) => a + b.c, 0);
+    document.getElementById('s-pro').textContent = proPlus;
+
+    // Users table
+    document.getElementById('users-body').innerHTML = users.map(u => `
+      <tr>
+        <td style="color:var(--muted)">${u.id}</td>
+        <td style="font-weight:600">${u.email}</td>
+        <td>
+          <select class="plan-select" onchange="changePlan(${u.id}, this.value)">
+            <option value="free" ${u.plan==='free'?'selected':''}>Free</option>
+            <option value="pro" ${u.plan==='pro'?'selected':''}>Pro</option>
+            <option value="business" ${u.plan==='business'?'selected':''}>Business</option>
+          </select>
+        </td>
+        <td>
+          <input class="credits-input" type="number" value="${u.credits}" id="credits-${u.id}" min="0">
+          <button class="btn-sm btn-cyan" onclick="setCredits(${u.id})">OK</button>
+        </td>
+        <td>${u.total_searches}</td>
+        <td>${u.total_prospects}</td>
+        <td style="color:var(--muted);font-size:.8rem">${new Date(u.created_at).toLocaleDateString('fr-FR')}</td>
+        <td>
+          <button class="btn-sm ${u.is_admin ? 'btn-amber' : 'btn-emerald'}" onclick="toggleAdmin(${u.id}, ${u.is_admin ? 0 : 1})">
+            ${u.is_admin ? 'Retirer admin' : 'Rendre admin'}
+          </button>
+        </td>
+      </tr>
+    `).join('');
+
+    // Searches table
+    document.getElementById('searches-body').innerHTML = searches.slice(0, 50).map(s => `
+      <tr>
+        <td style="font-weight:600">${s.email}</td>
+        <td>${s.niche}</td>
+        <td>${(s.country||'').toUpperCase()}</td>
+        <td>${s.results_count}</td>
+        <td style="color:var(--muted);font-size:.8rem">${new Date(s.created_at).toLocaleString('fr-FR')}</td>
+      </tr>
+    `).join('');
+
+  } catch (err) {
+    console.error(err);
+    alert('Erreur lors du chargement.');
+  }
+}
+
+async function setCredits(userId) {
+  const val = parseInt(document.getElementById('credits-' + userId).value);
+  if (isNaN(val) || val < 0) return;
+  await fetch('/api/admin/users/' + userId + '/credits', {
+    method: 'PUT', headers, body: JSON.stringify({ credits: val }),
+  });
+  loadAll();
+}
+
+async function changePlan(userId, plan) {
+  await fetch('/api/admin/users/' + userId + '/plan', {
+    method: 'PUT', headers, body: JSON.stringify({ plan }),
+  });
+  loadAll();
+}
+
+async function toggleAdmin(userId, isAdmin) {
+  await fetch('/api/admin/users/' + userId + '/admin', {
+    method: 'PUT', headers, body: JSON.stringify({ is_admin: isAdmin }),
+  });
+  loadAll();
+}
+
+loadAll();
+</script>
+</body>
+</html>

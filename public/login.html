@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProspectHunter — Connexion</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #020b18; --surface: #061222; --card: #081830;
+      --border: #0f2d50; --border2: #163558;
+      --cyan: #00c8f8; --cyan-glow: rgba(0,200,248,.12);
+      --emerald: #00e5a0;
+      --text: #ddeeff; --text2: #a8c4e0; --muted: #4a6a88; --dim: #7a9ab8;
+      --red-tx: #ff8585; --red-bg: rgba(255,65,65,.08); --red-bd: rgba(255,65,65,.22);
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', sans-serif; min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background-image: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,100,200,.15) 0%, transparent 70%);
+    }
+    .login-box {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2.5rem; width: 100%; max-width: 420px;
+      position: relative; overflow: hidden;
+    }
+    .login-box::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0,200,248,.3), transparent);
+    }
+    .logo { text-align: center; margin-bottom: 2rem; }
+    .logo-icon {
+      width: 48px; height: 48px; margin: 0 auto .75rem;
+      background: linear-gradient(135deg, var(--cyan), #0080c8);
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 24px rgba(0,200,248,.3); font-size: 1.4rem;
+    }
+    .logo h1 { font-size: 1.5rem; font-weight: 900; letter-spacing: -.5px; }
+    .logo h1 span { color: var(--cyan); }
+    .logo p { color: var(--dim); font-size: .85rem; margin-top: .3rem; }
+
+    .tabs { display: flex; margin-bottom: 1.5rem; gap: .5rem; }
+    .tab {
+      flex: 1; padding: .7rem; background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 10px; color: var(--muted); font-weight: 700; font-size: .85rem;
+      cursor: pointer; transition: all .15s; text-align: center; font-family: inherit;
+    }
+    .tab:hover { color: var(--text2); border-color: var(--cyan); }
+    .tab.on { background: var(--cyan-glow); border-color: var(--cyan); color: var(--cyan); }
+
+    .form { display: none; }
+    .form.on { display: block; }
+
+    .field { margin-bottom: 1rem; }
+    .field label {
+      display: block; font-size: .7rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: .07em; margin-bottom: .4rem;
+    }
+    .inp {
+      width: 100%; background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 10px; padding: .8rem 1rem; color: var(--text); font-size: .9rem;
+      outline: none; font-family: inherit; transition: border-color .15s, box-shadow .15s;
+    }
+    .inp:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px var(--cyan-glow); }
+    .inp::placeholder { color: var(--muted); }
+
+    .btn {
+      width: 100%; padding: .9rem; margin-top: .5rem;
+      background: linear-gradient(135deg, var(--cyan) 0%, #0096d4 100%);
+      color: #020b18; border: none; border-radius: 10px;
+      font-size: .95rem; font-weight: 800; cursor: pointer;
+      font-family: inherit; transition: opacity .15s;
+      box-shadow: 0 4px 20px rgba(0,200,248,.25);
+    }
+    .btn:hover { opacity: .9; }
+    .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+    .error {
+      background: var(--red-bg); border: 1px solid var(--red-bd); border-radius: 10px;
+      padding: .75rem 1rem; color: var(--red-tx); font-size: .85rem;
+      margin-bottom: 1rem; display: none;
+    }
+    .error.on { display: block; }
+
+    .success {
+      background: rgba(0,229,160,.08); border: 1px solid rgba(0,229,160,.22); border-radius: 10px;
+      padding: .75rem 1rem; color: var(--emerald); font-size: .85rem;
+      margin-bottom: 1rem; display: none;
+    }
+    .success.on { display: block; }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <div class="logo">
+      <div class="logo-icon">&#128269;</div>
+      <h1>Prospect<span>Hunter</span></h1>
+      <p>Trouvez vos futurs clients</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab on" onclick="showTab('login')">Connexion</button>
+      <button class="tab" onclick="showTab('register')">Inscription</button>
+    </div>
+
+    <div id="error" class="error"></div>
+    <div id="success" class="success"></div>
+
+    <!-- Login form -->
+    <div id="form-login" class="form on">
+      <div class="field">
+        <label>Email</label>
+        <input class="inp" type="email" id="login-email" placeholder="votre@email.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <input class="inp" type="password" id="login-pass" placeholder="Votre mot de passe" autocomplete="current-password">
+      </div>
+      <button class="btn" id="btn-login" onclick="doLogin()">Se connecter</button>
+    </div>
+
+    <!-- Register form -->
+    <div id="form-register" class="form">
+      <div class="field">
+        <label>Email</label>
+        <input class="inp" type="email" id="reg-email" placeholder="votre@email.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <input class="inp" type="password" id="reg-pass" placeholder="6 caractères minimum" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label>Confirmer le mot de passe</label>
+        <input class="inp" type="password" id="reg-pass2" placeholder="Confirmez votre mot de passe" autocomplete="new-password">
+      </div>
+      <button class="btn" id="btn-register" onclick="doRegister()">Créer mon compte</button>
+    </div>
+  </div>
+
+<script>
+// If already logged in, redirect
+if (localStorage.getItem('ph_token')) {
+  window.location.href = '/';
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('on', i === (tab === 'login' ? 0 : 1)));
+  document.getElementById('form-login').classList.toggle('on', tab === 'login');
+  document.getElementById('form-register').classList.toggle('on', tab === 'register');
+  hideMessages();
+}
+
+function showError(msg) {
+  const el = document.getElementById('error');
+  el.textContent = msg; el.classList.add('on');
+  document.getElementById('success').classList.remove('on');
+}
+function showSuccess(msg) {
+  const el = document.getElementById('success');
+  el.textContent = msg; el.classList.add('on');
+  document.getElementById('error').classList.remove('on');
+}
+function hideMessages() {
+  document.getElementById('error').classList.remove('on');
+  document.getElementById('success').classList.remove('on');
+}
+
+async function doLogin() {
+  hideMessages();
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-pass').value;
+  if (!email || !password) return showError('Remplissez tous les champs.');
+
+  document.getElementById('btn-login').disabled = true;
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) return showError(data.error || 'Erreur de connexion.');
+
+    localStorage.setItem('ph_token', data.token);
+    localStorage.setItem('ph_user', JSON.stringify(data.user));
+    window.location.href = '/';
+  } catch (err) {
+    showError('Erreur réseau.');
+  } finally {
+    document.getElementById('btn-login').disabled = false;
+  }
+}
+
+async function doRegister() {
+  hideMessages();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-pass').value;
+  const password2 = document.getElementById('reg-pass2').value;
+
+  if (!email || !password || !password2) return showError('Remplissez tous les champs.');
+  if (password !== password2) return showError('Les mots de passe ne correspondent pas.');
+  if (password.length < 6) return showError('Mot de passe : 6 caractères minimum.');
+
+  document.getElementById('btn-register').disabled = true;
+  try {
+    const res = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    const data = await res.json();
+    if (!res.ok) return showError(data.error || 'Erreur lors de l\'inscription.');
+
+    localStorage.setItem('ph_token', data.token);
+    localStorage.setItem('ph_user', JSON.stringify(data.user));
+    window.location.href = '/';
+  } catch (err) {
+    showError('Erreur réseau.');
+  } finally {
+    document.getElementById('btn-register').disabled = false;
+  }
+}
+
+// Enter key support
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('form-login').classList.contains('on')) doLogin();
+    else doRegister();
+  }
+});
+</script>
+</body>
+</html>
