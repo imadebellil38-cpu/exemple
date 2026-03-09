@@ -1046,6 +1046,9 @@
           </svg>
           Télécharger Excel
         </button>
+        <button class="btn-csv" id="btn-find-owners" onclick="findOwnerNames()" style="background:rgba(155,89,182,.15);color:#9b59b6;border-color:rgba(155,89,182,.25)">
+          👤 Trouver les gérants (3 crédits)
+        </button>
       </div>
     </div>
 
@@ -2094,6 +2097,45 @@ function esc(s) {
 }
 
 /* ── Export CSV ── */
+async function findOwnerNames() {
+  // Get visible prospects without owner names
+  const visible = getFilteredProspects();
+  const missing = visible.filter(p => !p.owner_name);
+  if (!missing.length) { alert('Tous les prospects affichés ont déjà un gérant.'); return; }
+
+  const btn = document.getElementById('btn-find-owners');
+  btn.disabled = true;
+  btn.textContent = '⏳ Analyse en cours...';
+
+  try {
+    const res = await fetch('/api/pitch/extract-owners', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
+      body: JSON.stringify({ prospects: missing.map(p => ({ id: p.id, name: p.name, city: p.city })) }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Erreur');
+
+    let found = 0;
+    if (data.results) {
+      data.results.forEach(r => {
+        if (r.owner_name) {
+          const p = prospects.find(pp => pp.id === r.id);
+          if (p) { p.owner_name = r.owner_name; found++; }
+        }
+      });
+    }
+    renderTable();
+    alert(`✅ ${found} gérant(s) trouvé(s) sur ${missing.length} prospects analysés.\n💰 3 crédits utilisés.`);
+    fetchCredits();
+  } catch (err) {
+    alert('❌ ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '👤 Trouver les gérants (3 crédits)';
+  }
+}
+
 function exportCSV() {
   if (!prospects.length) { alert('Aucun prospect à exporter.'); return; }
   const header = ['#','Nom','Téléphone','Adresse','Ville','Note','Nb d\'avis','Site web','Facebook','Instagram','TikTok','Chaleur','Statut','Notes CRM','Rappel'];

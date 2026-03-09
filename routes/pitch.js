@@ -168,6 +168,39 @@ function callClaude(apiKey, prospect, niche, pitchType) {
   });
 }
 
+function callClaudeRaw(apiKey, prompt, maxTokens = 900) {
+  return new Promise((resolve, reject) => {
+    const body = JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: maxTokens,
+      messages: [{ role: 'user', content: prompt }],
+    });
+    const options = {
+      hostname: 'api.anthropic.com',
+      path: '/v1/messages',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'Content-Length': Buffer.byteLength(body),
+      },
+    };
+    const req = https.request(options, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        try { resolve({ status: res.statusCode, body: JSON.parse(data) }); }
+        catch (e) { reject(new Error('Réponse invalide de l\'API Anthropic')); }
+      });
+    });
+    req.on('error', reject);
+    req.setTimeout(60000, () => { req.destroy(); reject(new Error('Anthropic API timeout')); });
+    req.write(body);
+    req.end();
+  });
+}
+
 // POST /api/pitch
 router.post('/', async (req, res) => {
   const { prospect, niche, pitchType } = req.body;
@@ -220,6 +253,86 @@ router.post('/keywords', async (req, res) => {
   } catch (err) {
     console.error('[KEYWORDS] Error:', err.message);
     res.status(500).json({ error: 'Erreur lors de la génération des mots-clés.' });
+  }
+});
+
+// POST /api/pitch/extract-owners — extract owner names from business names using Claude
+router.post('/extract-owners', async (req, res) => {
+  const { prospects } = req.body;
+
+  if (!Array.isArray(prospects) || prospects.length === 0) {
+    return res.status(400).json({ error: 'Aucun prospect fourni.' });
+  }
+  if (prospects.length > 200) {
+    return res.status(400).json({ error: 'Maximum 200 prospects à la fois.' });
+  }
+
+  // ── Check credits (costs 3) ──
+  const user = db.prepare('SELECT credits, anthropic_key FROM users WHERE id = ?').get(req.user.id);
+  if (!user || user.credits < 3) {
+    return res.status(400).json({ error: `Crédits insuffisants (${user ? user.credits : 0}/3 requis).` });
+  }
+  const apiKey = ANTHROPIC_API_KEY || user.anthropic_key;
+  if (!apiKey) {
+    return res.status(400).json({ error: 'Clé API Anthropic non configurée.' });
+  }
+
+  // Build the list for Claude
+  const list = prospects.map((p, i) => `${i + 1}. "${p.name}" (${p.city || '?'})`).join('\n');
+
+  const prompt = `Voici une liste de noms d'entreprises/commerces. Pour chacun, essaie d'extraire le nom du gérant/propriétaire SI il est visible dans le nom de l'entreprise.
+
+Règles :
+- Si le nom d'entreprise contient clairement un prénom+nom de personne (ex: "Bucci Stéphane", "PELLEGRIN Dylan PLOMBIER"), extrais-le au format "Prénom Nom"
+- Si le nom contient "Dr" ou "Docteur" + nom, extrais-le
+- Si le nom contient un patronyme évident (ex: "Caprara Yoann Plomberie"), extrais-le
+- Si c'est un nom de marque/enseigne sans nom de personne (ex: "La Flânerie", "SULTAN KABAB"), mets ""
+- Ne devine PAS. Si tu n'es pas sûr, mets ""
+
+Réponds UNIQUEMENT avec un JSON array, un objet par ligne, format: [{"i":1,"n":"Prénom Nom"},{"i":2,"n":""}]
+Pas de texte avant/après, juste le JSON.
+
+Liste :
+${list}`;
+
+  try {
+    const result = await callClaudeRaw(apiKey, prompt, 2000);
+    if (result.status !== 200) {
+      const errMsg = result.body?.error?.message || 'Erreur API Anthropic';
+      return res.status(result.status).json({ error: errMsg });
+    }
+
+    const text = result.body?.content?.[0]?.text || '[]';
+    // Extract JSON from response (Claude might wrap it in markdown)
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) {
+      return res.status(500).json({ error: 'Réponse IA invalide.' });
+    }
+
+    let parsed;
+    try { parsed = JSON.parse(jsonMatch[0]); } catch { return res.status(500).json({ error: 'JSON invalide.' }); }
+
+    // Update DB for each found name
+    const updateStmt = db.prepare('UPDATE prospects SET owner_name = ? WHERE id = ? AND user_id = ?');
+    const results = [];
+    for (const item of parsed) {
+      const idx = item.i - 1;
+      if (idx >= 0 && idx < prospects.length) {
+        const ownerName = (item.n || '').trim().substring(0, 200);
+        if (ownerName) {
+          updateStmt.run(ownerName, prospects[idx].id, req.user.id);
+        }
+        results.push({ id: prospects[idx].id, owner_name: ownerName });
+      }
+    }
+
+    // Deduct 3 credits
+    db.prepare('UPDATE users SET credits = credits - 3 WHERE id = ?').run(req.user.id);
+
+    res.json({ results, creditsUsed: 3 });
+  } catch (err) {
+    console.error('[EXTRACT-OWNERS] Error:', err.message);
+    res.status(500).json({ error: 'Erreur lors de l\'extraction. Réessayez.' });
   }
 });
 
