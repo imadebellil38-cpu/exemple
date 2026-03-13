@@ -68,9 +68,17 @@ const searchLimiter = rateLimit({
   message: { error: 'Trop de recherches. Réessayez dans quelques minutes.' },
 });
 
-// ── Static files ──
+// === Pages (BEFORE static so they take priority) ===
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'landing.html')));
+app.get('/app', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
+app.get('/pricing', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pricing.html')));
+
+// ── Static files (CSS, JS, images) ──
 app.use(express.static(path.join(__dirname, 'public'), {
   maxAge: isProd ? '1d' : 0,
+  index: false, // Don't serve index.html on / — landing.html handles that
 }));
 
 // === Public auth routes (rate-limited on login/register only) ===
@@ -83,11 +91,6 @@ app.use('/api/pitch', requireAuth, require('./routes/pitch'));
 app.use('/api/admin', requireAuth, require('./routes/admin'));
 app.use('/api/subscription', requireAuth, require('./routes/subscription'));
 app.use('/api/referral', requireAuth, require('./routes/referral'));
-
-// === Pages ===
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
-app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
-app.get('/pricing', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pricing.html')));
 
 // ── 404 handler for API routes ──
 app.use('/api', (req, res) => {

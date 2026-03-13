@@ -6,950 +6,168 @@
   <title>ProspectHunter</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg:       #020b18;
-      --surface:  #061222;
-      --card:     #081830;
-      --card2:    #0a1e38;
-      --border:   #0f2d50;
-      --border2:  #163558;
-
-      --cyan:     #00c8f8;
-      --cyan2:    #38d9fa;
-      --cyan-glow: rgba(0,200,248,.12);
-      --cyan-glow2: rgba(0,200,248,.06);
-
-      --emerald:  #00e5a0;
-      --emerald2: rgba(0,229,160,.1);
-
-      --purple:   #9d6eff;
-      --purple2:  rgba(157,110,255,.12);
-      --purple3:  rgba(157,110,255,.25);
-
-      --amber:    #ffb800;
-      --amber2:   rgba(255,184,0,.12);
-
-      --text:     #ddeeff;
-      --text2:    #a8c4e0;
-      --muted:    #4a6a88;
-      --dim:      #7a9ab8;
-
-      --red-bg:   rgba(255,65,65,.08);
-      --red-bd:   rgba(255,65,65,.22);
-      --red-tx:   #ff8585;
-
-      --green-tx: #00e5a0;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      min-height: 100vh;
-      line-height: 1.5;
-      background-image:
-        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,100,200,.15) 0%, transparent 70%);
-    }
-
-    /* ── HEADER ── */
-    header {
-      position: sticky; top: 0; z-index: 100;
-      height: 64px;
-      background: rgba(2,11,24,.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 2rem;
-      display: flex; align-items: center; gap: 1rem;
-    }
-
-    .logo-icon {
-      width: 34px; height: 34px;
-      background: linear-gradient(135deg, var(--cyan), #0080c8);
-      border-radius: 9px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 0 18px rgba(0,200,248,.3);
-    }
-
-    .logo-text {
-      font-size: 1.15rem; font-weight: 800; letter-spacing: -.4px;
-      color: var(--text);
-    }
-    .logo-text span { color: var(--cyan); }
-
-    .header-badge {
-      font-size: .68rem; font-weight: 600;
-      background: var(--cyan-glow);
-      color: var(--cyan);
-      border: 1px solid rgba(0,200,248,.2);
-      padding: 3px 10px; border-radius: 999px;
-      letter-spacing: .04em;
-    }
-
-    .header-right {
-      margin-left: auto;
-      display: flex; align-items: center; gap: .75rem;
-    }
-
-    .credits-badge {
-      display: flex; align-items: center; gap: .4rem;
-      font-size: .78rem; font-weight: 700;
-      padding: 5px 14px; border-radius: 999px;
-      border: 1px solid rgba(0,229,160,.25);
-      background: var(--emerald2); color: var(--emerald);
-    }
-    .plan-badge {
-      font-size: .68rem; font-weight: 700;
-      padding: 3px 10px; border-radius: 999px;
-      text-transform: uppercase; letter-spacing: .04em;
-    }
-    .plan-free { background: rgba(74,106,136,.12); color: var(--dim); border: 1px solid rgba(74,106,136,.3); }
-    .plan-pro { background: var(--cyan-glow); color: var(--cyan); border: 1px solid rgba(0,200,248,.2); }
-    .plan-business, .plan-enterprise { background: var(--purple2); color: var(--purple); border: 1px solid var(--purple3); }
-
-    .hdr-btn {
-      background: var(--surface); border: 1px solid var(--border2);
-      color: var(--dim); padding: 6px 14px; border-radius: 8px;
-      font-size: .78rem; font-weight: 600; cursor: pointer;
-      transition: all .15s; font-family: inherit; text-decoration: none;
-    }
-    .hdr-btn:hover { border-color: var(--cyan); color: var(--cyan); }
-
-    /* ── MAIN ── */
-    main { max-width: 1240px; margin: 0 auto; padding: 2.5rem 1.5rem; }
-
-    /* ── HERO ── */
-    .hero {
-      text-align: center;
-      margin-bottom: 2.5rem;
-      padding: 2rem 1rem;
-    }
-    .hero-eyebrow {
-      display: inline-flex; align-items: center; gap: .4rem;
-      font-size: .72rem; font-weight: 600; color: var(--cyan);
-      background: var(--cyan-glow);
-      border: 1px solid rgba(0,200,248,.18);
-      padding: 4px 14px; border-radius: 999px;
-      letter-spacing: .06em; text-transform: uppercase;
-      margin-bottom: 1rem;
-    }
-    .hero h1 {
-      font-size: 2.25rem; font-weight: 900; letter-spacing: -.5px;
-      line-height: 1.2;
-      background: linear-gradient(135deg, #fff 0%, var(--text2) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom: .6rem;
-    }
-    .hero h1 em {
-      font-style: normal;
-      background: linear-gradient(135deg, var(--cyan) 0%, var(--emerald) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .hero p { color: var(--dim); font-size: .9rem; }
-
-    /* ── SEARCH CARD ── */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 2rem;
-      margin-bottom: 1.25rem;
-      position: relative;
-      overflow: hidden;
-    }
-    .card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(0,200,248,.3), transparent);
-    }
-
-    .card-title {
-      font-size: .8rem; font-weight: 700; color: var(--cyan);
-      text-transform: uppercase; letter-spacing: .08em;
-      margin-bottom: 1.5rem;
-      display: flex; align-items: center; gap: .5rem;
-    }
-    .card-title::before {
-      content: '';
-      width: 3px; height: 14px;
-      background: var(--cyan);
-      border-radius: 2px;
-      display: inline-block;
-    }
-
-    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem; }
-
-    .field { display: flex; flex-direction: column; gap: .45rem; }
-    label {
-      font-size: .7rem; font-weight: 700; color: var(--muted);
-      text-transform: uppercase; letter-spacing: .07em;
-    }
-
-    .inp {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      padding: .78rem 1.1rem;
-      color: var(--text); font-size: .88rem;
-      outline: none; width: 100%;
-      transition: border-color .15s, box-shadow .15s;
-      font-family: inherit;
-    }
-    .inp:focus {
-      border-color: var(--cyan);
-      box-shadow: 0 0 0 3px var(--cyan-glow);
-    }
-    .inp::placeholder { color: var(--muted); }
-    .inp-wrap { position: relative; }
-    .inp-wrap .inp { padding-right: 2.75rem; }
-    .eye {
-      position: absolute; right: .8rem; top: 50%; transform: translateY(-50%);
-      background: none; border: none; color: var(--muted); cursor: pointer;
-      padding: 4px; line-height: 0; transition: color .15s;
-    }
-    .eye:hover { color: var(--cyan); }
-
-    /* Country buttons */
-    /* Niche categories */
-    .niche-cats { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: .75rem; }
-    .niche-cat {
-      padding: .55rem .9rem; background: var(--surface);
-      border: 1px solid var(--border2); border-radius: 10px;
-      color: var(--muted); font-size: .78rem; font-weight: 700;
-      cursor: pointer; transition: all .15s; font-family: inherit;
-      display: flex; align-items: center; gap: .35rem;
-    }
-    .niche-cat:hover { border-color: var(--cyan); color: var(--text2); }
-    .niche-cat.on {
-      background: var(--cyan-glow); border-color: var(--cyan);
-      color: var(--cyan); box-shadow: 0 0 12px var(--cyan-glow);
-    }
-    .niche-select {
-      width: 100%; padding: .75rem 1rem; background: var(--surface);
-      border: 1px solid var(--border2); border-radius: 10px;
-      color: var(--text); font-size: .88rem; font-weight: 600;
-      font-family: inherit; outline: none; cursor: pointer;
-      appearance: none; -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a6a88' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 1rem center;
-    }
-    .niche-select:focus { border-color: var(--cyan); }
-    .niche-select option { background: var(--card); color: var(--text); padding: .5rem; }
-    .niche-custom { display: none; margin-top: .5rem; }
-    .niche-custom.show { display: block; }
-
-    /* Search mode selector */
-    .search-modes { display: flex; gap: .6rem; margin-bottom: .25rem; }
-    .search-mode {
-      flex: 1; padding: .7rem .5rem; background: var(--surface);
-      border: 2px solid var(--border2); border-radius: 12px;
-      color: var(--muted); font-size: .78rem; font-weight: 700;
-      cursor: pointer; transition: all .2s; font-family: inherit;
-      text-align: center; display: flex; flex-direction: column; align-items: center; gap: .25rem;
-    }
-    .search-mode:hover { border-color: var(--cyan); color: var(--text2); }
-    .search-mode.on {
-      background: var(--cyan-glow); border-color: var(--cyan);
-      color: var(--cyan); box-shadow: 0 0 16px var(--cyan-glow);
-    }
-    .search-mode .sm-icon { font-size: 1.3rem; }
-    .search-mode .sm-label { font-size: .78rem; font-weight: 800; }
-    .search-mode .sm-cost { font-size: .68rem; font-weight: 600; opacity: .7; }
-    .search-mode.disabled {
-      opacity: .4; cursor: not-allowed; pointer-events: none;
-    }
-
-    /* Signal badges */
-    .badge-signals { display: flex; flex-wrap: wrap; gap: .3rem; }
-    .badge-sig {
-      display: inline-flex; align-items: center; gap: .2rem;
-      padding: .15rem .45rem; border-radius: 6px;
-      font-size: .65rem; font-weight: 700; white-space: nowrap;
-    }
-    .badge-nosite { background: rgba(231,76,60,.12); color: #e74c3c; }
-    .badge-nosocial { background: rgba(243,156,18,.12); color: #f39c12; }
-    .badge-fewreviews { background: rgba(241,196,15,.12); color: #f1c40f; }
-    .badge-unchecked { background: rgba(127,140,160,.1); color: var(--muted); }
-
-    .ctry-row { display: flex; gap: .6rem; }
-    .ctry {
-      flex: 1; padding: .7rem .5rem;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      color: var(--muted); font-size: .85rem; font-weight: 600;
-      cursor: pointer; transition: all .15s;
-      display: flex; align-items: center; justify-content: center; gap: .35rem;
-      font-family: inherit;
-    }
-    .ctry:hover { border-color: var(--cyan); color: var(--text2); }
-    .ctry.on {
-      background: var(--cyan-glow);
-      border-color: var(--cyan);
-      color: var(--cyan);
-      box-shadow: 0 0 12px var(--cyan-glow);
-    }
-
-    /* Search btn */
-    .btn-search {
-      width: 100%; padding: .9rem;
-      background: linear-gradient(135deg, var(--cyan) 0%, #0096d4 100%);
-      color: #020b18;
-      border: none; border-radius: 10px;
-      font-size: .95rem; font-weight: 800; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: .5rem;
-      transition: opacity .15s, transform .1s, box-shadow .15s;
-      letter-spacing: .02em; font-family: inherit;
-      box-shadow: 0 4px 20px rgba(0,200,248,.25);
-    }
-    .btn-search:hover:not(:disabled) {
-      opacity: .9;
-      box-shadow: 0 6px 30px rgba(0,200,248,.4);
-    }
-    .btn-search:active:not(:disabled) { transform: scale(.99); }
-    .btn-search:disabled { opacity: .45; cursor: not-allowed; }
-
-    /* Alert */
-    .alert {
-      background: var(--red-bg); border: 1px solid var(--red-bd);
-      border-radius: 10px; padding: .85rem 1.1rem;
-      color: var(--red-tx); font-size: .875rem;
-      margin-bottom: 1.25rem; display: none; align-items: center; gap: .5rem;
-    }
-    .alert.on { display: flex; }
-
-    /* ── LOADER ── */
-    .loader { display: none; text-align: center; padding: 3rem 1rem 2rem; }
-    .loader.on { display: block; }
-    .ring { width: 60px; height: 60px; margin: 0 auto 1.2rem; }
-    .ring svg { transform: rotate(-90deg); }
-    .ring circle { fill: none; stroke-width: 3; }
-    .ring .track { stroke: var(--border2); }
-    .ring .fill {
-      stroke: var(--cyan); stroke-linecap: round;
-      stroke-dasharray: 138.23; stroke-dashoffset: 138.23;
-      transition: stroke-dashoffset .35s ease;
-      filter: drop-shadow(0 0 4px var(--cyan));
-    }
-    .l-title { font-size: .95rem; font-weight: 700; margin-bottom: .3rem; color: var(--text); }
-    .l-sub   { color: var(--muted); font-size: .82rem; margin-bottom: 1rem; }
-
-    /* ── RESULTS ── */
-    .res-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: .75rem; margin-bottom: 1.25rem;
-    }
-
-    .kpi {
-      display: flex; align-items: center; gap: 1rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px; padding: .85rem 1.5rem;
-      position: relative; overflow: hidden;
-    }
-    .kpi::after {
-      content: '';
-      position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-      background: linear-gradient(180deg, var(--cyan), var(--emerald));
-      border-radius: 2px;
-    }
-    .kpi-n {
-      font-size: 2.4rem; font-weight: 900;
-      background: linear-gradient(135deg, var(--cyan), var(--emerald));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      line-height: 1; min-width: 2ch;
-    }
-    .kpi-label { font-size: .875rem; font-weight: 700; color: var(--text); }
-    .kpi-sub   { font-size: .7rem; color: var(--muted); margin-top: .1rem; }
-
-    .res-actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-
-    .filter-wrap {
-      display: flex; align-items: center; gap: .6rem;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 10px; padding: .55rem 1rem;
-    }
-    .filter-wrap span { font-size: .75rem; color: var(--muted); white-space: nowrap; }
-    .sel {
-      background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 7px; color: var(--text); font-size: .82rem;
-      padding: .3rem .5rem; outline: none; cursor: pointer; font-family: inherit;
-    }
-    .sel:focus { border-color: var(--cyan); }
-    .sel option { background: var(--surface); }
-
-    .btn-csv {
-      padding: .75rem 1.5rem;
-      background: linear-gradient(135deg, var(--cyan), #0080c8);
-      border: 1px solid var(--cyan);
-      color: #fff;
-      border-radius: 12px; font-size: .95rem; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; gap: .5rem;
-      transition: all .2s; font-family: inherit;
-      box-shadow: 0 0 20px rgba(0,200,248,.25);
-    }
-    .btn-csv:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,200,248,.4); background: linear-gradient(135deg, var(--cyan2), #00a0e8); }
-
-    /* Table */
-    .tbl-wrap {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 16px; overflow: hidden; overflow-x: auto;
-    }
-    table { width: 100%; border-collapse: collapse; min-width: 1000px; }
-    thead { background: var(--surface); }
-    th {
-      padding: .9rem 1.1rem;
-      text-align: left; font-size: .68rem; font-weight: 700;
-      color: var(--muted); text-transform: uppercase; letter-spacing: .08em;
-      border-bottom: 1px solid var(--border); white-space: nowrap;
-    }
-    th.sortable { cursor: pointer; user-select: none; transition: color .15s; }
-    th.sortable:hover { color: var(--text2); }
-    th.sortable.active { color: var(--cyan); }
-    .si { margin-left: 3px; font-size: .65rem; opacity: .4; }
-    th.active .si { opacity: 1; }
-
-    td {
-      padding: .85rem 1.1rem; font-size: .875rem;
-      border-bottom: 1px solid var(--border); vertical-align: middle;
-    }
-    tr:last-child td { border-bottom: none; }
-    tbody tr { cursor: pointer; transition: background .1s; }
-    tbody tr:hover td { background: rgba(0,200,248,.03); }
-
-    .c-n    { color: var(--muted); font-size: .75rem; width: 2.5rem; cursor: default; }
-    .c-name { font-weight: 700; max-width: 175px; color: var(--text); }
-    .map-link { color: var(--text); text-decoration: none; transition: color .2s; }
-    .map-link:hover { color: var(--accent); }
-    .map-icon { font-size: .7rem; opacity: 0; transition: opacity .2s; }
-    .map-link:hover .map-icon { opacity: 1; }
-    .c-addr { color: var(--dim); font-size: .8rem; max-width: 200px; }
-    .c-tel a {
-      color: var(--cyan); font-weight: 600; text-decoration: none; white-space: nowrap;
-    }
-    .c-tel a:hover { text-decoration: underline; }
-    .stars { color: var(--amber); }
-    .rval  { color: var(--muted); font-size: .78rem; margin-left: 3px; }
-    .nd    { color: var(--muted); }
-
-    /* Action buttons */
-    .row-actions { display: flex; gap: 6px; }
-    .btn-call, .btn-pitch {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 34px; height: 34px; border-radius: 9px; border: 1px solid;
-      cursor: pointer; transition: all .15s;
-    }
-    .btn-call  {
-      background: rgba(0,200,248,.08); border-color: rgba(0,200,248,.2);
-      color: var(--cyan); text-decoration: none;
-    }
-    .btn-call:hover  { background: rgba(0,200,248,.18); border-color: var(--cyan); }
-    .btn-pitch {
-      background: var(--purple2); border-color: var(--purple3);
-      color: var(--purple); font-size: .85rem;
-    }
-    .btn-pitch:hover { background: rgba(157,110,255,.22); border-color: var(--purple); }
-    .btn-fiche {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 34px; height: 34px; border-radius: 9px; border: 1px solid;
-      cursor: pointer; transition: all .15s;
-      background: var(--amber2); border-color: rgba(255,184,0,.3);
-      color: var(--amber); font-size: .85rem;
-    }
-    .btn-fiche:hover { background: rgba(255,184,0,.22); border-color: var(--amber); }
-    .btn-del {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 34px; height: 34px; border-radius: 9px; border: 1px solid;
-      cursor: pointer; transition: all .15s;
-      background: var(--red-bg); border-color: var(--red-bd);
-      color: var(--red-tx); font-size: .85rem;
-    }
-    .btn-del:hover { background: rgba(255,65,65,.18); border-color: #ff8585; }
-
-    /* Status badges */
-    .status {
-      display: inline-flex; align-items: center; padding: 4px 12px;
-      border-radius: 999px; font-size: .7rem; font-weight: 700;
-      cursor: pointer; user-select: none; white-space: nowrap;
-      border: 1px solid transparent; transition: opacity .12s, transform .1s;
-      letter-spacing: .02em;
-    }
-    .status:hover { opacity: .8; transform: scale(.96); }
-    .s-todo   { background: rgba(74,106,136,.12);  color: var(--dim);    border-color: rgba(74,106,136,.3); }
-    .s-called { background: var(--amber2);         color: var(--amber);  border-color: rgba(255,184,0,.3); }
-    .s-nope   { background: var(--red-bg);         color: var(--red-tx); border-color: var(--red-bd); }
-    .s-client { background: var(--emerald2);       color: var(--emerald);border-color: rgba(0,229,160,.25); }
-
-    /* Empty */
-    .empty { display: none; text-align: center; padding: 5rem 1rem; color: var(--muted); }
-    .empty.on { display: block; }
-    .empty p { margin-top: 1rem; font-size: .9rem; line-height: 1.8; color: var(--dim); }
-
-    /* ── MODAL ── */
-    .modal-bd {
-      position: fixed; inset: 0; z-index: 500;
-      background: rgba(2,11,24,.8); backdrop-filter: blur(8px);
-      display: none; align-items: center; justify-content: center; padding: 1rem;
-    }
-    .modal-bd.on { display: flex; }
-
-    .modal {
-      background: var(--card);
-      border: 1px solid var(--border2);
-      border-radius: 20px; width: 100%; max-width: 620px;
-      max-height: 90vh; overflow-y: auto; position: relative;
-      box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(0,200,248,.08);
-    }
-    .modal::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      border-radius: 20px 20px 0 0;
-    }
-
-    .modal-head {
-      padding: 1.75rem 1.75rem 1.25rem;
-      border-bottom: 1px solid var(--border);
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
-    }
-    .modal-title { font-size: 1.2rem; font-weight: 800; margin-bottom: .25rem; color: var(--text); }
-    .modal-sub   { font-size: .8rem; color: var(--dim); }
-    .modal-close {
-      background: var(--surface); border: 1px solid var(--border2);
-      color: var(--muted); cursor: pointer; font-size: 1.1rem; line-height: 1;
-      padding: .4rem .55rem; border-radius: 8px; flex-shrink: 0;
-      transition: all .15s; font-family: inherit;
-    }
-    .modal-close:hover { color: var(--text); border-color: var(--cyan); }
-
-    /* Tabs */
-    .tabs {
-      display: flex; background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 1rem;
-    }
-    .tab {
-      flex: 1; padding: .9rem .5rem;
-      background: none; border: none; color: var(--muted);
-      font-size: .78rem; font-weight: 700; cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: all .15s; letter-spacing: .03em;
-      font-family: inherit; text-transform: uppercase;
-    }
-    .tab:hover { color: var(--text2); }
-    .tab.on { color: var(--cyan); border-bottom-color: var(--cyan); }
-
-    .tab-panel { padding: 1.75rem; display: none; }
-    .tab-panel.on { display: block; }
-
-    /* Calculator */
-    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .75rem; }
-    .calc-card {
-      background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 12px; padding: 1.1rem;
-    }
-    .calc-card.hi {
-      border-color: rgba(0,229,160,.3);
-      background: rgba(0,229,160,.05);
-    }
-    .calc-n { font-size: 1.7rem; font-weight: 900; color: var(--text); line-height: 1; margin-bottom: .3rem; }
-    .calc-card.hi .calc-n { color: var(--emerald); }
-    .calc-l { font-size: .72rem; color: var(--muted); font-weight: 500; }
-    .calc-note { font-size: .7rem; color: var(--muted); line-height: 1.6; margin-top: .5rem; }
-
-    /* CRM */
-    .crm-field { margin-bottom: 1.25rem; }
-    .crm-field label { display: block; margin-bottom: .45rem; }
-    .crm-ta {
-      width: 100%; min-height: 90px; resize: vertical;
-      background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 10px; padding: .8rem 1rem;
-      color: var(--text); font-size: .875rem; font-family: inherit; outline: none;
-      transition: border-color .15s, box-shadow .15s;
-    }
-    .crm-ta:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px var(--cyan-glow); }
-    .crm-date {
-      background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 10px; padding: .68rem 1rem;
-      color: var(--text); font-size: .875rem; outline: none; color-scheme: dark;
-      font-family: inherit;
-    }
-    .crm-date:focus { border-color: var(--cyan); }
-    .crm-saved { font-size: .72rem; color: var(--emerald); margin-top: .35rem; opacity: 0; transition: opacity .3s; }
-    .crm-saved.show { opacity: 1; }
-
-    /* Pitch */
-    .pitch-desc { font-size: .82rem; color: var(--dim); margin-bottom: 1.25rem; line-height: 1.6; }
-    .btn-gen {
-      padding: .7rem 1.2rem;
-      background: linear-gradient(135deg, var(--purple) 0%, #6e3fff 100%);
-      color: #fff; border: none; border-radius: 10px;
-      font-size: .85rem; font-weight: 700; cursor: pointer;
-      white-space: nowrap; transition: opacity .15s, box-shadow .15s;
-      display: flex; align-items: center; gap: .4rem; font-family: inherit;
-      box-shadow: 0 4px 16px rgba(157,110,255,.3);
-    }
-    .btn-gen:disabled { opacity: .5; cursor: not-allowed; box-shadow: none; }
-    .btn-gen:hover:not(:disabled) { opacity: .88; box-shadow: 0 6px 24px rgba(157,110,255,.4); }
-
-    .pitch-out {
-      background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 12px; padding: 1.4rem; line-height: 1.8;
-      font-size: .88rem; margin-top: 1rem; white-space: pre-wrap; display: none;
-      color: var(--text2);
-    }
-    .pitch-out.on { display: block; }
-
-    .btn-copy {
-      margin-top: 1rem; padding: .6rem 1.1rem;
-      background: transparent; border: 1px solid var(--border2); color: var(--dim);
-      border-radius: 9px; font-size: .8rem; font-weight: 600; cursor: pointer;
-      display: flex; align-items: center; gap: .4rem; transition: all .15s; font-family: inherit;
-    }
-    .btn-copy:hover { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-glow2); }
-
-    .pitch-loading {
-      display: flex; align-items: center; gap: .7rem;
-      color: var(--muted); font-size: .875rem; padding: .6rem 0;
-    }
-    .mini-spin {
-      width: 16px; height: 16px;
-      border: 2px solid var(--border2);
-      border-top-color: var(--cyan);
-      border-radius: 50%;
-      animation: spin .7s linear infinite; flex-shrink: 0;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .pitch-err {
-      color: var(--red-tx); font-size: .85rem;
-      background: var(--red-bg); border: 1px solid var(--red-bd);
-      border-radius: 10px; padding: .9rem 1rem; margin-top: .75rem;
-    }
-
-    /* ── HEAT BADGES ── */
-    .heat {
-      display: inline-flex; align-items: center; gap: 3px;
-      padding: 4px 12px; border-radius: 999px;
-      font-size: .7rem; font-weight: 700; white-space: nowrap;
-      cursor: default; border: 1px solid transparent;
-      transition: transform .1s; letter-spacing: .02em;
-    }
-    .heat:hover { transform: scale(1.05); }
-    .h-hot  { background: rgba(255,65,65,.12);    color: #ff7070; border-color: rgba(255,65,65,.3); }
-    .h-warm { background: rgba(0,200,248,.1);     color: var(--cyan); border-color: rgba(0,200,248,.3); }
-    .h-mild { background: var(--amber2);          color: var(--amber); border-color: rgba(255,184,0,.3); }
-    .h-cold { background: rgba(74,106,136,.1);    color: var(--muted); border-color: rgba(74,106,136,.2); }
-
-    /* ── DIVIDER ── */
-    .section-divider {
-      display: flex; align-items: center; gap: .75rem;
-      margin: 1.75rem 0 1.25rem; color: var(--muted); font-size: .72rem;
-      font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
-    }
-    .section-divider::before, .section-divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--border);
-    }
-
-    /* ── STATS ROW ── */
-    .stats-row {
-      display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.25rem;
-    }
-    .stat-chip {
-      display: flex; align-items: center; gap: .4rem;
-      padding: .5rem 1rem; border-radius: 10px;
-      font-size: .78rem; font-weight: 600;
-      border: 1px solid transparent;
-    }
-    .stat-n { font-weight: 900; font-size: 1rem; }
-    .sc-total  { background: var(--cyan-glow2); border-color: rgba(0,200,248,.15); color: var(--cyan); }
-    .sc-todo   { background: rgba(74,106,136,.08); border-color: rgba(74,106,136,.2); color: var(--dim); }
-    .sc-called { background: var(--amber2); border-color: rgba(255,184,0,.2); color: var(--amber); }
-    .sc-client { background: var(--emerald2); border-color: rgba(0,229,160,.2); color: var(--emerald); }
-    .sc-nope   { background: var(--red-bg); border-color: var(--red-bd); color: var(--red-tx); }
-
-    /* ── REGEN BTN ── */
-    .btn-regen {
-      margin-top: .5rem; padding: .6rem 1.1rem;
-      background: transparent; border: 1px solid var(--border2); color: var(--dim);
-      border-radius: 9px; font-size: .8rem; font-weight: 600; cursor: pointer;
-      display: inline-flex; align-items: center; gap: .4rem; transition: all .15s; font-family: inherit;
-    }
-    .btn-regen:hover { border-color: var(--purple); color: var(--purple); background: var(--purple2); }
-
-    /* ── FICHE ── */
-    .fiche-out {
-      background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 12px; padding: 1.4rem; line-height: 1.8;
-      font-size: .88rem; white-space: pre-wrap; color: var(--text2);
-    }
-    .fiche-out strong { color: var(--amber); }
-    .btn-fiche-gen {
-      width: 100%; padding: .85rem;
-      background: linear-gradient(135deg, var(--amber) 0%, #d49800 100%);
-      color: #020b18; border: none; border-radius: 10px;
-      font-size: .92rem; font-weight: 800; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: .5rem;
-      transition: opacity .15s, box-shadow .15s; font-family: inherit;
-      box-shadow: 0 4px 20px rgba(255,184,0,.25);
-    }
-    .btn-fiche-gen:hover:not(:disabled) { opacity: .88; box-shadow: 0 6px 30px rgba(255,184,0,.4); }
-    .btn-fiche-gen:disabled { opacity: .45; cursor: not-allowed; }
-
-    /* ── PITCH TYPE SELECT ── */
-    .pitch-type-row {
-      display: flex; gap: .4rem; margin-bottom: 1rem; flex-wrap: wrap;
-    }
-    .pitch-type-btn {
-      padding: .5rem .9rem; border-radius: 8px;
-      background: var(--surface); border: 1px solid var(--border2);
-      color: var(--muted); font-size: .78rem; font-weight: 600;
-      cursor: pointer; transition: all .15s; font-family: inherit;
-    }
-    .pitch-type-btn:hover { border-color: var(--purple); color: var(--text2); }
-    .pitch-type-btn.on {
-      background: var(--purple2); border-color: var(--purple);
-      color: var(--purple); box-shadow: 0 0 10px var(--purple2);
-    }
-
-    /* ── SETTINGS MODAL ── */
-    .settings-bd {
-      position: fixed; inset: 0; z-index: 600;
-      background: rgba(2,11,24,.8); backdrop-filter: blur(8px);
-      display: none; align-items: center; justify-content: center; padding: 1rem;
-    }
-    .settings-bd.on { display: flex; }
-    .settings-box {
-      background: var(--card); border: 1px solid var(--border2);
-      border-radius: 20px; width: 100%; max-width: 480px;
-      padding: 2rem; position: relative;
-      box-shadow: 0 40px 80px rgba(0,0,0,.6);
-    }
-    .settings-box::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-      border-radius: 20px 20px 0 0;
-    }
-    .settings-title {
-      font-size: 1.1rem; font-weight: 800; margin-bottom: 1.5rem;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .settings-title button {
-      background: var(--surface); border: 1px solid var(--border2);
-      color: var(--muted); cursor: pointer; font-size: 1.1rem; line-height: 1;
-      padding: .4rem .55rem; border-radius: 8px;
-      transition: all .15s; font-family: inherit;
-    }
-    .settings-title button:hover { color: var(--text); border-color: var(--cyan); }
-    .settings-field { margin-bottom: 1.25rem; }
-    .settings-field label { display: block; margin-bottom: .4rem; }
-    .settings-save {
-      width: 100%; padding: .85rem;
-      background: linear-gradient(135deg, var(--cyan) 0%, #0096d4 100%);
-      color: #020b18; border: none; border-radius: 10px;
-      font-size: .92rem; font-weight: 800; cursor: pointer;
-      font-family: inherit; box-shadow: 0 4px 20px rgba(0,200,248,.25);
-      transition: opacity .15s;
-    }
-    .settings-save:hover { opacity: .9; }
-    .settings-msg { font-size: .8rem; color: var(--emerald); text-align: center; margin-top: .75rem; opacity: 0; transition: opacity .3s; }
-    .settings-msg.show { opacity: 1; }
-
-    /* ── Referral section ── */
-    .referral-card {
-      background: var(--card); border: 1px solid var(--border2);
-      border-radius: 16px; padding: 1.5rem; margin-top: 1.5rem;
-      position: relative; overflow: hidden;
-    }
-    .referral-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(0,229,160,.3), transparent);
-    }
-    .referral-title {
-      font-size: 1rem; font-weight: 800; margin-bottom: .75rem;
-      display: flex; align-items: center; gap: .5rem;
-    }
-    .referral-title svg { color: var(--emerald); }
-    .referral-link-row {
-      display: flex; gap: .5rem; margin-bottom: 1rem;
-    }
-    .referral-link-row input {
-      flex: 1; background: var(--surface); border: 1px solid var(--border2);
-      border-radius: 8px; padding: .6rem .8rem; color: var(--cyan);
-      font-size: .8rem; font-family: 'Courier New', monospace; outline: none;
-    }
-    .referral-link-row button {
-      padding: .6rem 1rem; background: var(--emerald2); border: 1px solid rgba(0,229,160,.25);
-      border-radius: 8px; color: var(--emerald); font-size: .78rem; font-weight: 700;
-      cursor: pointer; font-family: inherit; transition: all .15s; white-space: nowrap;
-    }
-    .referral-link-row button:hover { background: rgba(0,229,160,.18); }
-    .referral-stats {
-      display: flex; gap: 1.5rem;
-    }
-    .referral-stat {
-      display: flex; flex-direction: column; gap: .15rem;
-    }
-    .referral-stat-n {
-      font-size: 1.4rem; font-weight: 900; color: var(--emerald);
-    }
-    .referral-stat-l {
-      font-size: .72rem; font-weight: 600; color: var(--muted); text-transform: uppercase;
-      letter-spacing: .06em;
-    }
-
-    @media (max-width: 680px) {
-      .row2          { grid-template-columns: 1fr; }
-      main           { padding: 1.5rem 1rem; }
-      .hero h1       { font-size: 1.65rem; }
-      .kpi-n         { font-size: 1.9rem; }
-      .calc-grid     { grid-template-columns: 1fr; }
-      .ctry-row      { flex-wrap: wrap; }
-      .header-right  { gap: .4rem; }
-      .credits-badge { font-size: .7rem; padding: 4px 10px; }
-    }
-  </style>
+  <link rel="stylesheet" href="/shared.css?v=12">
+  <link rel="stylesheet" href="/style.css?v=12">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 </head>
 <body>
 
+<!-- ── HEADER ── -->
 <header>
-  <div class="logo-icon">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <circle cx="11" cy="11" r="7" stroke="#020b18" stroke-width="2.2"/>
-      <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#020b18" stroke-width="2.4" stroke-linecap="round"/>
-      <circle cx="11" cy="11" r="2.5" fill="#020b18" opacity=".6"/>
+  <div class="logo-icon" onclick="window.location.reload()">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2.5" stroke-linecap="round">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
     </svg>
   </div>
-  <span class="logo-text"><span>Prospect</span>Hunter</span>
+  <div class="logo-text">Prospect<span>Hunter</span></div>
   <span class="header-badge" id="header-plan">FREE</span>
+
   <div class="header-right">
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">🌙</button>
+    <div class="rappel-hdr-btn">
+      <button class="hdr-btn" onclick="toggleRappelPanel()" title="Rappels">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Rappels
+      </button>
+      <span class="rappel-badge" id="rappel-badge" style="display:none">0</span>
+    </div>
     <div class="credits-badge" id="credits-badge">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v12M6 12h12"/></svg>
       <span id="hdr-credits">-</span> crédits
     </div>
-    <a class="hdr-btn" href="/pricing" id="upgrade-link" style="background:var(--cyan-glow);color:var(--cyan);border-color:rgba(0,200,248,.2)">Upgrade</a>
+    <a class="hdr-btn" href="/pricing" id="upgrade-link" style="background:var(--text);color:var(--bg);border-color:transparent;font-weight:600">Upgrade</a>
     <a class="hdr-btn" href="/pricing" id="plan-link" style="display:none">Mon abonnement</a>
     <a class="hdr-btn" href="/admin" id="admin-link" style="display:none">Admin</a>
-    <button class="hdr-btn" onclick="logout()" style="color:var(--red-tx)">Déconnexion</button>
+    <button class="hdr-btn" onclick="logout()" style="color:var(--red-tx)">Fuir 🏃</button>
   </div>
 </header>
 
 <main>
+  <!-- ── HERO ── -->
   <div class="hero">
     <div class="hero-eyebrow">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-      Outil de prospection intelligent
+      L'outil ultime de la prospection 🔥
     </div>
-    <h1>Trouvez des entreprises<br><em>sans présence digitale</em></h1>
-    <p>Sans site web · sans réseaux sociaux · téléphone vérifié · CRM intégré · Script IA</p>
+    <h1>Trouve les business<br><em>qui vivent encore en 2005</em></h1>
+    <p>Pas de site web &middot; 0 reseaux sociaux &middot; telephone verifie &middot; CRM integre &middot; Pitch IA de folie</p>
   </div>
 
+  <!-- ── SEARCH CARD ── -->
   <div class="card">
-    <div class="card-title">Configurer la recherche</div>
+    <div class="card-title">Configure ta machine à prospects 🎯</div>
 
+    <!-- Niche -->
     <div class="field" style="margin-bottom:1.25rem">
-      <label>Niche / Secteur d'activité</label>
+      <label>Niche / C'est quoi ton game ? 🎮</label>
       <div class="niche-cats" id="niche-cats"></div>
       <select class="niche-select" id="niche-dropdown" onchange="onNicheSelect(this.value)">
-        <option value="" disabled selected>← Choisis une catégorie d'abord</option>
+        <option value="" disabled selected>&larr; Choisis une categorie d'abord</option>
       </select>
       <div class="niche-custom" id="niche-custom">
-        <input class="inp" id="niche-custom-input" type="text" placeholder="Tape ta niche ici…" />
+        <input class="inp" id="niche-custom-input" type="text" placeholder="Tape ta niche, champion... 🏆" />
       </div>
       <input type="hidden" id="niche" />
     </div>
 
+    <!-- Search modes -->
     <div class="field" style="margin-bottom:1.25rem">
-      <label>Type de recherche</label>
+      <label>Mode de recherche 💡</label>
       <div class="search-modes" id="search-modes">
         <button type="button" class="search-mode on" data-mode="site" id="mode-site" onclick="setSearchMode('site')">
           <span class="sm-icon">🔍</span>
           <span class="sm-label">Sans site web</span>
-          <span class="sm-cost">1 crédit / prospect</span>
+          <span class="sm-cost">1 credit / prospect</span>
         </button>
         <button type="button" class="search-mode" data-mode="social" id="mode-social" onclick="setSearchMode('social')">
           <span class="sm-icon">📱</span>
-          <span class="sm-label">Sans réseaux</span>
-          <span class="sm-cost">1 crédit / prospect</span>
+          <span class="sm-label">Sans réseaux sociaux</span>
+          <span class="sm-cost">1 credit / prospect</span>
         </button>
         <button type="button" class="search-mode" data-mode="both" id="mode-both" onclick="setSearchMode('both')">
           <span class="sm-icon">🔥</span>
-          <span class="sm-label">Sans site + réseaux</span>
-          <span class="sm-cost">2 crédits / prospect</span>
+          <span class="sm-label">Sans site + sans réseaux</span>
+          <span class="sm-cost">2 credits / prospect</span>
         </button>
-        <button type="button" class="search-mode" data-mode="owners" id="mode-owners" onclick="setSearchMode('owners')">
-          <span class="sm-icon">👤</span>
-          <span class="sm-label">Noms des gérants</span>
-          <span class="sm-cost">1 crédit / prospect</span>
+        <button type="button" class="search-mode" data-mode="fewreviews" id="mode-fewreviews" onclick="setSearchMode('fewreviews')">
+          <span class="sm-icon">⭐</span>
+          <span class="sm-label">Peu d'avis (&lt;10)</span>
+          <span class="sm-cost">1 credit / prospect</span>
+        </button>
+        <button type="button" class="search-mode" data-mode="new" id="mode-new" onclick="setSearchMode('new')">
+          <span class="sm-icon">🆕</span>
+          <span class="sm-label">Nouveaux business</span>
+          <span class="sm-cost">1 credit / prospect</span>
         </button>
       </div>
       <div id="mode-hint" style="font-size:.7rem;color:var(--muted);margin-top:.3rem;"></div>
     </div>
 
+    <!-- Country -->
     <div class="field" style="margin-bottom:1.5rem">
-      <label>Zone de recherche</label>
+      <label>Zone de prospection 🗺️</label>
       <div class="ctry-row">
         <button class="ctry on" id="btn-fr" onclick="setCountry('fr')">🇫🇷 France</button>
         <button class="ctry"    id="btn-ch" onclick="setCountry('ch')">🇨🇭 Suisse</button>
         <button class="ctry"    id="btn-be" onclick="setCountry('be')">🇧🇪 Belgique</button>
-        <button class="ctry"    id="btn-geo" onclick="activateGeoloc()" style="border-color:var(--green);">📍 Autour de moi</button>
+        <button class="ctry"    id="btn-geo" onclick="activateGeoloc()">📍 Autour de moi</button>
       </div>
-      <div id="geo-options" style="display:none;margin-top:.75rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--green);border-radius:10px;">
+      <div id="geo-options" style="display:none;margin-top:.75rem;padding:.75rem 1rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;">
         <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem;">
-          <span style="font-size:.8rem;color:var(--green);font-weight:700;">📍 Position détectée</span>
+          <span style="font-size:.8rem;color:var(--text);font-weight:700;">📍 Position detectee</span>
           <span id="geo-city" style="font-size:.75rem;color:var(--text2);"></span>
         </div>
         <div style="display:flex;align-items:center;gap:.75rem;">
           <label style="font-size:.72rem;font-weight:600;color:var(--muted);white-space:nowrap;">Rayon :</label>
-          <input type="range" id="geo-radius" min="5" max="100" value="30" step="5" oninput="updateRadiusLabel()" style="flex:1;accent-color:var(--green);cursor:pointer;" />
-          <span id="geo-radius-label" style="font-size:.85rem;font-weight:800;color:var(--green);min-width:50px;text-align:right;">30 km</span>
+          <input type="range" id="geo-radius" min="5" max="100" value="30" step="5" oninput="updateRadiusLabel()" style="flex:1;accent-color:var(--text2);cursor:pointer;" />
+          <span id="geo-radius-label" style="font-size:.85rem;font-weight:800;color:var(--text);min-width:50px;text-align:right;">30 km</span>
         </div>
       </div>
     </div>
 
+    <!-- Smart filter -->
     <div style="margin-bottom:1rem;">
       <label style="display:inline-flex;align-items:center;gap:.5rem;cursor:pointer;font-size:.85rem;color:var(--text2);font-weight:600;">
-        <input type="checkbox" id="strict-filter" onchange="strictFilter=this.checked" style="width:18px;height:18px;accent-color:var(--amber);cursor:pointer;" />
-        Filtre intelligent IA — ne garde que les vrais commerces de ta niche
+        <input type="checkbox" id="strict-filter" onchange="strictFilter=this.checked" style="width:18px;height:18px;accent-color:var(--text2);cursor:pointer;" />
+        Filtre IA anti-parasites 🤖
       </label>
       <div style="font-size:.72rem;color:var(--muted);margin-top:.3rem;margin-left:1.6rem;">
-        Utilise Claude pour comprendre ta niche et virer les résultats hors-sujet (nécessite clé API Anthropic dans les paramètres).
+        L'IA vire les résultats hors-sujet. Ex : tu cherches "Boulangerie" → elle dégage les Carrefour, Paul, Franprix qui vendent du pain mais sont pas des vraies boulangeries. Tu gardes que les vrais commerces indépendants.
       </div>
     </div>
 
-    <div id="slider-section" style="margin-bottom:1.25rem;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;">
+    <!-- Slider -->
+    <div id="slider-section" style="margin-bottom:1.25rem;background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:1rem 1.25rem;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;">
-        <label style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;">Nombre de prospects souhaités</label>
+        <label style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;">Combien de prospects tu veux aider ? 🚀</label>
         <div style="display:flex;align-items:center;gap:.5rem;">
-          <span id="prospects-count" style="font-size:1.2rem;font-weight:900;color:var(--cyan);">5</span>
+          <span id="prospects-count" style="font-size:1.2rem;font-weight:900;color:var(--text);">5</span>
           <span style="font-size:.75rem;color:var(--muted);">prospects</span>
           <span style="font-size:.75rem;color:var(--dim);">=</span>
-          <span id="credits-cost" style="font-size:1.2rem;font-weight:900;color:var(--amber);">5</span>
-          <span style="font-size:.75rem;color:var(--muted);">crédits</span>
+          <span id="credits-cost" style="font-size:1.2rem;font-weight:900;color:var(--text2);">5</span>
+          <span style="font-size:.75rem;color:var(--muted);">credits</span>
         </div>
       </div>
-      <input type="range" id="prospects-slider" min="1" max="50" value="5" oninput="updateProspectsSlider()" style="width:100%;accent-color:var(--cyan);cursor:pointer;" />
+      <input type="range" id="prospects-slider" min="1" max="50" value="5" oninput="updateProspectsSlider()" style="width:100%;accent-color:var(--text2);cursor:pointer;" />
       <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);margin-top:.3rem;">
         <span>1 prospect</span>
         <span id="prospects-max-label">50 prospects (max)</span>
       </div>
     </div>
 
+    <!-- Launch button -->
     <div style="display:flex;gap:.75rem;">
       <button class="btn-search" id="btn-go" onclick="runSearch()" style="flex:1">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        Lancer la recherche
+        Lancer la machine ⚡
       </button>
     </div>
   </div>
 
+  <!-- ── ALERT ── -->
   <div class="alert" id="alert">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
       <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
@@ -957,1224 +175,396 @@
     <span id="alert-msg"></span>
   </div>
 
-  <div class="loader" id="loader">
-    <div class="ring">
-      <svg width="60" height="60" viewBox="0 0 60 60">
-        <circle class="track" cx="30" cy="30" r="22"/>
-        <circle class="fill" id="ring-fill" cx="30" cy="30" r="22"/>
-      </svg>
-    </div>
-    <div class="l-title" id="l-title">Recherche en cours…</div>
-    <div class="l-sub"   id="l-sub">Veuillez patienter, cela peut prendre quelques minutes</div>
-  </div>
-
-  <!-- Search History -->
-  <div id="search-history" style="display:none;margin-bottom:1.5rem;">
-    <div class="section-divider">Historique des recherches</div>
-    <div style="background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:1rem 1.25rem;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;">
-        <span style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;">Mes recherches</span>
-        <button id="btn-clear-filter" onclick="clearSearchFilter()" style="display:none;background:var(--cyan);color:#000;border:none;border-radius:6px;padding:.3rem .7rem;font-size:.7rem;font-weight:700;cursor:pointer;font-family:inherit;">Tout afficher</button>
-      </div>
-      <div id="history-list" style="max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:.4rem;"></div>
-      <div id="history-empty" style="color:var(--dim);font-size:.8rem;text-align:center;padding:.5rem 0;">Aucune recherche pour le moment.</div>
+  <!-- ── LOADER ── -->
+  <div class="loader-bd" id="loader">
+    <div class="loader-box">
+      <div class="spinner"></div>
+      <div class="l-title" id="l-title">Recherche en cours...</div>
+      <div class="l-sub" id="l-sub" style="transition: opacity .3s;"></div>
     </div>
   </div>
 
-  <div id="res" style="display:none">
-    <div class="section-divider">Résultats</div>
+  <!-- ── EMPTY STATE ── -->
+  <div class="empty" id="empty">
+    <div style="font-size:3rem;margin-bottom:1rem;">🏜️</div>
+    <div id="empty-msg" style="font-size:1rem;font-weight:700;color:var(--text2);line-height:1.6;"></div>
+  </div>
 
-    <div class="stats-row" id="stats-row">
-      <div class="stat-chip sc-total"><span class="stat-n" id="stat-total">0</span> Total</div>
-      <div class="stat-chip sc-todo"><span class="stat-n" id="stat-todo">0</span> À appeler</div>
-      <div class="stat-chip sc-called"><span class="stat-n" id="stat-called">0</span> Appelés</div>
-      <div class="stat-chip sc-client"><span class="stat-n" id="stat-client">0</span> Clients</div>
-      <div class="stat-chip sc-nope"><span class="stat-n" id="stat-nope">0</span> Refusés</div>
+
+  <!-- ── SEARCH HISTORY ── -->
+  <div class="card" id="search-history" style="margin-top:1.5rem;">
+    <div class="card-title">📋 Tes recherches précédentes</div>
+    <div id="history-list"></div>
+  </div>
+
+  <!-- ── RAPPEL ALERT BANNER ── -->
+  <div class="rappel-alert-banner" id="rappel-alert-banner" style="display:none;">
+    <div class="rappel-alert-content">
+      <span class="rappel-alert-icon">⏰</span>
+      <span class="rappel-alert-text" id="rappel-alert-text">0 rappels en attente</span>
     </div>
+    <button class="rappel-alert-btn" onclick="toggleRappelPanel()">Voir les rappels</button>
+    <button class="rappel-alert-close" onclick="dismissRappelAlert()">&times;</button>
+  </div>
 
-    <div class="res-bar">
-      <div class="kpi">
-        <div class="kpi-n" id="counter">0</div>
-        <div>
-          <div class="kpi-label">Prospects affichés</div>
-          <div class="kpi-sub">après filtres appliqués</div>
+  <!-- ── ANALYTICS ── -->
+  <div class="card analytics-card" id="analytics-section" style="margin-top:1.5rem;">
+    <div class="card-title analytics-toggle" onclick="toggleAnalytics()">
+      <span>📊 Analytics</span>
+      <svg class="analytics-chevron" id="analytics-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="analytics-body" id="analytics-body" style="display:none;">
+      <div class="analytics-charts">
+        <div class="analytics-chart-box">
+          <div class="analytics-chart-title">Prospects / jour (7j)</div>
+          <svg id="chart-daily" viewBox="0 0 320 160" class="analytics-svg"></svg>
+        </div>
+        <div class="analytics-chart-box">
+          <div class="analytics-chart-title">Conversion / semaine (4 sem.)</div>
+          <svg id="chart-weekly" viewBox="0 0 320 160" class="analytics-svg"></svg>
         </div>
       </div>
-      <div class="res-actions">
-        <div class="filter-wrap">
-          <span>Niche</span>
-          <select class="sel" id="filter-niche" onchange="applyFilter()">
-            <option value="all">Toutes</option>
-          </select>
+      <div class="analytics-totals" id="analytics-totals"></div>
+      <div class="analytics-timeline-title">Activité récente</div>
+      <div class="analytics-timeline" id="analytics-timeline"></div>
+    </div>
+  </div>
+
+  <!-- ── RESULTS ── -->
+  <div id="res" style="display:none;margin-top:2rem;">
+
+    <!-- Dashboard -->
+    <div class="dash-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;margin-bottom:1.5rem;">
+      <div class="dash-card dc-total" onclick="dashFilter('all')" style="cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
+          <div class="dash-icon">📊</div>
+          <div>
+            <div class="dash-val" id="stat-total">0</div>
+            <div class="dash-label">Prospects trouvés</div>
+          </div>
         </div>
-        <div class="filter-wrap">
-          <span>Min. étoiles</span>
-          <select class="sel" id="min-stars" onchange="applyFilter()">
-            <option value="0">Toutes</option>
-            <option value="3">3+</option>
-            <option value="3.5">3.5+</option>
-            <option value="4">4+</option>
-            <option value="4.5">4.5+</option>
-          </select>
+        <div class="dash-sub" id="dash-todo-detail">0 à accompagner</div>
+      </div>
+      <div class="dash-card dc-called" onclick="dashFilter('called')" style="cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
+          <div class="dash-icon">📞</div>
+          <div>
+            <div class="dash-val" id="stat-called">0</div>
+            <div class="dash-label">Appelés 📞</div>
+          </div>
         </div>
-        <div class="filter-wrap">
-          <span>Statut</span>
-          <select class="sel" id="filter-status" onchange="applyFilter()">
-            <option value="all">Tous</option>
-            <option value="todo">À appeler</option>
-            <option value="called">Appelé</option>
-            <option value="nope">Pas intéressé</option>
-            <option value="client">Client</option>
-          </select>
+        <div class="dash-progress"><div class="dash-progress-bar" id="progress-called" style="width:0%"></div></div>
+      </div>
+      <div class="dash-card dc-client" onclick="dashFilter('client')" style="cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
+          <div class="dash-icon">🎯</div>
+          <div>
+            <div class="dash-val" id="stat-client">0</div>
+            <div class="dash-label">Closés 💰</div>
+          </div>
         </div>
-        <div class="filter-wrap">
-          <span>Ancienneté</span>
-          <select class="sel" id="filter-age" onchange="applyFilter()">
-            <option value="all">Tous</option>
-            <option value="new">Nouveau (&lt; 50 avis)</option>
-            <option value="mid">Établi (50-200)</option>
-            <option value="old">Ancien (200+)</option>
-          </select>
+        <div class="dash-progress"><div class="dash-progress-bar" id="progress-client" style="width:0%"></div></div>
+      </div>
+      <div class="dash-card dc-rate" onclick="dashFilter('nope')" style="cursor:pointer">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;">
+          <div class="dash-icon">📈</div>
+          <div>
+            <div class="dash-val" id="stat-rate">0%</div>
+            <div class="dash-label">Taux conversion</div>
+          </div>
         </div>
-        <div class="filter-wrap">
-          <span>Signaux</span>
-          <select class="sel" id="filter-signals" onchange="applyFilter()">
-            <option value="all">Tous</option>
-            <option value="nosite">🔴 Sans site</option>
-            <option value="nosocial">🟠 Sans réseaux</option>
-            <option value="fewreviews">🟡 &lt; 5 avis</option>
-          </select>
+        <div class="dash-sub" id="dash-nope-detail">0 refusés</div>
+      </div>
+    </div>
+
+    <!-- Results bar -->
+    <div class="res-bar" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <div class="kpi" style="display:flex;align-items:center;gap:.75rem;">
+          <svg class="kpi-ring" viewBox="0 0 48 48" width="48" height="48">
+            <circle cx="24" cy="24" r="22" stroke="var(--border)" fill="none" stroke-width="3"/>
+            <circle id="ring-fill" cx="24" cy="24" r="22" stroke="var(--text)" fill="none" stroke-width="3" stroke-dasharray="138.23" stroke-dashoffset="138.23" transform="rotate(-90 24 24)" style="transition:stroke-dashoffset .6s ease-out"/>
+          </svg>
+          <div>
+            <div class="kpi-n" id="counter">0</div>
+            <div class="kpi-l">prospects</div>
+          </div>
         </div>
+      </div>
+      <div class="res-actions" style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">
+        <button class="btn-batch" id="btn-batch" onclick="batchPitch()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+          Pitch IA en masse 🤖
+        </button>
         <button class="btn-csv" onclick="exportCSV()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
             <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
-          Télécharger Excel
+          Export Excel
+        </button>
+        <button class="btn-csv" onclick="exportPDF()" style="border-color:rgba(255,65,65,.25);color:var(--red-tx);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          </svg>
+          Export PDF
         </button>
       </div>
     </div>
 
+    <!-- Filters -->
+    <div class="filter-wrap" style="flex-wrap:wrap;margin-bottom:1rem;">
+      <select class="sel" id="filter-status" onchange="applyFilter()">
+        <option value="all">Tous statuts</option>
+        <option value="todo">A appeler</option>
+        <option value="called">Appele</option>
+        <option value="nope">Pas interesse</option>
+        <option value="client">Client</option>
+      </select>
+      <select class="sel" id="filter-niche" onchange="applyFilter()">
+        <option value="all">Toutes niches</option>
+      </select>
+      <select class="sel" id="filter-age" onchange="applyFilter()">
+        <option value="all">Tous avis</option>
+        <option value="new">&lt; 50 avis</option>
+        <option value="mid">50-200 avis</option>
+        <option value="old">&gt; 200 avis</option>
+      </select>
+      <select class="sel" id="filter-signals" onchange="applyFilter()">
+        <option value="all">Tous signaux</option>
+        <option value="nosite">🔴 Pas de site</option>
+        <option value="nosocial">🟠 Pas de reseaux</option>
+        <option value="fewreviews">🟡 &lt; 5 avis</option>
+      </select>
+      <div style="display:flex;align-items:center;gap:.4rem;">
+        <label style="font-size:.72rem;font-weight:600;color:var(--muted);">Note min:</label>
+        <select class="sel" id="min-stars" onchange="applyFilter()">
+          <option value="0">Toutes</option>
+          <option value="3">3+</option>
+          <option value="3.5">3.5+</option>
+          <option value="4">4+</option>
+          <option value="4.5">4.5+</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table -->
     <div class="tbl-wrap">
       <table>
         <thead>
           <tr>
-            <th class="c-n">#</th>
-            <th>Entreprise</th>
-            <th>Gérant</th>
-            <th>Téléphone</th>
+            <th style="width:2.5rem"><input type="checkbox" id="select-all" onchange="toggleSelectAll(this)"></th>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Telephone</th>
             <th>Adresse</th>
-            <th class="sortable" id="th-rating"  onclick="sortBy('rating')">Note <span class="si" id="si-rating">&#8597;</span></th>
-            <th class="sortable" id="th-reviews" onclick="sortBy('reviews')">Avis <span class="si" id="si-reviews">&#8597;</span></th>
-            <th>Signaux</th>
-            <th class="sortable active" id="th-heat" onclick="sortBy('heat')">Chaleur <span class="si" id="si-heat">&#8595;</span></th>
+            <th class="sortable" id="th-rating" onclick="sortBy('rating')">Note <span class="sort-icon" id="si-rating">⇕</span></th>
+            <th class="sortable" id="th-reviews" onclick="sortBy('reviews')">Avis <span class="sort-icon" id="si-reviews">⇕</span></th>
+            <th class="sortable active" id="th-heat" onclick="sortBy('heat')">Chaleur <span class="sort-icon" id="si-heat">↓</span></th>
             <th>Statut</th>
-            <th></th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="tbody"></tbody>
       </table>
     </div>
+
+    <!-- Pagination -->
+    <div id="pagination" style="display:flex;align-items:center;justify-content:center;gap:.4rem;margin-top:1rem;"></div>
   </div>
 
-  <div class="empty" id="empty">
-    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity=".15">
-      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/>
-    </svg>
-    <p>Aucun prospect trouvé pour cette recherche.<br>Essayez une autre niche ou un autre pays.</p>
+  <!-- ── REFERRAL ── -->
+  <div class="card" id="referral-section" style="display:none;margin-top:1.5rem;">
+    <div class="card-title">🎁 Parrainage — ramène tes potes</div>
+    <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem;">Ramène tes potes : <strong>+5 crédits gratos</strong> pour toi et ton filleul. C'est cadeau. 🎁</p>
+    <div style="display:flex;gap:.5rem;align-items:center;">
+      <input class="inp" id="ref-link" type="text" readonly style="flex:1;font-size:.78rem;color:var(--text2);" />
+      <button class="ctry" onclick="copyRefLink()" style="white-space:nowrap;">Copier le lien</button>
+    </div>
+    <div style="display:flex;gap:1.5rem;margin-top:1rem;">
+      <div>
+        <div class="referral-stat-n" id="ref-count">0</div>
+        <div class="referral-stat-l">Filleuls</div>
+      </div>
+      <div>
+        <div class="referral-stat-n" id="ref-credits">0</div>
+        <div class="referral-stat-l">Credits gagnes</div>
+      </div>
+    </div>
   </div>
 </main>
+
 
 <!-- ── PROSPECT MODAL ── -->
 <div class="modal-bd" id="modal-bd" onclick="if(event.target===this)closeModal()">
   <div class="modal">
     <div class="modal-head">
       <div>
-        <div class="modal-title" id="m-name">—</div>
-        <div class="modal-sub"  id="m-meta">—</div>
+        <div class="m-name" id="m-name"></div>
+        <div class="m-meta" id="m-meta"></div>
       </div>
-      <button class="modal-close" onclick="closeModal()">&#10005;</button>
+      <button onclick="closeModal()" class="modal-close">&times;</button>
     </div>
-
     <div class="tabs">
-      <button class="tab on" data-tab="calc"  onclick="showTab('calc')">Calculateur</button>
-      <button class="tab"    data-tab="fiche" onclick="showTab('fiche')">Fiche</button>
-      <button class="tab"    data-tab="crm"   onclick="showTab('crm')">CRM</button>
-      <button class="tab"    data-tab="pitch" onclick="showTab('pitch')">Pitch IA</button>
+      <button class="tab on" data-tab="calc" onclick="showTab('calc')">💰 Ce qu'il perd</button>
+      <button class="tab" data-tab="pitch" onclick="showTab('pitch')">🎯 Pitch fatal</button>
+      <button class="tab" data-tab="fiche" onclick="showTab('fiche')">📋 Dossier</button>
+      <button class="tab" data-tab="crm" onclick="showTab('crm')">📝 Notes perso</button>
     </div>
 
+    <!-- Tab: Calculator -->
     <div class="tab-panel on" data-tab="calc">
       <div id="calc-content"></div>
     </div>
 
-    <div class="tab-panel" data-tab="fiche">
-      <p class="pitch-desc">Recherche automatique d'infos sur ce prospect (spécialité, type, clientèle…) pour préparer ton appel.</p>
-      <button class="btn-fiche-gen" id="btn-fiche-gen" onclick="generateFiche()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        Rechercher les infos
-      </button>
-      <div id="fiche-zone" style="margin-top:1rem"></div>
-    </div>
-
-    <div class="tab-panel" data-tab="crm">
-      <div class="crm-field">
-        <label>Gérant / Propriétaire</label>
-        <input type="text" class="inp" id="m-owner-name" placeholder="Nom Prénom du gérant" oninput="debounceSave()" style="padding:.6rem .8rem;font-size:.85rem;">
-      </div>
-      <div class="crm-field">
-        <label>Notes</label>
-        <textarea class="crm-ta" id="m-notes" placeholder="Informations, objections, suivi…" oninput="debounceSave()"></textarea>
-        <div class="crm-saved" id="crm-saved">&#10003; Sauvegardé</div>
-      </div>
-      <div class="crm-field">
-        <label>Date de rappel</label>
-        <input type="date" class="crm-date" id="m-rappel" onchange="saveCrmNow()">
-      </div>
-    </div>
-
+    <!-- Tab: Pitch -->
     <div class="tab-panel" data-tab="pitch">
-      <p class="pitch-desc">Génère un message personnalisé pour ce prospect via Claude IA.</p>
-      <div class="pitch-type-row">
-        <button class="pitch-type-btn on" data-type="appel" onclick="setPitchType('appel')">Appel</button>
-        <button class="pitch-type-btn" data-type="email" onclick="setPitchType('email')">Email</button>
-        <button class="pitch-type-btn" data-type="sms" onclick="setPitchType('sms')">SMS</button>
-        <button class="pitch-type-btn" data-type="linkedin" onclick="setPitchType('linkedin')">LinkedIn</button>
+      <div style="display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap;">
+        <button class="pitch-type-btn on" data-type="appel" onclick="setPitchType('appel')">📞 Appel</button>
+        <button class="pitch-type-btn" data-type="email" onclick="setPitchType('email')">📧 Email</button>
+        <button class="pitch-type-btn" data-type="sms" onclick="setPitchType('sms')">💬 SMS</button>
+        <button class="pitch-type-btn" data-type="dm" onclick="setPitchType('dm')">📱 DM</button>
       </div>
-      <button class="btn-gen" id="btn-gen" onclick="generatePitch()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
-        </svg>
-        Générer le pitch
+      <button class="btn-search" id="btn-gen" onclick="generatePitch()" style="margin-bottom:1rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+        Générer le pitch de ouf 🔥
       </button>
       <div id="pitch-zone"></div>
     </div>
-  </div>
-</div>
 
-<!-- ── REFERRAL SECTION ── -->
-<div style="max-width:900px;margin:0 auto;padding:0 1.5rem 2rem">
-  <div class="referral-card" id="referral-section" style="display:none">
-    <div class="referral-title">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
-      Parrainage — Gagnez des crédits
+    <!-- Tab: Fiche -->
+    <div class="tab-panel" data-tab="fiche">
+      <button class="btn-search" id="btn-fiche-gen" onclick="generateFiche()" style="margin-bottom:1rem;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Stalker ce prospect 👀
+      </button>
+      <div id="fiche-zone"></div>
     </div>
-    <p style="font-size:.82rem;color:var(--text2);margin-bottom:1rem">
-      Partagez votre lien. Quand un ami s'inscrit, vous recevez <strong style="color:var(--emerald)">5 crédits</strong> chacun.
-    </p>
-    <div class="referral-link-row">
-      <input type="text" id="ref-link" readonly />
-      <button onclick="copyRefLink()">Copier le lien</button>
-    </div>
-    <div class="referral-stats">
-      <div class="referral-stat">
-        <span class="referral-stat-n" id="ref-count">0</span>
-        <span class="referral-stat-l">Filleuls</span>
+
+    <!-- Tab: CRM -->
+    <div class="tab-panel" data-tab="crm">
+      <div class="field">
+        <label>Notes</label>
+        <textarea class="crm-ta" id="m-notes" rows="5" placeholder="Balance tes infos sur cette proie... 🎯" oninput="debounceSave()"></textarea>
       </div>
-      <div class="referral-stat">
-        <span class="referral-stat-n" id="ref-credits">0</span>
-        <span class="referral-stat-l">Crédits gagnés</span>
+      <div class="field">
+        <label>Date de rappel</label>
+        <input class="crm-date" id="m-rappel" type="date" oninput="debounceSave()" />
       </div>
+      <div class="crm-saved" id="crm-saved">Sauvegarde !</div>
     </div>
   </div>
 </div>
 
-<!-- ── SETTINGS MODAL ── -->
-<div class="settings-bd" id="settings-bd" onclick="if(event.target===this)closeSettings()">
-  <div class="settings-box">
-    <div class="settings-title">
-      <span>Paramètres</span>
-      <button onclick="closeSettings()">&#10005;</button>
-    </div>
-    <div class="settings-field">
-      <label>Clé API Google Places</label>
-      <div class="inp-wrap">
-        <input class="inp" id="set-google" type="password" placeholder="AIzaSy…" />
-        <button class="eye" onclick="toggleVis('set-google')" title="Afficher / masquer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-          </svg>
-        </button>
+<!-- ── RAPPEL PANEL ── -->
+<div class="rappel-overlay" id="rappel-overlay" onclick="if(event.target===this)toggleRappelPanel()">
+  <div class="rappel-panel">
+    <div class="rappel-panel-header">
+      <div class="rappel-panel-title">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Rappels
       </div>
+      <button class="rappel-panel-close" onclick="toggleRappelPanel()">&times;</button>
     </div>
-    <div class="settings-field">
-      <label>Clé API Anthropic (Claude IA)</label>
-      <div class="inp-wrap">
-        <input class="inp" id="set-anthropic" type="password" placeholder="sk-ant-…  (pour pitch + fiche + filtre IA)" />
-        <button class="eye" onclick="toggleVis('set-anthropic')" title="Afficher / masquer">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-          </svg>
-        </button>
-      </div>
+    <div class="rappel-tabs">
+      <button class="rappel-tab on" data-rtab="today" onclick="switchRappelTab('today')">Aujourd'hui</button>
+      <button class="rappel-tab" data-rtab="overdue" onclick="switchRappelTab('overdue')">En retard</button>
+      <button class="rappel-tab" data-rtab="upcoming" onclick="switchRappelTab('upcoming')">A venir</button>
+      <button class="rappel-tab" data-rtab="history" onclick="switchRappelTab('history')">Historique</button>
     </div>
-    <button class="settings-save" onclick="saveSettings()">Enregistrer les clés</button>
-    <div class="settings-msg" id="settings-msg">&#10003; Clés sauvegardées avec succès</div>
+    <div class="rappel-list" id="rappel-list"></div>
   </div>
 </div>
 
-<script>
-'use strict';
+<!-- ── CALL TRACKER ── -->
+<div class="call-overlay" id="call-overlay">
+  <div class="call-box">
+    <div class="call-header">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.22 2 2 0 012.22.04L5.22.04a2 2 0 012 1.72c.13 1 .36 1.97.72 2.9a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.14-1.14a2 2 0 012.11-.45c.93.36 1.9.59 2.9.72a2 2 0 011.76 2.03z"/>
+      </svg>
+      Suivi d'appel
+    </div>
+    <div class="call-prospect" id="call-prospect-name"></div>
 
-/* ── Auth check ── */
-const token = localStorage.getItem('ph_token');
-if (!token) window.location.href = '/login';
-
-const AUTH_HEADERS = {
-  'Content-Type': 'application/json',
-  'Authorization': 'Bearer ' + token,
-};
-
-/* ── State ── */
-const CIRC = 2 * Math.PI * 22;
-const STATUS_CYCLE  = ['todo','called','nope','client'];
-const STATUS_LABEL  = { todo:'À appeler', called:'Appelé', nope:'Pas intéressé', client:'Client' };
-const STATUS_CLASS  = { todo:'s-todo', called:'s-called', nope:'s-nope', client:'s-client' };
-
-let country         = 'fr';
-let searchMode      = 'site';
-let prospects       = [];
-let currentNiche    = '';
-let currentProspect = null;
-let sortCol         = 'heat';
-let sortDir         = 'desc';
-let minStars        = 0;
-let filterStatus    = 'all';
-let filterAge       = 'all';
-let filterNiche     = 'all';
-let filterSignals   = 'all';
-let socialCheckAvailable = false;
-let filterSearchId  = null;
-let geoMode         = false;
-let geoLat          = null;
-let geoLng          = null;
-let geoRadius       = 30;
-let saveTimer       = null;
-let pitchType       = 'appel';
-let strictFilter    = false;
-let userCredits     = 0;
-let userPlan        = 'free';
-
-/* ── Load user info ── */
-async function loadUser() {
-  try {
-    const res = await fetch('/api/me', { headers: AUTH_HEADERS });
-    if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem('ph_token');
-      window.location.href = '/login';
-      return;
-    }
-    const data = await res.json();
-    const user = data.user;
-    userCredits = user.credits;
-    userPlan = user.plan;
-
-    // Update header
-    document.getElementById('hdr-credits').textContent = user.credits;
-    const planBadge = document.getElementById('header-plan');
-    planBadge.textContent = user.plan.toUpperCase();
-    planBadge.className = 'header-badge plan-' + user.plan;
-
-    // Show admin link if admin
-    if (user.is_admin) {
-      document.getElementById('admin-link').style.display = '';
-    }
-
-    // Show upgrade or "Mon abonnement" link
-    if (user.plan === 'enterprise') {
-      document.getElementById('upgrade-link').style.display = 'none';
-      document.getElementById('plan-link').style.display = '';
-    } else {
-      document.getElementById('upgrade-link').style.display = '';
-      document.getElementById('plan-link').style.display = 'none';
-    }
-
-    // Load referral info
-    loadReferral();
-
-    // Init cities slider based on credits
-    updateProspectsSlider();
-  } catch {
-    console.error('Failed to load user');
-  }
-}
-
-function logout() {
-  localStorage.removeItem('ph_token');
-  localStorage.removeItem('ph_user');
-  window.location.href = '/login';
-}
-
-/* ── Settings ── */
-function openSettings() {
-  document.getElementById('settings-bd').classList.add('on');
-}
-function closeSettings() {
-  document.getElementById('settings-bd').classList.remove('on');
-  document.getElementById('settings-msg').classList.remove('show');
-}
-async function saveSettings() {
-  const google_key = document.getElementById('set-google').value.trim();
-  const anthropic_key = document.getElementById('set-anthropic').value.trim();
-  try {
-    await fetch('/api/me/keys', {
-      method: 'PUT',
-      headers: AUTH_HEADERS,
-      body: JSON.stringify({ google_key, anthropic_key }),
-    });
-    const msg = document.getElementById('settings-msg');
-    msg.classList.add('show');
-    setTimeout(() => msg.classList.remove('show'), 3000);
-  } catch {
-    alert('Erreur lors de la sauvegarde.');
-  }
-}
-
-/* ── Load prospects from server ── */
-async function loadProspects() {
-  try {
-    const res = await fetch('/api/prospects', { headers: AUTH_HEADERS });
-    if (!res.ok) return;
-    const data = await res.json();
-    if (data.length) {
-      prospects = data.map((p, i) => ({ ...p, _idx: i }));
-      document.getElementById('res').style.display = 'block';
-      populateNicheFilter();
-      renderTable();
-      renderStats();
-    }
-  } catch {}
-}
-
-/* ── Niche filter dropdown ── */
-function populateNicheFilter() {
-  const sel = document.getElementById('filter-niche');
-  const niches = [...new Set(prospects.map(p => p.niche).filter(Boolean))];
-  sel.innerHTML = '<option value="all">Toutes</option>';
-  niches.forEach(n => {
-    const opt = document.createElement('option');
-    opt.value = n; opt.textContent = n.charAt(0).toUpperCase() + n.slice(1);
-    sel.appendChild(opt);
-  });
-}
-
-/* ── Search history ── */
-const COUNTRY_FLAGS = { fr: '\u{1F1EB}\u{1F1F7}', ch: '\u{1F1E8}\u{1F1ED}', be: '\u{1F1E7}\u{1F1EA}', geo: '📍' };
-
-async function loadSearchHistory() {
-  try {
-    const res = await fetch('/api/prospects/searches', { headers: AUTH_HEADERS });
-    if (!res.ok) return;
-    const searches = await res.json();
-    const wrap = document.getElementById('search-history');
-    const list = document.getElementById('history-list');
-    const empty = document.getElementById('history-empty');
-
-    if (!searches.length) {
-      wrap.style.display = 'block';
-      list.innerHTML = '';
-      empty.style.display = 'block';
-      return;
-    }
-
-    wrap.style.display = 'block';
-    empty.style.display = 'none';
-    list.innerHTML = searches.map(s => {
-      const flag = COUNTRY_FLAGS[s.country] || '';
-      const date = new Date(s.created_at);
-      const ago = timeAgo(date);
-      const active = filterSearchId === s.id ? 'background:var(--cyan-glow2);border-color:var(--cyan);' : '';
-      const modeLabels = { site: '🔍 Sans site', social: '📱 Sans réseaux', both: '🔥 Sans site + réseaux', owners: '👤 Noms gérants' };
-      const modeTag = modeLabels[s.search_mode] || '🔍 Sans site';
-      return `<div onclick="filterBySearch(${s.id},'${esc(s.niche)}')" style="display:flex;justify-content:space-between;align-items:center;padding:.55rem .8rem;border-radius:8px;border:1px solid var(--border2);cursor:pointer;transition:all .15s;${active}" onmouseover="this.style.borderColor='var(--cyan)'" onmouseout="this.style.borderColor='${filterSearchId === s.id ? 'var(--cyan)' : 'var(--border2)'}'">`
-        + `<div style="display:flex;align-items:center;gap:.6rem;">`
-        + `<span style="font-size:1.1rem;">${flag}</span>`
-        + `<span style="font-weight:700;color:var(--text);font-size:.85rem;">${esc(s.niche)}</span>`
-        + `<span style="font-size:.6rem;padding:.15rem .4rem;border-radius:4px;background:var(--surface2);color:var(--dim);white-space:nowrap;">${modeTag}</span>`
-        + `</div>`
-        + `<div style="display:flex;align-items:center;gap:.8rem;">`
-        + `<span style="font-size:.75rem;color:var(--cyan);font-weight:700;">${s.results_count || 0} prospects</span>`
-        + `<span style="font-size:.7rem;color:var(--dim);">${ago}</span>`
-        + `</div></div>`;
-    }).join('');
-  } catch {}
-}
-
-function timeAgo(date) {
-  const s = Math.floor((Date.now() - date.getTime()) / 1000);
-  if (s < 60) return "à l'instant";
-  if (s < 3600) return Math.floor(s / 60) + ' min';
-  if (s < 86400) return Math.floor(s / 3600) + ' h';
-  if (s < 2592000) return Math.floor(s / 86400) + ' j';
-  return date.toLocaleDateString('fr-FR');
-}
-
-function filterBySearch(searchId, niche) {
-  filterSearchId = searchId;
-  filterNiche = niche || 'all';
-  if (niche) currentNiche = niche;
-  document.getElementById('filter-niche').value = niche || 'all';
-  document.getElementById('btn-clear-filter').style.display = '';
-  renderTable();
-  renderStats();
-  loadSearchHistory(); // re-render to highlight active
-}
-
-function clearSearchFilter() {
-  filterSearchId = null;
-  filterNiche = 'all';
-  document.getElementById('filter-niche').value = 'all';
-  document.getElementById('btn-clear-filter').style.display = 'none';
-  renderTable();
-  renderStats();
-  loadSearchHistory();
-}
-
-/* ── Prospects slider ── */
-function updateProspectsSlider() {
-  const slider = document.getElementById('prospects-slider');
-  const multiplier = searchMode === 'both' ? 2 : 1;
-  const maxAllowed = Math.max(1, Math.floor((userCredits || 1) / multiplier));
-  slider.max = maxAllowed;
-  if (parseInt(slider.value) > maxAllowed) slider.value = maxAllowed;
-  const val = parseInt(slider.value);
-  const creditsCost = val * multiplier;
-  document.getElementById('prospects-count').textContent = val;
-  document.getElementById('credits-cost').textContent = creditsCost;
-  document.getElementById('prospects-max-label').textContent = maxAllowed + ' prospects (max)';
-}
-
-/* ── Niche categories ── */
-const NICHE_DATA = {
-  '🔧 BTP': ['Plombier','Électricien','Peintre en bâtiment','Maçon','Couvreur','Carreleur','Serrurier','Menuisier','Chauffagiste','Climatisation'],
-  '💇 Beauté': ['Coiffeur','Barbier','Institut de beauté','Onglerie','Salon de massage','Tatoueur','Esthéticienne'],
-  '🍽️ Restauration': ['Restaurant','Boulangerie','Pâtisserie','Pizzeria','Traiteur','Food truck','Bar','Kebab','Sushi'],
-  '🏥 Santé': ['Dentiste','Ostéopathe','Kinésithérapeute','Opticien','Vétérinaire','Podologue','Psychologue'],
-  '🚗 Auto': ['Garage automobile','Carrossier','Lavage auto','Auto-école','Contrôle technique','Vitrage auto'],
-  '🏠 Services': ['Agent immobilier','Déménageur','Photographe','Coach sportif','Jardinier','Paysagiste','Nettoyage'],
-  '🛍️ Commerce': ['Fleuriste','Bijouterie','Pressing','Cordonnerie','Animalerie','Caviste','Épicerie fine'],
-  '✏️ Autre': ['__custom__']
-};
-
-let selectedCat = null;
-
-function initNicheCategories() {
-  const container = document.getElementById('niche-cats');
-  container.innerHTML = Object.keys(NICHE_DATA).map(cat =>
-    `<button class="niche-cat" onclick="selectNicheCategory('${cat}')">${cat}</button>`
-  ).join('');
-}
-
-function selectNicheCategory(cat) {
-  selectedCat = cat;
-  document.querySelectorAll('.niche-cat').forEach(b => b.classList.toggle('on', b.textContent === cat));
-  const dropdown = document.getElementById('niche-dropdown');
-  const customDiv = document.getElementById('niche-custom');
-
-  if (cat === '✏️ Autre') {
-    dropdown.style.display = 'none';
-    customDiv.classList.add('show');
-    const inp = document.getElementById('niche-custom-input');
-    inp.value = '';
-    inp.focus();
-    inp.oninput = () => { document.getElementById('niche').value = inp.value; };
-    document.getElementById('niche').value = '';
-  } else {
-    dropdown.style.display = '';
-    customDiv.classList.remove('show');
-    const niches = NICHE_DATA[cat];
-    dropdown.innerHTML = '<option value="" disabled selected>Choisis une niche…</option>' +
-      niches.map(n => `<option value="${n}">${n}</option>`).join('');
-  }
-}
-
-function onNicheSelect(val) {
-  document.getElementById('niche').value = val;
-}
-
-initNicheCategories();
-
-/* ── Search Mode ── */
-function setSearchMode(mode) {
-  // Block click on disabled modes
-  if ((mode === 'social' || mode === 'both') && !socialCheckAvailable) return;
-  searchMode = mode;
-  document.querySelectorAll('.search-mode').forEach(b => b.classList.toggle('on', b.dataset.mode === mode));
-  const hints = {
-    site: 'Trouve les entreprises qui n\'ont pas de site internet.',
-    social: 'Trouve les entreprises qui n\'ont pas de réseaux sociaux (Facebook, Instagram, TikTok).',
-    both: 'Trouve les entreprises sans site web ET sans réseaux sociaux. Coût ×2.',
-    owners: 'Recherche des entreprises dont le nom du gérant est identifiable. 1 crédit par prospect trouvé.',
-  };
-  document.getElementById('mode-hint').textContent = hints[mode] || '';
-  updateProspectsSlider();
-}
-
-function checkSearchModes() {
-  fetch('/api/search/modes', { headers: AUTH_HEADERS })
-    .then(r => r.json())
-    .then(data => {
-      socialCheckAvailable = data.socialCheckAvailable;
-      if (!socialCheckAvailable) {
-        document.getElementById('mode-social').classList.add('disabled');
-        document.getElementById('mode-both').classList.add('disabled');
-        document.getElementById('mode-hint').textContent = '⚠️ Modes réseaux indisponibles — GOOGLE_CSE_ID non configuré.';
-      }
-    })
-    .catch(() => {});
-}
-
-/* ── Country / Geolocation ── */
-function setCountry(c) {
-  country = c;
-  geoMode = false;
-  geoLat = null;
-  geoLng = null;
-  ['fr','ch','be'].forEach(x => document.getElementById('btn-'+x).classList.toggle('on', x === c));
-  document.getElementById('btn-geo').classList.remove('on');
-  document.getElementById('geo-options').style.display = 'none';
-}
-
-function activateGeoloc() {
-  if (!navigator.geolocation) {
-    return showAlert('Votre navigateur ne supporte pas la géolocalisation.');
-  }
-  setLoader(true, 'Détection de votre position…', 'Autorisez la géolocalisation dans votre navigateur.');
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      geoLat = pos.coords.latitude;
-      geoLng = pos.coords.longitude;
-      geoMode = true;
-      geoRadius = parseInt(document.getElementById('geo-radius').value);
-
-      // UI: highlight geo button, unhighlight countries
-      ['fr','ch','be'].forEach(x => document.getElementById('btn-'+x).classList.remove('on'));
-      document.getElementById('btn-geo').classList.add('on');
-      document.getElementById('geo-options').style.display = 'block';
-
-      // Reverse geocode to show city name
-      fetchCityName(geoLat, geoLng);
-      setLoader(false);
-    },
-    (err) => {
-      setLoader(false);
-      showAlert('Impossible de vous localiser. Vérifiez les permissions de votre navigateur.');
-    },
-    { enableHighAccuracy: true, timeout: 10000 }
-  );
-}
-
-async function fetchCityName(lat, lng) {
-  try {
-    const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&accept-language=fr`);
-    const d = await r.json();
-    const city = d.address?.city || d.address?.town || d.address?.village || d.address?.municipality || '';
-    const dept = d.address?.county || d.address?.state || '';
-    document.getElementById('geo-city').textContent = city ? `${city}${dept ? ', ' + dept : ''}` : `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-  } catch {
-    document.getElementById('geo-city').textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-  }
-}
-
-function updateRadiusLabel() {
-  const val = parseInt(document.getElementById('geo-radius').value);
-  geoRadius = val;
-  document.getElementById('geo-radius-label').textContent = val + ' km';
-}
-
-function toggleVis(id) {
-  const i = document.getElementById(id);
-  i.type = i.type === 'password' ? 'text' : 'password';
-}
-
-function showAlert(msg) {
-  document.getElementById('alert-msg').textContent = msg;
-  document.getElementById('alert').classList.add('on');
-}
-function hideAlert() { document.getElementById('alert').classList.remove('on'); }
-
-function setLoader(show, title, sub) {
-  document.getElementById('loader').classList.toggle('on', show);
-  if (title !== undefined) document.getElementById('l-title').textContent = title;
-  if (sub   !== undefined) document.getElementById('l-sub').textContent   = sub;
-}
-
-/* ── SEARCH (server-side) ── */
-async function runSearch() {
-  const niche = document.getElementById('niche').value.trim();
-  hideAlert();
-  if (!niche) return showAlert("Veuillez saisir une niche ou un secteur d'activité.");
-
-  if (userCredits <= 0) {
-    return showAlert('Plus de crédits disponibles. Passez à un plan supérieur.');
-  }
-
-  currentNiche = niche;
-  const btn = document.getElementById('btn-go');
-  btn.disabled = true;
-
-  // Load smart keywords if filter enabled
-  let smartKw = [];
-  if (strictFilter) {
-    setLoader(true, 'Analyse de la niche par l\'IA…', 'Claude génère les mots-clés de filtrage');
-    try {
-      const kwRes = await fetch('/api/pitch/keywords', {
-        method: 'POST',
-        headers: AUTH_HEADERS,
-        body: JSON.stringify({ niche }),
-      });
-      const kwData = await kwRes.json();
-      if (kwData.keywords && kwData.keywords.length) {
-        smartKw = kwData.keywords;
-        setLoader(true, `${smartKw.length} mots-clés trouvés`, 'Filtrage intelligent activé');
-        await new Promise(r => setTimeout(r, 800));
-      }
-    } catch { smartKw = []; }
-  }
-
-  const numProspects = parseInt(document.getElementById('prospects-slider').value);
-  const geoLabel = geoMode ? ` autour de vous (${geoRadius} km)` : '';
-  const modeLabel = searchMode === 'social' ? ' + vérification réseaux sociaux' : searchMode === 'both' ? ' + vérification complète' : searchMode === 'owners' ? ' + extraction noms gérants' : '';
-  setLoader(true, `Recherche « ${niche} » en cours…${geoLabel}`, `Recherche de ${numProspects} prospect${numProspects > 1 ? 's' : ''}${modeLabel}. Cela peut prendre 1 à 3 minutes.`);
-
-  document.getElementById('res').style.display = 'none';
-  document.getElementById('empty').classList.remove('on');
-  document.getElementById('counter').textContent = '0';
-  document.getElementById('ring-fill').style.strokeDashoffset = CIRC;
-  document.getElementById('min-stars').value = '0';
-  document.getElementById('tbody').innerHTML = '';
-  sortCol = 'heat'; sortDir = 'desc'; minStars = 0;
-  updateSortHeaders();
-
-  try {
-    const res = await fetch('/api/search', {
-      method: 'POST',
-      headers: AUTH_HEADERS,
-      body: JSON.stringify({
-        niche,
-        country,
-        smartKeywords: smartKw,
-        numProspects: parseInt(document.getElementById('prospects-slider').value),
-        searchMode,
-        geoMode,
-        geoLat,
-        geoLng,
-        geoRadius,
-      }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || `Erreur ${res.status}`);
-
-    // Update credits in header + slider
-    userCredits = data.credits;
-    document.getElementById('hdr-credits').textContent = data.credits;
-    updateProspectsSlider();
-
-    // Reload full prospects list from server (includes IDs from DB)
-    await loadProspects();
-    await loadSearchHistory();
-
-    setLoader(false);
-
-    if (!prospects.length) {
-      document.getElementById('res').style.display = 'none';
-      document.getElementById('empty').classList.add('on');
-    }
-  } catch (err) {
-    setLoader(false);
-    showAlert(err.message || 'Une erreur inconnue est survenue.');
-  } finally {
-    btn.disabled = false;
-  }
-}
-
-/* ── Heat score ── */
-const HEAT_DATA = [
-  { label:'Froid',      cls:'h-cold', score:0 },
-  { label:'Tiède',      cls:'h-mild', score:1 },
-  { label:'Chaud',      cls:'h-warm', score:2 },
-  { label:'Très chaud', cls:'h-hot',  score:3 },
-];
-function heatScore(p) {
-  const r = p.rating  ?? 0;
-  const v = p.reviews ?? 0;
-  if (r >= 4.5 && v > 200) return 3;
-  if (r >= 4.0 && v >= 50) return 2;
-  if (r >= 3.5 && v >= 20) return 1;
-  return 0;
-}
-function renderHeat(p) {
-  const s = heatScore(p);
-  const h = HEAT_DATA[s];
-  const rStr = p.rating  != null ? `${p.rating.toFixed(1)}` : 'pas de note';
-  const vStr = p.reviews > 0 ? `${p.reviews} avis` : 'aucun avis';
-  return `<span class="heat ${h.cls}" title="${h.label} — ${rStr}, ${vStr}">${h.label}</span>`;
-}
-
-/* ── Table ── */
-function renderSignals(p) {
-  let badges = '';
-  const mode = p.search_mode || 'site';
-  // Badge site — seulement en mode site ou both
-  if ((mode === 'site' || mode === 'both') && !p.website_url) {
-    badges += '<span class="badge-sig badge-nosite">🔴 Pas de site</span>';
-  }
-  // Badge réseaux — seulement si le mode a vérifié les réseaux
-  if (mode === 'social' || mode === 'both') {
-    if (p.has_facebook === 0 && p.has_instagram === 0 && p.has_tiktok === 0) {
-      badges += '<span class="badge-sig badge-nosocial">🟠 Pas de réseaux</span>';
-    } else if (p.has_facebook === 1 || p.has_instagram === 1 || p.has_tiktok === 1) {
-      const found = [];
-      if (p.has_facebook === 1) found.push('FB');
-      if (p.has_instagram === 1) found.push('IG');
-      if (p.has_tiktok === 1) found.push('TK');
-      badges += '<span class="badge-sig" style="background:rgba(46,204,113,.12);color:#2ecc71;font-size:.6rem;padding:.15rem .4rem;border-radius:4px">✅ ' + found.join(', ') + '</span>';
-    } else {
-      badges += '<span class="badge-sig badge-nosocial">🟠 Sans réseaux</span>';
-    }
-  }
-  // Badge avis
-  if ((p.reviews || 0) < 5) badges += '<span class="badge-sig badge-fewreviews">🟡 &lt; 5 avis</span>';
-  return '<div class="badge-signals">' + (badges || '<span style="color:var(--muted);font-size:.65rem">—</span>') + '</div>';
-}
-
-function renderTable() {
-  let list = prospects.filter(p => {
-    if (filterSearchId && p.search_id !== filterSearchId) return false;
-    if (filterNiche !== 'all' && p.niche !== filterNiche) return false;
-    if (minStars > 0 && (p.rating == null || p.rating < minStars)) return false;
-    if (filterStatus !== 'all' && p.status !== filterStatus) return false;
-    if (filterAge === 'new' && (p.reviews || 0) >= 50) return false;
-    if (filterAge === 'mid' && ((p.reviews || 0) < 50 || (p.reviews || 0) >= 200)) return false;
-    if (filterAge === 'old' && (p.reviews || 0) < 200) return false;
-    // Signal filter
-    if (filterSignals === 'nosite' && p.website_url) return false;
-    if (filterSignals === 'nosocial' && !(p.has_facebook === 0 && p.has_instagram === 0 && p.has_tiktok === 0)) return false;
-    if (filterSignals === 'fewreviews' && (p.reviews || 0) >= 5) return false;
-    return true;
-  });
-  if (sortCol) {
-    list = [...list].sort((a, b) => {
-      const av = sortCol === 'heat' ? heatScore(a) : (a[sortCol] ?? -1);
-      const bv = sortCol === 'heat' ? heatScore(b) : (b[sortCol] ?? -1);
-      return sortDir === 'desc' ? bv - av : av - bv;
-    });
-  }
-  const tbody = document.getElementById('tbody');
-  tbody.innerHTML = '';
-  list.forEach((p, i) => {
-    const tr = document.createElement('tr');
-    tr.onclick = () => openModal(p.id, 'calc');
-    tr.innerHTML = `
-      <td class="c-n">${i+1}</td>
-      <td class="c-name"><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.name + ' ' + p.address)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" class="map-link" title="Voir sur Google Maps">${esc(p.name)} <span class="map-icon">📍</span></a></td>
-      <td class="c-owner" style="font-size:.78rem;color:${p.owner_name ? 'var(--text)' : 'var(--muted)'}">${p.owner_name ? esc(p.owner_name) : '—'}</td>
-      <td class="c-tel"><a href="tel:${p.phone.replace(/\s/g,'')}" onclick="event.stopPropagation()">${esc(p.phone)}</a></td>
-      <td class="c-addr">${esc(p.address)}</td>
-      <td>${renderStars(p.rating)}</td>
-      <td>${p.reviews > 0 ? p.reviews.toLocaleString('fr-FR') : '<span class="nd">—</span>'}</td>
-      <td>${renderSignals(p)}</td>
-      <td>${renderHeat(p)}</td>
-      <td><span class="status ${STATUS_CLASS[p.status]}" onclick="cycleStatus(${p.id},event)">${STATUS_LABEL[p.status]}</span></td>
-      <td>
-        <div class="row-actions">
-          <a class="btn-call" href="tel:${p.phone.replace(/\s/g,'')}" onclick="event.stopPropagation()" title="Appeler">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.22 2 2 0 012.22.04L5.22.04a2 2 0 012 1.72c.13 1 .36 1.97.72 2.9a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.14-1.14a2 2 0 012.11-.45c.93.36 1.9.59 2.9.72a2 2 0 011.76 2.03z"/>
-            </svg>
-          </a>
-          <button class="btn-fiche" onclick="openModal(${p.id},'fiche');event.stopPropagation()" title="Fiche prospect">F</button>
-          <button class="btn-pitch" onclick="openModal(${p.id},'pitch');event.stopPropagation()" title="Générer pitch IA">P</button>
-          <button class="btn-del" onclick="deleteProspect(${p.id},event)" title="Supprimer">&#10005;</button>
-        </div>
-      </td>`;
-    tbody.appendChild(tr);
-  });
-  document.getElementById('counter').textContent = list.length;
-}
-
-function sortBy(col) {
-  sortDir = sortCol === col && sortDir === 'desc' ? 'asc' : 'desc';
-  sortCol = col;
-  updateSortHeaders();
-  renderTable();
-}
-function updateSortHeaders() {
-  ['rating','reviews','heat'].forEach(col => {
-    const th = document.getElementById(`th-${col}`);
-    const si = document.getElementById(`si-${col}`);
-    if (!th||!si) return;
-    th.classList.toggle('active', sortCol === col);
-    si.textContent = sortCol !== col ? '\u2195' : sortDir === 'desc' ? '\u2193' : '\u2191';
-  });
-}
-function applyFilter() {
-  minStars = parseFloat(document.getElementById('min-stars').value) || 0;
-  filterStatus = document.getElementById('filter-status').value;
-  filterAge = document.getElementById('filter-age').value;
-  filterSignals = document.getElementById('filter-signals').value;
-  const nicheVal = document.getElementById('filter-niche').value;
-  if (nicheVal !== filterNiche) {
-    filterNiche = nicheVal;
-    filterSearchId = null; // reset search filter when niche changes manually
-    document.getElementById('btn-clear-filter').style.display = filterNiche !== 'all' ? '' : 'none';
-    loadSearchHistory();
-  }
-  renderTable();
-}
-
-/* ── Status cycle (API) ── */
-async function cycleStatus(id, event) {
-  if (event) event.stopPropagation();
-  const p = prospects.find(x => x.id === id);
-  if (!p) return;
-  const newStatus = STATUS_CYCLE[(STATUS_CYCLE.indexOf(p.status) + 1) % STATUS_CYCLE.length];
-  p.status = newStatus;
-  renderTable();
-  renderStats();
-  try {
-    await fetch(`/api/prospects/${id}/status`, {
-      method: 'PUT',
-      headers: AUTH_HEADERS,
-      body: JSON.stringify({ status: newStatus }),
-    });
-  } catch {}
-}
-
-/* ── Delete prospect (API) ── */
-async function deleteProspect(id, event) {
-  if (event) event.stopPropagation();
-  if (!confirm('Supprimer ce prospect ?')) return;
-  try {
-    await fetch(`/api/prospects/${id}`, {
-      method: 'DELETE',
-      headers: AUTH_HEADERS,
-    });
-    prospects = prospects.filter(p => p.id !== id);
-    renderTable();
-    renderStats();
-  } catch {}
-}
-
-/* ── Modal ── */
-function openModal(id, tab) {
-  currentProspect = prospects.find(x => x.id === id);
-  if (!currentProspect) return;
-  const p = currentProspect;
-  document.getElementById('m-name').textContent = p.name;
-  document.getElementById('m-meta').textContent = `${p.phone} · ${p.city || ''}${p.rating ? ' · ' + p.rating.toFixed(1) : ''}`;
-  document.getElementById('m-owner-name').value = p.owner_name || '';
-  document.getElementById('m-notes').value  = p.notes  || '';
-  document.getElementById('m-rappel').value = p.rappel || '';
-  document.getElementById('pitch-zone').innerHTML = '';
-  document.getElementById('fiche-zone').innerHTML = '';
-  document.getElementById('modal-bd').classList.add('on');
-  showTab(tab || 'calc');
-}
-function closeModal() {
-  document.getElementById('modal-bd').classList.remove('on');
-  currentProspect = null;
-}
-function showTab(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.tab === name));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('on', p.dataset.tab === name));
-  if (name === 'calc' && currentProspect) renderCalc(currentProspect);
-}
-
-/* ── Calculator ── */
-function calculateLoss(p) {
-  const reviews = p.reviews || 0;
-  const rating  = p.rating  || 3.5;
-  const monthlyImpressions = Math.max(80, Math.round(reviews * 12 + rating * 15));
-  const monthlyClicks      = Math.round(monthlyImpressions * 0.20);
-  const lookingForSite     = Math.round(monthlyClicks * 0.48);
-  const bounced            = Math.round(lookingForSite * 0.72);
-  const lostClients        = Math.max(1, Math.round(bounced * 0.06));
-  const lostRevenue        = lostClients * 400;
-  return { monthlyImpressions, monthlyClicks, bounced, lostClients, lostRevenue };
-}
-
-function renderCalc(p) {
-  const r = calculateLoss(p);
-  document.getElementById('calc-content').innerHTML = `
-    <div class="calc-grid">
-      <div class="calc-card">
-        <div class="calc-n">${r.monthlyImpressions.toLocaleString('fr-FR')}</div>
-        <div class="calc-l">Vues Google Maps / mois</div>
-      </div>
-      <div class="calc-card">
-        <div class="calc-n">${r.monthlyClicks.toLocaleString('fr-FR')}</div>
-        <div class="calc-l">Visiteurs potentiels / mois</div>
-      </div>
-      <div class="calc-card">
-        <div class="calc-n">${r.bounced.toLocaleString('fr-FR')}</div>
-        <div class="calc-l">Repartent faute de site web</div>
-      </div>
-      <div class="calc-card hi">
-        <div class="calc-n">${r.lostClients}</div>
-        <div class="calc-l">Clients perdus / mois</div>
+    <!-- Step 1: Did they answer? -->
+    <div class="call-step on" id="call-step-1">
+      <div class="call-q">Il a eu le cran de décrocher ? 📞</div>
+      <div class="call-btns">
+        <button class="call-btn yes" onclick="callAnswer(true)">✓ Ouais il a répondu</button>
+        <button class="call-btn no" onclick="callAnswer(false)">✗ Le lâche a pas décroché</button>
       </div>
     </div>
-    <div class="calc-card hi" style="margin-bottom:1rem;text-align:center;">
-      <div class="calc-n" style="font-size:2.1rem;">~${r.lostRevenue.toLocaleString('fr-FR')} &euro;</div>
-      <div class="calc-l" style="font-size:.78rem;">chiffre d'affaires perdu estimé chaque mois</div>
+
+    <!-- Step 2: Was it positive? -->
+    <div class="call-step" id="call-step-2">
+      <div class="call-q">Alors, il est tombé dans le piège ? 😈</div>
+      <div class="call-btns">
+        <button class="call-btn yes" onclick="callPositive(true)">🎉 Closé / Il est cuit !</button>
+        <button class="call-btn no" onclick="callPositive(false)">😤 L'ingrat a dit non</button>
+      </div>
     </div>
-    <p class="calc-note">* Estimations basées sur les benchmarks locaux Google Maps : taux de clic 20 %, abandon sans site 72 %, taux de conversion 6 %, panier moyen 400 €.</p>`;
-}
 
-/* ── CRM save (API) ── */
-function debounceSave() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveCrmNow, 800);
-}
-async function saveCrmNow() {
-  if (!currentProspect) return;
-  const notes  = document.getElementById('m-notes').value;
-  const rappel = document.getElementById('m-rappel').value;
-  const owner_name = document.getElementById('m-owner-name').value;
-  currentProspect.notes  = notes;
-  currentProspect.rappel = rappel;
-  currentProspect.owner_name = owner_name;
-  try {
-    await fetch(`/api/prospects/${currentProspect.id}/notes`, {
-      method: 'PUT',
-      headers: AUTH_HEADERS,
-      body: JSON.stringify({ notes, rappel, owner_name }),
-    });
-    const saved = document.getElementById('crm-saved');
-    saved.classList.add('show');
-    setTimeout(() => saved.classList.remove('show'), 2000);
-  } catch {}
-}
+    <!-- Step: Objection -->
+    <div class="call-step" id="call-step-obj">
+      <div class="call-q">Quelle excuse bidon il a sorti ? 🙄</div>
+      <div class="call-obj-list">
+        <button class="call-obj-btn" onclick="selectObj(this)">« J'ai pas le temps » (classique)</button>
+        <button class="call-obj-btn" onclick="selectObj(this)">« J'ai déjà quelqu'un » (menteur)</button>
+        <button class="call-obj-btn" onclick="selectObj(this)">« J'ai pas le budget » (radin)</button>
+        <button class="call-obj-btn" onclick="selectObj(this)">« Ça m'intéresse pas » (aveugle)</button>
+        <button class="call-obj-btn" onclick="selectObj(this)">« Rappelez plus tard » (fuyeur)</button>
+      </div>
+      <input class="call-obj-input" id="call-obj-custom" type="text" placeholder="Autre excuse pourrie..." oninput="clearObjBtns()" />
+      <button class="call-confirm" onclick="confirmObj()">Valider</button>
+    </div>
 
-/* ── Pitch type ── */
-function setPitchType(type) {
-  pitchType = type;
-  document.querySelectorAll('.pitch-type-btn').forEach(b => b.classList.toggle('on', b.dataset.type === type));
-}
+    <!-- Step: Set rappel (positive) -->
+    <div class="call-step" id="call-step-rappel">
+      <div class="call-q">🎉 ÉNORME ! Quand tu le revois pour encaisser ? 💰</div>
+      <input class="call-date-input" id="call-rappel-date" type="date" />
+      <button class="call-confirm" onclick="confirmRappel()">Valider le client</button>
+      <button class="call-skip" onclick="confirmRappel()">Pas de date</button>
+    </div>
 
-/* ── Pitch generation (server uses stored API key) ── */
-async function generatePitch() {
-  const btn = document.getElementById('btn-gen');
-  btn.disabled = true;
-  document.getElementById('pitch-zone').innerHTML = `<div class="pitch-loading"><div class="mini-spin"></div> Génération du script en cours…</div>`;
-  try {
-    const res = await fetch('/api/pitch', {
-      method: 'POST',
-      headers: AUTH_HEADERS,
-      body: JSON.stringify({ prospect: currentProspect, niche: currentNiche || currentProspect?.niche || '', pitchType }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error?.message || data.error || `Erreur ${res.status}`);
-    const text = data.content?.[0]?.text || '';
-    if (!text) throw new Error('Réponse vide de Claude');
-    document.getElementById('pitch-zone').innerHTML = `
-      <div class="pitch-out on" id="pitch-text">${esc(text).replace(/\n/g,'<br>')}</div>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
-        <button class="btn-copy" onclick="copyPitch()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-          </svg>
-          Copier le script
-        </button>
-        <button class="btn-copy" onclick="downloadPitch()" style="border-color:rgba(0,200,248,.25);color:var(--cyan);">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Télécharger .txt
-        </button>
-        <button class="btn-regen" onclick="generatePitch()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
-          </svg>
-          Régénérer
-        </button>
-      </div>`;
-    document.getElementById('pitch-text').dataset.raw = text;
-  } catch (err) {
-    document.getElementById('pitch-zone').innerHTML = `<div class="pitch-err">${esc(err.message)}</div>`;
-  } finally {
-    btn.disabled = false;
-  }
-}
+    <!-- Step: No answer → retry? -->
+    <div class="call-step" id="call-step-noanswer">
+      <div class="call-q">📞 Il se cache... On le traque quand ? 🎯</div>
+      <input class="call-date-input" id="call-retry-date" type="date" />
+      <button class="call-confirm" onclick="confirmRetry()">Programmer l'embuscade 🫡</button>
+      <button class="call-skip" onclick="closeCallTracker()">Tant pis, NEXT</button>
+    </div>
 
-/* ── Fiche generation (server uses stored API key) ── */
-async function generateFiche() {
-  const btn = document.getElementById('btn-fiche-gen');
-  btn.disabled = true;
-  document.getElementById('fiche-zone').innerHTML = `<div class="pitch-loading"><div class="mini-spin"></div> Recherche d'infos en cours…</div>`;
-  try {
-    const res = await fetch('/api/pitch', {
-      method: 'POST',
-      headers: AUTH_HEADERS,
-      body: JSON.stringify({ prospect: currentProspect, niche: currentNiche, pitchType: 'fiche' }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error?.message || data.error || `Erreur ${res.status}`);
-    const text = data.content?.[0]?.text || '';
-    if (!text) throw new Error('Réponse vide de Claude');
-    document.getElementById('fiche-zone').innerHTML = `
-      <div class="fiche-out">${esc(text).replace(/\n/g,'<br>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')}</div>
-      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.75rem;">
-        <button class="btn-copy" onclick="copyFiche()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-          </svg>
-          Copier la fiche
-        </button>
-        <button class="btn-regen" onclick="generateFiche()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
-          </svg>
-          Relancer
-        </button>
-      </div>`;
-    document.getElementById('fiche-zone').querySelector('.fiche-out').dataset.raw = text;
-  } catch (err) {
-    document.getElementById('fiche-zone').innerHTML = `<div class="pitch-err">${esc(err.message)}</div>`;
-  } finally {
-    btn.disabled = false;
-  }
-}
+    <!-- Step: Done -->
+    <div class="call-step" id="call-step-done">
+      <div class="call-result">
+        <div class="call-result-icon" id="call-done-icon"></div>
+        <div class="call-result-msg" id="call-done-msg"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-function copyFiche() {
-  const el = document.querySelector('.fiche-out');
-  if (!el) return;
-  navigator.clipboard.writeText(el.dataset.raw || el.innerText).then(() => {
-    const btn = document.querySelector('#fiche-zone .btn-copy');
-    if (btn) {
-      btn.textContent = '\u2713 Copié !';
-      setTimeout(() => btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copier la fiche`, 2500);
-    }
-  });
-}
+<!-- ── BULK ACTIONS BAR ── -->
+<div class="bulk-bar" id="bulk-bar">
+  <span class="bulk-count" id="bulk-count">0 selectionne</span>
+  <div style="display:flex;align-items:center;gap:.5rem;">
+    <select id="bulk-status-select" style="background:var(--surface);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:.4rem .6rem;font-size:.78rem;font-family:inherit;">
+      <option value="">Changer statut...</option>
+      <option value="todo">A appeler</option>
+      <option value="called">Appele</option>
+      <option value="nope">Pas interesse</option>
+      <option value="client">Client</option>
+    </select>
+    <button onclick="bulkSetStatus()" style="background:var(--text);border:none;color:var(--bg);border-radius:8px;padding:.4rem .8rem;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;">Appliquer</button>
+    <button onclick="bulkDelete()" style="background:var(--red-bg);border:1px solid var(--red-bd);color:var(--red-tx);border-radius:8px;padding:.4rem .8rem;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;">Supprimer</button>
+    <button onclick="clearSelection()" style="background:none;border:1px solid var(--border2);color:var(--dim);border-radius:8px;padding:.4rem .8rem;font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;">Annuler</button>
+  </div>
+</div>
 
-function copyPitch() {
-  const el = document.getElementById('pitch-text');
-  if (!el) return;
-  navigator.clipboard.writeText(el.dataset.raw || el.innerText).then(() => {
-    const btn = document.querySelector('#pitch-zone .btn-copy');
-    if (btn) {
-      btn.textContent = '\u2713 Copié !';
-      setTimeout(() => btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copier le script`, 2500);
-    }
-  });
-}
+<!-- ── TOAST CONTAINER ── -->
+<div class="toast-container" id="toast-container"></div>
 
-function downloadPitch() {
-  const el = document.getElementById('pitch-text');
-  if (!el) return;
-  const text = el.dataset.raw || el.innerText;
-  const name = currentProspect ? currentProspect.name.replace(/[^a-zA-Z0-9àâäéèêëïîôùûüçÀÂÄÉÈÊËÏÎÔÙÛÜÇ -]/g, '') : 'prospect';
-  const filename = `${pitchType}_${name}.txt`;
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-/* ── Stats ── */
-function renderStats() {
-  const total = prospects.length;
-  const todo   = prospects.filter(p => p.status === 'todo').length;
-  const called = prospects.filter(p => p.status === 'called').length;
-  const client = prospects.filter(p => p.status === 'client').length;
-  const nope   = prospects.filter(p => p.status === 'nope').length;
-  document.getElementById('stat-total').textContent  = total;
-  document.getElementById('stat-todo').textContent   = todo;
-  document.getElementById('stat-called').textContent = called;
-  document.getElementById('stat-client').textContent = client;
-  document.getElementById('stat-nope').textContent   = nope;
-}
-
-function renderStars(r) {
-  if (r == null) return '<span class="nd">\u2014</span>';
-  const n = Math.round(r);
-  return `<span class="stars">${'\u2605'.repeat(n)}${'\u2606'.repeat(5-n)}</span><span class="rval">${r.toFixed(1)}</span>`;
-}
-function esc(s) {
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-/* ── Export CSV ── */
-/* runOwnerExtraction removed — owners mode now uses normal search flow */
-
-function exportCSV() {
-  if (!prospects.length) { alert('Aucun prospect à exporter.'); return; }
-  const header = ['#','Nom','Téléphone','Adresse','Ville','Note','Nb d\'avis','Site web','Facebook','Instagram','TikTok','Chaleur','Statut','Notes CRM','Rappel'];
-  const heatLabels = {3:'Très chaud',2:'Chaud',1:'Tiède',0:'Froid'};
-  const socialLabel = v => v === 1 ? 'Oui' : v === 0 ? 'Non' : '?';
-  const rows = prospects.map((p,i) => {
-    const s = heatScore(p);
-    return [
-      i+1, p.name, p.phone, p.address, p.city || '',
-      p.rating != null ? p.rating.toFixed(1) : '',
-      p.reviews,
-      p.website_url || 'Non',
-      socialLabel(p.has_facebook),
-      socialLabel(p.has_instagram),
-      socialLabel(p.has_tiktok),
-      heatLabels[s] || '\u2014',
-      STATUS_LABEL[p.status],
-      p.notes || '',
-      p.rappel || '',
-    ];
-  });
-
-  let html = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">';
-  html += '<head><meta charset="utf-8"/><style>td,th{padding:6px 10px;border:1px solid #ccc;font-family:Calibri,Arial;font-size:12pt} th{background:#0078d4;color:#fff;font-weight:bold} tr:nth-child(even){background:#f2f7fc}</style></head><body><table>';
-  html += '<tr>' + header.map(h => `<th>${h}</th>`).join('') + '</tr>';
-  rows.forEach(r => {
-    html += '<tr>' + r.map(c => `<td>${String(c).replace(/</g,'&lt;').replace(/>/g,'&gt;')}</td>`).join('') + '</tr>';
-  });
-  html += '</table></body></html>';
-
-  const blob = new Blob(['\uFEFF' + html], { type:'application/vnd.ms-excel;charset=utf-8' });
-  const niche = document.getElementById('niche').value.replace(/\s+/g,'_') || 'prospects';
-  const a = Object.assign(document.createElement('a'), {
-    href: URL.createObjectURL(blob),
-    download: `prospects_${niche}_${new Date().toISOString().slice(0,10)}.xls`
-  });
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
-
-/* ── Referral ── */
-async function loadReferral() {
-  try {
-    const res = await fetch('/api/referral', { headers: AUTH_HEADERS });
-    if (!res.ok) return;
-    const data = await res.json();
-    const section = document.getElementById('referral-section');
-    section.style.display = '';
-    document.getElementById('ref-link').value = location.origin + '/login?ref=' + data.referral_code;
-    document.getElementById('ref-count').textContent = data.total_referrals || 0;
-    document.getElementById('ref-credits').textContent = data.credits_earned || 0;
-  } catch { /* silent */ }
-}
-
-function copyRefLink() {
-  const inp = document.getElementById('ref-link');
-  inp.select();
-  navigator.clipboard.writeText(inp.value).then(() => {
-    const btn = inp.nextElementSibling;
-    btn.textContent = 'Copié !';
-    setTimeout(() => btn.textContent = 'Copier le lien', 2000);
-  });
-}
-
-/* ── Enter key ── */
-document.getElementById('niche-custom-input').addEventListener('keydown', e => { if (e.key==='Enter') runSearch(); });
-
-/* ── Init ── */
-loadUser();
-loadProspects();
-loadSearchHistory();
-checkSearchModes();
-setSearchMode('site');
-</script>
+<!-- ── APP JS ── -->
+<script src="/app.js?v=12"></script>
 </body>
 </html>

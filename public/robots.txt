@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /pricing
+Disallow: /api/
+Disallow: /admin
+
+Sitemap: https://prospecthunter.fr/sitemap.xml

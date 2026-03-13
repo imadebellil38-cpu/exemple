@@ -11,7 +11,7 @@ if (!ANTHROPIC_API_KEY) {
   console.error('\x1b[31m[WARN] ANTHROPIC_API_KEY not set in .env — pitch generation will fail\x1b[0m');
 }
 
-const VALID_PITCH_TYPES = ['appel', 'email', 'sms', 'linkedin', 'fiche', 'keywords'];
+const VALID_PITCH_TYPES = ['appel', 'email', 'sms', 'linkedin', 'dm', 'fiche', 'keywords'];
 
 const PITCH_PROMPTS = {
   appel: (name, niche, pays, rating, reviews, ownerName) =>
@@ -89,6 +89,26 @@ Le message doit :
 
 Commence directement par le message sans titre.`,
 
+  dm: (name, niche, pays, rating, reviews, ownerName) =>
+`Tu es un expert commercial en creation de sites web. Redige un message direct (DM Instagram/Facebook) de prospection en francais pour contacter ${ownerName ? ownerName + ', gerant de ' + name : 'le gerant de ' + name}, un(e) ${niche} a ${pays}.
+
+Informations :
+- Entreprise : ${name}${ownerName ? '\n- Gerant/Proprietaire : ' + ownerName : ''}
+- Activite : ${niche}
+- Ville : ${pays}
+- Note Google : ${rating}
+- Nombre d'avis Google : ${reviews}
+- Situation : visible sur Google Maps, mais SANS site web
+
+Le message doit :
+1. Etre tres court (80 mots max)
+2. Commencer par un compliment sincere (avis Google, activite)
+3. Proposer une aide concrete et rapide
+4. Pas de lien, pas de spam — juste engager la conversation
+5. Ton : decontracte, amical, comme un vrai DM entre humains
+
+Commence directement par le message sans titre.`,
+
   keywords: (name, niche) =>
 `Tu es un assistant de prospection. L'utilisateur cherche des commerces de type : "${niche}".
 
@@ -125,6 +145,15 @@ Donne-moi ces informations de manière concise et structurée :
 Sois direct et concis. Pas de blabla. Commence directement par la fiche.`,
 };
 
+const SITUATION_BY_MODE = {
+  site: 'visible sur Google Maps, mais SANS site web',
+  social: 'a un site web mais AUCUNE présence sur les réseaux sociaux (Facebook, Instagram, TikTok)',
+  both: 'SANS site web ET SANS réseaux sociaux',
+  owners: 'visible sur Google Maps, mais SANS site web',
+  fewreviews: 'très peu visible en ligne — seulement quelques avis Google, a besoin de booster sa visibilité',
+  new: 'business récemment ouvert, quasi inconnu en ligne — très peu d\'avis, a besoin de tout construire (site, réseaux, visibilité)',
+};
+
 function callClaude(apiKey, prospect, niche, pitchType) {
   return new Promise((resolve, reject) => {
     const pays = prospect.city || '';
@@ -132,7 +161,11 @@ function callClaude(apiKey, prospect, niche, pitchType) {
     const reviews = prospect.reviews || 0;
     const ownerName = prospect.owner_name || '';
     const promptFn = PITCH_PROMPTS[pitchType] || PITCH_PROMPTS.appel;
-    const prompt = promptFn(prospect.name, niche, pays, rating, reviews, ownerName);
+    let prompt = promptFn(prospect.name, niche, pays, rating, reviews, ownerName);
+    // Adapt situation based on search mode
+    const mode = prospect.search_mode || 'site';
+    const situation = SITUATION_BY_MODE[mode] || SITUATION_BY_MODE.site;
+    prompt = prompt.replace('visible sur Google Maps, mais SANS site web', situation);
 
     const body = JSON.stringify({
       model: 'claude-sonnet-4-6',
@@ -223,6 +256,7 @@ router.post('/', async (req, res) => {
 
   try {
     const result = await callClaude(apiKey, prospect, validator.trim(niche), type);
+    try { db.prepare('INSERT INTO activity_log (user_id, action, details) VALUES (?, ?, ?)').run(req.user.id, 'pitch_generated', JSON.stringify({ prospect: prospect.name, type })); } catch {}
     res.status(result.status).json(result.body);
   } catch (err) {
     console.error('[PITCH] Error:', err.message);
@@ -275,6 +309,40 @@ function googleSearch(query) {
 }
 
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+// POST /api/pitch/batch — generate pitches for multiple prospects
+router.post('/batch', async (req, res) => {
+  const { prospects, niche, pitchType } = req.body;
+  if (!Array.isArray(prospects) || prospects.length === 0) {
+    return res.status(400).json({ error: 'Aucun prospect fourni.' });
+  }
+  const limit = Math.min(prospects.length, 20);
+  const type = VALID_PITCH_TYPES.includes(pitchType) ? pitchType : 'appel';
+
+  const user = db.prepare('SELECT anthropic_key FROM users WHERE id = ?').get(req.user.id);
+  const apiKey = ANTHROPIC_API_KEY || (user && user.anthropic_key);
+  if (!apiKey) {
+    return res.status(400).json({ error: 'Cle API Anthropic non configuree.' });
+  }
+
+  const results = [];
+  let success = 0;
+  for (let i = 0; i < limit; i++) {
+    const p = prospects[i];
+    try {
+      const result = await callClaude(apiKey, p, validator.trim(niche || p.niche || ''), type);
+      const text = result.body?.content?.[0]?.text || '';
+      results.push({ name: p.name, pitch: text, error: null });
+      if (text) success++;
+    } catch (err) {
+      results.push({ name: p.name, pitch: '', error: err.message });
+    }
+    // Small delay between calls
+    if (i < limit - 1) await new Promise(r => setTimeout(r, 500));
+  }
+
+  res.json({ results, total: limit, success });
+});
 
 // POST /api/pitch/extract-owners — extract owner names (2 phases: name analysis + Google search)
 router.post('/extract-owners', async (req, res) => {

@@ -49,9 +49,19 @@ db.exec(`
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
 
+  CREATE TABLE IF NOT EXISTS activity_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    action TEXT NOT NULL,
+    details TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+
   CREATE INDEX IF NOT EXISTS idx_prospects_user ON prospects(user_id);
   CREATE INDEX IF NOT EXISTS idx_prospects_phone ON prospects(user_id, phone);
   CREATE INDEX IF NOT EXISTS idx_searches_user ON searches(user_id);
+  CREATE INDEX IF NOT EXISTS idx_activity_log_user ON activity_log(user_id, created_at);
 `);
 
 // ── Migrations ──

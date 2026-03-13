@@ -1,0 +1,56 @@
+/* ProspectHunter — Shared Variables & Base Reset */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg:       #0a0a0a;
+  --surface:  #111;
+  --card:     #141414;
+  --card2:    #1a1a1a;
+  --border:   #1e1e1e;
+  --border2:  #2a2a2a;
+
+  --cyan:     #00c8f8;
+  --cyan2:    #38d9fa;
+  --cyan-glow: rgba(0,200,248,.1);
+  --cyan-glow2: rgba(0,200,248,.05);
+
+  --emerald:  #00e5a0;
+  --emerald2: rgba(0,229,160,.08);
+
+  --purple:   #9d6eff;
+  --purple2:  rgba(157,110,255,.1);
+  --purple3:  rgba(157,110,255,.2);
+
+  --amber:    #ffb800;
+  --amber2:   rgba(255,184,0,.1);
+
+  --text:     #ededed;
+  --text2:    #a1a1a1;
+  --muted:    #666;
+  --dim:      #888;
+
+  --red-bg:   rgba(255,65,65,.06);
+  --red-bd:   rgba(255,65,65,.18);
+  --red-tx:   #ff6b6b;
+
+  --green-tx: #00e5a0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}

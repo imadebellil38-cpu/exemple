@@ -7,7 +7,7 @@ const { batchFindOwners } = require('../services/pappers');
 
 const router = Router();
 
-const VALID_SEARCH_MODES = ['site', 'social', 'both', 'owners'];
+const VALID_SEARCH_MODES = ['site', 'social', 'both', 'owners', 'fewreviews', 'new'];
 
 // Anthropic API key for owner name extraction (owners mode)
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
@@ -257,8 +257,12 @@ router.post('/', async (req, res) => {
       // Mode 'site' or 'both': filter OUT businesses WITH a website
       if ((searchMode === 'site' || searchMode === 'both') && websiteUrl) continue;
 
-      // Mode 'social' or 'owners': keep all businesses (with or without website)
-      // Website filter NOT applied
+      // Mode 'fewreviews': keep only businesses with < 10 reviews
+      const reviewCount = place.userRatingCount ?? 0;
+      if (searchMode === 'fewreviews' && reviewCount >= 10) continue;
+
+      // Mode 'new': keep only businesses with < 5 reviews (proxy for newly opened)
+      if (searchMode === 'new' && reviewCount >= 5) continue;
 
       // Smart keyword filter
       if (keywords.length > 0) {
@@ -483,6 +487,9 @@ Réponds UNIQUEMENT en JSON, un tableau avec le numéro et le nom trouvé (vide 
     // Update search results count
     db.prepare('UPDATE searches SET results_count = ? WHERE id = ?').run(prospects.length, searchId);
 
+    // Log activity
+    try { db.prepare('INSERT INTO activity_log (user_id, action, details) VALUES (?, ?, ?)').run(userId, 'search', JSON.stringify({ niche: sanitizedNiche, count: prospects.length, searchMode })); } catch {}
+
     // Get updated credits
     const updated = db.prepare('SELECT credits FROM users WHERE id = ?').get(userId);
 
@@ -515,6 +522,8 @@ router.get('/modes', (req, res) => {
       { id: 'social', label: 'Sans réseaux', icon: '📱', cost: 1, available: isSocialCheckAvailable() },
       { id: 'both', label: 'Complet', icon: '🔥', cost: 2, available: isSocialCheckAvailable() },
       { id: 'owners', label: 'Noms des gérants', icon: '👤', cost: 1, available: !!ANTHROPIC_API_KEY },
+      { id: 'fewreviews', label: 'Peu d\'avis', icon: '⭐', cost: 1, available: true },
+      { id: 'new', label: 'Nouveaux business', icon: '🆕', cost: 1, available: true },
     ],
   });
 });

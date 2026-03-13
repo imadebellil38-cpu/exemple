@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+.env
+.git
+.github
+.claude
+*.db
+*.sqlite
+tests
+jest.config.js
+*.md
+.dockerignore
+Dockerfile
+docker-compose.yml
