@@ -326,14 +326,17 @@ main {
   margin-bottom: .65rem;
 }
 
-/* Category tabs */
+/* Category tabs — row 1 */
 .niche-cats {
   display: flex; gap: .4rem; flex-wrap: wrap;
-  margin-bottom: .75rem;
+  padding: .6rem .75rem;
+  background: var(--card); border-radius: 10px 10px 0 0;
+  border: 1px solid var(--border2);
+  border-bottom: none;
 }
 .niche-cat-btn {
-  padding: .38rem .75rem; border-radius: 20px;
-  background: var(--card); border: 1px solid var(--border2);
+  padding: .32rem .7rem; border-radius: 20px;
+  background: transparent; border: 1px solid transparent;
   color: var(--text2); font-size: .78rem; font-weight: 600;
   transition: all .15s; white-space: nowrap;
 }
@@ -344,16 +347,19 @@ main {
   color: #fff;
 }
 
-/* Niche chips grid */
+/* Niche chips — row 2 */
 .niche-chips {
   display: flex; flex-wrap: wrap; gap: .4rem;
+  padding: .65rem .75rem;
+  background: var(--card2); border-radius: 0 0 10px 10px;
+  border: 1px solid var(--border2);
   margin-bottom: .9rem;
-  min-height: 38px;
+  min-height: 52px;
 }
 .niche-chip {
   display: inline-flex; align-items: center; gap: .35rem;
-  padding: .42rem .8rem; border-radius: 8px;
-  background: var(--card2); border: 1px solid var(--border2);
+  padding: .35rem .75rem; border-radius: 8px;
+  background: var(--card); border: 1px solid var(--border2);
   color: var(--text2); font-size: .82rem; font-weight: 500;
   transition: all .15s;
 }
