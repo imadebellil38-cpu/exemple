@@ -255,7 +255,7 @@ function getFilteredProspects() {
    RENDER LIST (desktop + mobile)
 ───────────────────────────────────────── */
 function renderList() {
-  const prospects = getFilteredProspects();
+  const prospects = getFilteredProspects().sort((a, b) => calcHeat(b) - calcHeat(a));
   const empty     = document.getElementById('empty-state');
   const tblWrap   = document.getElementById('tbl-wrap');
   const cardsWrap = document.getElementById('cards-wrap');
