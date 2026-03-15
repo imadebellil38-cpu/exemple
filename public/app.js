@@ -304,9 +304,9 @@ function calcHeat(p) {
 
 function buildHeatBadge(p) {
   const score = calcHeat(p);
-  if (score >= 7) return `<span class="heat-badge heat-burning" title="Score ${score}/9">🔥🔥 Brûlant</span>`;
-  if (score >= 5) return `<span class="heat-badge heat-hot"     title="Score ${score}/9">🔥 Chaud</span>`;
-  if (score >= 3) return `<span class="heat-badge heat-warm"    title="Score ${score}/9">🌡️ Tiède</span>`;
+  if (score >= 6) return `<span class="heat-badge heat-burning" title="Score ${score}/9">🔥🔥 Brûlant</span>`;
+  if (score >= 3) return `<span class="heat-badge heat-hot"     title="Score ${score}/9">🔥 Chaud</span>`;
+  if (score >= 2) return `<span class="heat-badge heat-warm"    title="Score ${score}/9">🌡️ Tiède</span>`;
   return             `<span class="heat-badge heat-cold"        title="Score ${score}/9">❄️ Froid</span>`;
 }
 
