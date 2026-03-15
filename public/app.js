@@ -292,9 +292,9 @@ function renderList() {
 function calcHeat(p) {
   let score = 0;
   if (!p.website_url || p.website_url === '') score += 3;
-  if (p.has_facebook  === 0) score += 1;
-  if (p.has_instagram === 0) score += 1;
-  if (p.has_tiktok    === 0) score += 1;
+  if (p.has_facebook  === 0) score += 3;
+  if (p.has_instagram === 0) score += 3;
+  if (p.has_tiktok    === 0) score += 3;
   const rev = p.reviews ?? 0;
   if (rev < 10) score += 2;
   if (rev < 5)  score += 1;
