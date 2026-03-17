@@ -56,6 +56,7 @@ async function loadAll() {
         <td style="font-weight:600">${esc(u.email)}</td>
         <td>
           <select class="plan-select" onchange="changePlan(${parseInt(u.id)}, this.value)">
+            <option value="trial" ${u.plan==='trial'?'selected':''}>Trial</option>
             <option value="free" ${u.plan==='free'?'selected':''}>Free</option>
             <option value="pro" ${u.plan==='pro'?'selected':''}>Pro</option>
             <option value="enterprise" ${u.plan==='enterprise'?'selected':''}>Enterprise</option>

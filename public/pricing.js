@@ -44,10 +44,10 @@ async function upgrade(plan) {
     const statusRes = await fetch('/api/stripe/status', { headers });
     const status = await statusRes.json();
 
-    if (status.enabled && status.plans[plan]?.configured) {
+    if (status.enabled && status.packs[plan]?.configured) {
       const res = await fetch('/api/stripe/checkout', {
         method: 'POST', headers,
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ pack: plan }),
       });
       const data = await res.json();
       if (!res.ok) { alert(data.error || 'Erreur'); return; }
@@ -65,17 +65,12 @@ async function upgrade(plan) {
     if (!res.ok) { alert(data.error || 'Erreur'); return; }
     currentPlan = plan;
     updateUI();
-    setTimeout(() => { window.location.href = '/'; }, 500);
+    setTimeout(() => { window.location.href = '/app'; }, 500);
   } catch (e) { alert('Erreur de connexion.'); }
 }
 
 async function manageSubscription() {
-  try {
-    const res = await fetch('/api/stripe/portal', { method: 'POST', headers });
-    const data = await res.json();
-    if (data.url) window.location.href = data.url;
-    else alert(data.error || 'Erreur');
-  } catch { alert('Erreur de connexion.'); }
+  alert('Gestion de l\'abonnement disponible depuis le dashboard Stripe.');
 }
 
 init();
@@ -85,6 +80,6 @@ const params = new URLSearchParams(window.location.search);
 if (params.get('success') === '1') {
   setTimeout(() => {
     alert('Paiement réussi ! Votre plan a été mis à jour.');
-    window.location.href = '/';
+    window.location.href = '/app';
   }, 500);
 }

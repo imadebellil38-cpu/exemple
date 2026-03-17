@@ -2,7 +2,7 @@
 
 // If already logged in, redirect
 if (localStorage.getItem('ph_token')) {
-  window.location.href = '/';
+  window.location.href = '/app';
 }
 
 // Referral code from URL
@@ -67,7 +67,7 @@ async function doLogin() {
 
     localStorage.setItem('ph_token', data.token);
     localStorage.setItem('ph_user', JSON.stringify(data.user));
-    window.location.href = '/';
+    window.location.href = '/app';
   } catch (err) {
     showError('Erreur réseau.');
   } finally {
@@ -97,7 +97,7 @@ async function doRegister() {
 
     localStorage.setItem('ph_token', data.token);
     localStorage.setItem('ph_user', JSON.stringify(data.user));
-    window.location.href = '/';
+    window.location.href = '/app';
   } catch (err) {
     showError('Erreur réseau.');
   } finally {
