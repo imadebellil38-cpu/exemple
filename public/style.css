@@ -1055,7 +1055,15 @@ tbody tr[data-stage="refused"]           { border-left: 3px solid var(--stage-re
 }
 .card-call-btn:hover { background: var(--stage-cold); color: #fff; }
 
-.card-actions { display: flex; gap: .4rem; flex-wrap: wrap; }
+.card-bottom {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: .5rem;
+  flex-wrap: wrap; margin-top: .5rem;
+}
+.card-heat { flex-shrink: 0; }
+.card-heat .heat-badge { font-size: .8rem; padding: .3rem .7rem; }
+
+.card-actions { display: flex; gap: .4rem; flex-wrap: wrap; justify-content: flex-end; }
 
 /* ─────────────────────────────────────────
    EMPTY STATE

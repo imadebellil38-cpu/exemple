@@ -529,10 +529,13 @@ function renderCards(prospects) {
       </div>
       ${address ? `<div class="card-address">${esc(address)}</div>` : ''}
       <div class="card-info-row">
-        ${ratingHtml}${buildHeatBadge(p)}${signals}${buildDateChip(p)}${objBadge}
+        ${ratingHtml}${signals}${buildDateChip(p)}${objBadge}
+      </div>
+      <div class="card-bottom">
+        <div class="card-heat">${buildHeatBadge(p)}</div>
+        <div class="card-actions">${actions}</div>
       </div>
       ${p.notes ? `<div class="card-notes-row"><button class="notes-peek-btn" onclick="toggleNotesPreview('c${p.id}', this)">📝 Notes</button><div class="notes-preview" id="notes-preview-c${p.id}" style="display:none">${esc(p.notes)}</div></div>` : ''}
-      <div class="card-actions">${actions}</div>
     `;
     wrap.appendChild(card);
   });
