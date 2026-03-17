@@ -459,15 +459,24 @@ function renderTable(prospects) {
       ? `<button class="notes-peek-btn" onclick="toggleNotesPreview(${p.id}, this)" title="Voir les notes">📝 Notes</button>
          <div class="notes-preview" id="notes-preview-${p.id}" style="display:none">${esc(p.notes)}</div>`
       : '';
+    const ratingHtml = p.rating
+      ? `<span class="row-rating">★ ${p.rating}${p.reviews ? ` <span class="row-avis">${p.reviews} avis</span>` : ''}</span>`
+      : '';
+
     tr.innerHTML = `
-      <td>
+      <td class="td-main">
         <div class="prospect-name" onclick="openDetail(${p.id})">${esc(p.name || '—')}</div>
         ${p.address ? `<div class="prospect-addr">${esc(p.address)}</div>` : ''}
-        ${dateChip}
-        ${objBadge}
+        <div class="row-meta-line">
+          ${ratingHtml}${signals}${dateChip}${objBadge}
+        </div>
+        <div class="row-bottom-line">
+          <div class="row-heat">${buildHeatBadge(p)}</div>
+          <div class="row-actions">${actions}</div>
+        </div>
         ${notesBtn}
       </td>
-      <td>
+      <td class="td-phone">
         <div class="phone-cell">
           ${p.phone
             ? `<a class="phone-call-link" href="tel:${escAttr(p.phone)}" title="Appuyer pour appeler"><span>📞 ${esc(p.phone)}</span></a>`
@@ -475,19 +484,7 @@ function renderTable(prospects) {
           }
           ${phoneCopy}
         </div>
-      </td>
-      <td>
-        <div class="signals-cell">
-          ${buildHeatBadge(p)}
-          ${signals}
-        </div>
-      </td>
-      <td><div class="actions-cell">${actions}</div></td>
-      <td>
-        <div class="actions-cell row-quick-actions">
-          ${callLink}
-          <button class="btn-fiche" onclick="openDetail(${p.id})" title="Voir la fiche complète">📋 Fiche</button>
-        </div>
+        <button class="btn-fiche" onclick="openDetail(${p.id})" title="Voir la fiche complète">📋 Fiche</button>
       </td>
     `;
     tbody.appendChild(tr);

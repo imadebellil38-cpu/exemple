@@ -963,7 +963,29 @@ tbody tr[data-stage="refused"]           { border-left: 3px solid var(--stage-re
   -webkit-text-fill-color: transparent; background-clip: text;
 }
 
-.prospect-addr { font-size: .72rem; color: var(--muted); margin-top: .15rem; }
+.prospect-addr { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
+
+.row-meta-line {
+  display: flex; align-items: center; gap: .35rem;
+  flex-wrap: wrap; margin-top: .35rem;
+}
+.row-rating { font-size: .78rem; font-weight: 700; color: #f59e0b; }
+.row-avis   { font-weight: 400; color: var(--muted); font-size: .7rem; }
+
+.row-bottom-line {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-top: .45rem; gap: .5rem; flex-wrap: wrap;
+}
+.row-heat { flex-shrink: 0; }
+.row-actions { display: flex; gap: .35rem; flex-wrap: wrap; }
+
+.td-main { width: 100%; }
+.td-phone {
+  white-space: nowrap; vertical-align: middle;
+  padding-left: 1rem !important;
+}
+.td-phone .btn-fiche { display: block; margin-top: .4rem; }
 
 .phone-cell { display: flex; align-items: center; gap: .4rem; }
 .phone-text { font-size: .82rem; color: var(--text2); font-variant-numeric: tabular-nums; }
