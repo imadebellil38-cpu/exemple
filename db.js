@@ -100,6 +100,10 @@ const migrations = [
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`,
   `CREATE INDEX IF NOT EXISTS idx_call_attempts_prospect ON call_attempts(prospect_id)`,
+  // ── Stripe ──
+  `ALTER TABLE users ADD COLUMN stripe_customer_id TEXT DEFAULT ''`,
+  `ALTER TABLE users ADD COLUMN stripe_subscription_id TEXT DEFAULT ''`,
+  `CREATE INDEX IF NOT EXISTS idx_users_stripe_customer ON users(stripe_customer_id)`,
 ];
 
 for (const sql of migrations) {

@@ -40,11 +40,12 @@ router.post('/', express.raw({ type: 'application/json' }), (req, res) => {
     case 'checkout.session.completed': {
       const session = event.data.object;
       const userId = parseInt(session.metadata?.user_id);
-      const plan = session.metadata?.plan;
-      if (userId && plan && PLAN_CREDITS[plan]) {
-        db.prepare('UPDATE users SET plan = ?, credits = ?, stripe_subscription_id = ? WHERE id = ?')
-          .run(plan, PLAN_CREDITS[plan], session.subscription || '', userId);
-        console.log(`[STRIPE] User ${userId} upgraded to ${plan}`);
+      const pack = session.metadata?.pack;
+      const credits = parseInt(session.metadata?.credits);
+      // Pack one-time purchase: add credits to user
+      if (userId && pack && credits > 0) {
+        db.prepare('UPDATE users SET credits = credits + ? WHERE id = ?').run(credits, userId);
+        console.log(`[STRIPE] User ${userId} bought pack "${pack}" (+${credits} credits)`);
       }
       break;
     }
