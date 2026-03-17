@@ -523,6 +523,14 @@ main {
   padding-top: .75rem;
   border-top: 1px solid var(--border2);
 }
+.geo-slider-row {
+  display: flex; align-items: center; gap: .75rem;
+}
+.geo-slider-row .slider-input { flex: 1; margin: 0; }
+.geo-km-val {
+  font-size: 1.05rem; font-weight: 900; color: #fff;
+  white-space: nowrap; min-width: 3.8rem; text-align: right;
+}
 
 /* Big launch button */
 .btn-scan-big {
@@ -727,9 +735,10 @@ main {
 .sort-select {
   padding: .5rem .8rem; border-radius: 9px;
   background: var(--surface); border: 1px solid var(--border2);
-  color: var(--text2); font-size: .82rem; font-weight: 600;
+  color: var(--text); font-size: .82rem; font-weight: 600;
   min-height: 44px; cursor: pointer;
 }
+.sort-select option { background: #1e1e2e; color: #fff; }
 .sort-select:focus { outline: none; border-color: var(--cold-bd); }
 
 /* ─────────────────────────────────────────
