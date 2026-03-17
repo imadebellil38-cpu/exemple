@@ -26,6 +26,9 @@ let saveTimer      = null;
 let scanCountry = 'fr';
 let scanMode    = 'site';
 let userCredits = 0;
+let scanLat     = null;
+let scanLng     = null;
+let scanRadius  = 10;
 
 /* ─────────────────────────────────────────
    STAGE CONFIG
@@ -1193,11 +1196,47 @@ document.addEventListener('DOMContentLoaded', () => {
 function selectCountry(btn) {
   scanCountry = btn.dataset.country;
   document.querySelectorAll('.flag-btn').forEach(b => b.classList.toggle('active', b === btn));
+
+  const geoWrap = document.getElementById('geo-radius-wrap');
+  if (scanCountry === 'around_me') {
+    if (geoWrap) geoWrap.style.display = '';
+    // Demande la géolocalisation
+    if (!navigator.geolocation) {
+      showToast('Géolocalisation non supportée par ce navigateur.', 'error'); return;
+    }
+    btn.textContent = '📍 Localisation…';
+    btn.disabled = true;
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        scanLat = pos.coords.latitude;
+        scanLng = pos.coords.longitude;
+        btn.textContent = `📍 Autour de moi ✓`;
+        btn.disabled = false;
+        showToast('Position détectée ✓', 'success', 2000);
+      },
+      err => {
+        btn.textContent = '📍 Autour de moi';
+        btn.disabled = false;
+        showToast('Impossible d\'obtenir ta position. Active la géolocalisation.', 'error');
+        // Revenir sur France
+        const frBtn = document.querySelector('.flag-btn[data-country="fr"]');
+        if (frBtn) selectCountry(frBtn);
+      }
+    );
+  } else {
+    if (geoWrap) geoWrap.style.display = 'none';
+    scanLat = null; scanLng = null;
+  }
 }
 
 function selectMode(btn) {
   scanMode = btn.dataset.mode;
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b === btn));
+}
+
+function updateRadiusSlider() {
+  scanRadius = parseInt(document.getElementById('radius-slider').value);
+  document.getElementById('radius-display').textContent = scanRadius;
 }
 
 function updateProspectsSlider() {
@@ -1261,7 +1300,13 @@ async function launchScan() {
     const res = await fetch('/api/search', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token },
-      body: JSON.stringify({ niche, country: scanCountry, mode: scanMode, numProspects: parseInt(document.getElementById('prospects-slider')?.value || 10) }),
+      body: JSON.stringify({
+        niche,
+        country: scanCountry,
+        mode: scanMode,
+        numProspects: parseInt(document.getElementById('prospects-slider')?.value || 10),
+        ...(scanCountry === 'around_me' && scanLat ? { lat: scanLat, lng: scanLng, radius: scanRadius } : {}),
+      }),
     });
     const data = await res.json();
 

@@ -62,96 +62,111 @@
 
     <div class="scan-body" id="scan-body">
 
-      <!-- Niche picker -->
-      <div class="niche-picker">
-
-        <!-- Step 1 -->
-        <div class="niche-step">
-          <span class="niche-step-num">①</span>
-          <span class="niche-step-label">Choisis un secteur d'activité</span>
+      <!-- ── ÉTAPE 1 : Secteur ── -->
+      <div class="scan-step">
+        <div class="scan-step-header">
+          <span class="scan-step-num">①</span>
+          <span class="scan-step-label">Secteur d'activité</span>
         </div>
         <div class="niche-cats">
-          <button class="niche-cat-btn active" data-cat="batiment" onclick="switchNicheCat(this)">🏗️ Bâtiment</button>
-          <button class="niche-cat-btn" data-cat="restaurant" onclick="switchNicheCat(this)">🍽️ Resto / Food</button>
-          <button class="niche-cat-btn" data-cat="sante" onclick="switchNicheCat(this)">🏥 Santé</button>
-          <button class="niche-cat-btn" data-cat="beaute" onclick="switchNicheCat(this)">💅 Beauté</button>
-          <button class="niche-cat-btn" data-cat="auto" onclick="switchNicheCat(this)">🚗 Auto</button>
-          <button class="niche-cat-btn" data-cat="services" onclick="switchNicheCat(this)">💼 Services</button>
+          <button class="niche-cat-btn active" data-cat="batiment"   onclick="switchNicheCat(this)">🏗️ Bâtiment</button>
+          <button class="niche-cat-btn"        data-cat="restaurant" onclick="switchNicheCat(this)">🍽️ Resto</button>
+          <button class="niche-cat-btn"        data-cat="sante"      onclick="switchNicheCat(this)">🏥 Santé</button>
+          <button class="niche-cat-btn"        data-cat="beaute"     onclick="switchNicheCat(this)">💅 Beauté</button>
+          <button class="niche-cat-btn"        data-cat="auto"       onclick="switchNicheCat(this)">🚗 Auto</button>
+          <button class="niche-cat-btn"        data-cat="services"   onclick="switchNicheCat(this)">💼 Services</button>
         </div>
+      </div>
 
-        <!-- Step 2 -->
-        <div class="niche-step">
-          <span class="niche-step-num">②</span>
-          <span class="niche-step-label">Clique sur un métier pour le sélectionner</span>
-        </div>
-        <div class="niche-chips" id="niche-chips">
-          <!-- rempli par JS selon catégorie -->
-        </div>
+      <div class="scan-arrow">↓</div>
 
-        <!-- Selected display -->
+      <!-- ── ÉTAPE 2 : Métier ── -->
+      <div class="scan-step">
+        <div class="scan-step-header">
+          <span class="scan-step-num">②</span>
+          <span class="scan-step-label">Métier</span>
+        </div>
+        <div class="niche-chips" id="niche-chips"></div>
         <div class="niche-selected-display" id="niche-selected-display" style="display:none"></div>
-
         <div class="niche-custom-row">
           <span class="niche-or">✏️ ou tape directement :</span>
-          <input
-            class="scan-niche-input"
-            type="text"
-            id="scan-niche"
+          <input class="scan-niche-input" type="text" id="scan-niche"
             placeholder="ex: électricien, boulanger..."
             onkeydown="if(event.key==='Enter')launchScan()"
-            autocomplete="off"
-          />
+            autocomplete="off" />
         </div>
       </div>
 
-      <div class="scan-options-row">
-        <!-- Country flags -->
-        <div class="scan-option-group">
-          <button class="flag-btn active" data-country="fr" onclick="selectCountry(this)">🇫🇷 France</button>
-          <button class="flag-btn" data-country="ch" onclick="selectCountry(this)">🇨🇭 Suisse</button>
-          <button class="flag-btn" data-country="be" onclick="selectCountry(this)">🇧🇪 Belgique</button>
-        </div>
+      <div class="scan-arrow">↓</div>
 
-        <!-- Mode buttons -->
+      <!-- ── ÉTAPE 3 : Zone ── -->
+      <div class="scan-step">
+        <div class="scan-step-header">
+          <span class="scan-step-num">③</span>
+          <span class="scan-step-label">Zone de recherche</span>
+        </div>
         <div class="scan-option-group">
-          <button class="mode-btn active" data-mode="site"       onclick="selectMode(this)" title="Entreprises sans site web">❌ Sans site</button>
+          <button class="flag-btn geo-btn" data-country="around_me" onclick="selectCountry(this)">📍 Autour de moi</button>
+          <button class="flag-btn active"  data-country="fr"         onclick="selectCountry(this)">🇫🇷 France</button>
+          <button class="flag-btn"         data-country="ch"         onclick="selectCountry(this)">🇨🇭 Suisse</button>
+          <button class="flag-btn"         data-country="be"         onclick="selectCountry(this)">🇧🇪 Belgique</button>
+        </div>
+        <!-- Slider km (affiché seulement si "autour de moi") -->
+        <div class="geo-radius-wrap" id="geo-radius-wrap" style="display:none">
+          <div class="slider-header">
+            <label class="slider-label">Rayon de recherche</label>
+            <span class="slider-num" id="radius-display">10</span><span class="slider-unit"> km</span>
+          </div>
+          <input type="range" id="radius-slider" min="1" max="100" value="10" oninput="updateRadiusSlider()" class="slider-input" />
+          <div class="slider-minmax"><span>1 km</span><span>100 km</span></div>
+        </div>
+      </div>
+
+      <div class="scan-arrow">↓</div>
+
+      <!-- ── ÉTAPE 4 : Objectif ── -->
+      <div class="scan-step">
+        <div class="scan-step-header">
+          <span class="scan-step-num">④</span>
+          <span class="scan-step-label">Ce que tu cherches</span>
+        </div>
+        <div class="scan-option-group mode-group">
+          <button class="mode-btn active" data-mode="site"       onclick="selectMode(this)" title="Entreprises sans site web">🌐 Sans site</button>
           <button class="mode-btn"        data-mode="social"     onclick="selectMode(this)" title="Entreprises sans réseaux sociaux">📱 Sans réseaux</button>
           <button class="mode-btn"        data-mode="both"       onclick="selectMode(this)" title="Sans site ET sans réseaux">🔥 Les deux</button>
-          <button class="mode-btn"        data-mode="fewreviews" onclick="selectMode(this)" title="Moins de 10 avis Google — besoin de visibilité">⭐ &lt;10 avis</button>
-          <button class="mode-btn"        data-mode="owners"     onclick="selectMode(this)" title="Extraction du nom du gérant par IA">🧑 Gérants IA</button>
+          <button class="mode-btn"        data-mode="fewreviews" onclick="selectMode(this)" title="Moins de 10 avis Google">⭐ &lt;10 avis</button>
+          <button class="mode-btn"        data-mode="owners"     onclick="selectMode(this)" title="Extraction du gérant par IA">🤖 Gérants IA</button>
           <button class="mode-btn"        data-mode="new"        onclick="selectMode(this)" title="Entreprises récemment ouvertes">🆕 Récents</button>
         </div>
-
-        <!-- Launch -->
-        <button class="btn-scan" id="btn-scan" onclick="launchScan()">⚡ Lancer</button>
       </div>
 
-      <!-- Slider prospects -->
-      <div class="slider-section">
-        <div class="slider-header">
-          <label class="slider-label">Combien de prospects tu veux ?</label>
-          <div class="slider-count-wrap">
+      <div class="scan-arrow">↓</div>
+
+      <!-- ── ÉTAPE 5 : Quantité ── -->
+      <div class="scan-step">
+        <div class="scan-step-header">
+          <span class="scan-step-num">⑤</span>
+          <span class="scan-step-label">Combien de prospects ?</span>
+          <div class="slider-count-wrap" style="margin-left:auto">
             <span id="prospects-count" class="slider-num">10</span>
-            <span class="slider-unit">prospects</span>
-            <span class="slider-eq">=</span>
+            <span class="slider-unit">prospects =</span>
             <span id="credits-cost" class="slider-num-cost">10</span>
             <span class="slider-unit">crédits</span>
           </div>
         </div>
         <input type="range" id="prospects-slider" min="1" max="100" value="10" oninput="updateProspectsSlider()" class="slider-input" />
-        <div class="slider-minmax">
-          <span>1 prospect</span>
-          <span id="prospects-max-label">100 max</span>
-        </div>
+        <div class="slider-minmax"><span>1</span><span id="prospects-max-label">100 max</span></div>
       </div>
 
-      <!-- Progress / status -->
+      <!-- ── LANCER ── -->
+      <button class="btn-scan btn-scan-big" id="btn-scan" onclick="launchScan()">⚡ Lancer le scan</button>
+
+      <!-- Progress -->
       <div class="scan-status" id="scan-status" style="display:none">
-        <div class="scan-progress-bar">
-          <div class="scan-progress-fill" id="scan-progress-fill"></div>
-        </div>
+        <div class="scan-progress-bar"><div class="scan-progress-fill" id="scan-progress-fill"></div></div>
         <span id="scan-status-text">Scan en cours...</span>
       </div>
+
     </div>
   </div>
 

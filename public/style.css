@@ -352,6 +352,7 @@ main {
 
 .scan-body {
   padding: 0 1.25rem 1.25rem;
+  display: flex; flex-direction: column; gap: .3rem;
 }
 
 .scan-row {
@@ -480,12 +481,54 @@ main {
 }
 .scan-niche-input::placeholder { color: var(--muted); }
 
+/* ── SCAN STEPS (vertical) ── */
+.scan-step {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: .85rem 1rem;
+  margin-bottom: 0;
+}
+.scan-step-header {
+  display: flex; align-items: center; gap: .6rem;
+  margin-bottom: .7rem;
+}
+.scan-step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--grad); color: #fff;
+  font-size: .78rem; font-weight: 800; flex-shrink: 0;
+}
+.scan-step-label {
+  font-size: .85rem; font-weight: 700; color: var(--text);
+}
+.scan-arrow {
+  text-align: center; color: var(--muted);
+  font-size: 1.1rem; line-height: 1;
+  padding: .2rem 0;
+}
 .scan-options-row {
   display: flex; gap: .6rem; align-items: center; flex-wrap: wrap;
 }
-
 .scan-option-group {
   display: flex; gap: .35rem; flex-wrap: wrap;
+}
+.mode-group { margin-top: 0; }
+
+/* Geo */
+.geo-btn { border-color: #10b981 !important; color: #10b981 !important; }
+.geo-btn.active { background: #10b981 !important; color: #fff !important; border-color: #10b981 !important; }
+.geo-radius-wrap {
+  margin-top: .75rem;
+  padding-top: .75rem;
+  border-top: 1px solid var(--border2);
+}
+
+/* Big launch button */
+.btn-scan-big {
+  width: 100%; padding: .85rem; font-size: 1rem;
+  border-radius: 12px; margin-top: .25rem;
+  letter-spacing: .03em;
 }
 
 /* Prospects slider */
