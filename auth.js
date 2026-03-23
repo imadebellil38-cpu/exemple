@@ -43,4 +43,19 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-module.exports = { createToken, requireAuth, requireAdmin };
+// Middleware: require admin with DB verification (prevents stale JWT admin claims)
+async function requireAdminFromDB(req, res, next) {
+  if (!req.user) return res.status(401).json({ error: 'Non authentifié.' });
+  try {
+    const db = require('./db');
+    const user = await db.get('SELECT is_admin FROM users WHERE id = ?', [req.user.id]);
+    if (!user || !user.is_admin) {
+      return res.status(403).json({ error: 'Accès réservé aux administrateurs.' });
+    }
+    next();
+  } catch (err) {
+    return res.status(500).json({ error: 'Erreur de vérification admin.' });
+  }
+}
+
+module.exports = { createToken, requireAuth, requireAdmin, requireAdminFromDB };

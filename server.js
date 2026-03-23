@@ -14,7 +14,7 @@ const rateLimit = require('express-rate-limit');
 // Init database (creates tables on first run)
 require('./db');
 
-const { requireAuth } = require('./auth');
+const { requireAuth, requireAdminFromDB } = require('./auth');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -121,7 +121,7 @@ app.use('/api', require('./routes/auth'));
 app.use('/api/search', requireAuth, searchLimiter, require('./routes/search'));
 app.use('/api/prospects', requireAuth, require('./routes/prospects'));
 app.use('/api/pitch', requireAuth, require('./routes/pitch'));
-app.use('/api/admin', requireAuth, require('./routes/admin'));
+app.use('/api/admin', requireAuth, requireAdminFromDB, require('./routes/admin'));
 app.use('/api/subscription', requireAuth, require('./routes/subscription'));
 app.use('/api/referral', requireAuth, require('./routes/referral'));
 app.use('/api/quotes', require('./routes/quotes')); // sign/* are public, others need auth inline
