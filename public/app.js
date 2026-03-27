@@ -753,6 +753,7 @@ function renderCards(prospects) {
     else if (heatScore >= 3) metaParts.push('🔥 Chaud');
     if (!p.website_url) metaParts.push('🌐 Sans site');
     if (p.has_facebook === 0 && p.has_instagram === 0) metaParts.push('📵 Sans réseaux');
+    if (p.instagram_handle) metaParts.push(`📸 @${esc(p.instagram_handle)}`);
     if (p.pipeline_stage === 'refused' && p.objection) metaParts.push(`❌ ${esc(p.objection)}`);
     const metaLine = metaParts.join(' · ');
 
@@ -1447,6 +1448,16 @@ function buildDetailInfo(p) {
       </div>
     `;
   }
+  if (p.instagram_handle) {
+    html += `
+      <div class="detail-item" style="margin-bottom:.75rem;">
+        <div class="detail-label">Instagram</div>
+        <div class="detail-value">
+          <a href="https://www.instagram.com/${escAttr(p.instagram_handle)}/" target="_blank" rel="noopener" style="color:#E1306C;font-weight:600;">📸 @${esc(p.instagram_handle)}</a>
+        </div>
+      </div>
+    `;
+  }
 
   if (p.phone) {
     const waPhone = p.phone.replace(/\D/g, '');
@@ -2016,7 +2027,7 @@ async function launchScan() {
       body: JSON.stringify({
         niche,
         country: scanCountry,
-        mode: scanMode,
+        searchMode: scanMode,
         numProspects: parseInt(document.getElementById('prospects-slider')?.value || 10),
         ...(scanCountry === 'around_me' && scanLat ? { lat: scanLat, lng: scanLng, radius: scanRadius } : {}),
       }),
