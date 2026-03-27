@@ -14,6 +14,14 @@ const rateLimit = require('express-rate-limit');
 // Init database (creates tables on first run)
 require('./db');
 
+// Auto-migration: add instagram_handle column
+(async () => {
+  try {
+    const db = require('./db');
+    await db.run(`DO $$ BEGIN ALTER TABLE prospects ADD COLUMN instagram_handle TEXT DEFAULT ''; EXCEPTION WHEN duplicate_column THEN NULL; END $$`);
+  } catch (e) { /* column already exists or DB not ready */ }
+})();
+
 const { requireAuth, requireAdminFromDB } = require('./auth');
 
 const app = express();
