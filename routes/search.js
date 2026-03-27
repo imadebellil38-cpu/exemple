@@ -4,10 +4,12 @@ const validator = require('validator');
 const db = require('../db');
 const { batchCheckSocialMedia, isSocialCheckAvailable } = require('../services/socialCheck');
 const { batchFindOwners } = require('../services/pappers');
+const { batchSearchInstagram, isInstagramSearchAvailable } = require('../services/instagramSearch');
+const { getCacheKey, getCachedResults, setCachedResults } = require('../services/searchCache');
 
 const router = Router();
 
-const VALID_SEARCH_MODES = ['site', 'social', 'both', 'owners', 'fewreviews', 'new'];
+const VALID_SEARCH_MODES = ['site', 'social', 'both', 'owners', 'fewreviews', 'new', 'instagram'];
 
 // Anthropic API key for owner name extraction (owners mode)
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
@@ -175,10 +177,10 @@ router.post('/', async (req, res) => {
   }
 
   // ── Check credits ──
-  const user = db.prepare('SELECT credits, is_admin FROM users WHERE id = ?').get(userId);
+  const user = await db.get('SELECT credits, is_admin FROM users WHERE id = ?', [userId]);
   if (!user) return res.status(404).json({ error: 'Utilisateur introuvable.' });
   const isAdmin = !!user.is_admin;
-  if (!isAdmin && user.credits <= 0) return res.status(403).json({ error: 'Plus de crédits disponibles. Passez à un plan supérieur.' });
+  if (!isAdmin && user.credits <= 0) return res.status(403).json({ error: 'Plus de crédits. Passez au plan supérieur.', upgrade: true });
 
   // ── Extract & validate inputs ──
   const { niche, country, smartKeywords, numProspects, geoMode, geoLat, geoLng, geoRadius, searchMode: rawMode } = req.body;
@@ -197,6 +199,11 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Clé Anthropic API non configurée. Ajoutez ANTHROPIC_API_KEY dans les paramètres serveur.' });
   }
 
+  // If instagram mode requested, check CSE availability
+  if (searchMode === 'instagram' && !isInstagramSearchAvailable()) {
+    return res.status(400).json({ error: 'Recherche Instagram non configurée. Ajoutez GOOGLE_CSE_ID dans les paramètres serveur.' });
+  }
+
   if (!niche || typeof niche !== 'string') {
     return res.status(400).json({ error: 'Niche requise.' });
   }
@@ -212,7 +219,7 @@ router.post('/', async (req, res) => {
   const requestedNum = Math.max(1, parseInt(numProspects, 10) || 5);
   const maxAffordable = isAdmin ? requestedNum : Math.floor(user.credits / creditMultiplier);
   const maxProspects = Math.min(requestedNum, maxAffordable);
-  if (!isAdmin && maxProspects <= 0) return res.status(403).json({ error: 'Plus de crédits disponibles.' });
+  if (!isAdmin && maxProspects <= 0) return res.status(403).json({ error: 'Plus de crédits. Passez au plan supérieur.', upgrade: true });
 
   // Validate geo params if geo mode
   if (geoMode) {
@@ -228,8 +235,8 @@ router.post('/', async (req, res) => {
 
   // ── Log search ──
   const searchLabel = geoMode ? 'geo' : countryCode;
-  const searchResult = db.prepare('INSERT INTO searches (user_id, niche, country, search_mode) VALUES (?, ?, ?, ?)').run(userId, sanitizedNiche, searchLabel, searchMode);
-  const searchId = searchResult.lastInsertRowid;
+  const searchInsert = await db.insert('INSERT INTO searches (user_id, niche, country, search_mode) VALUES (?, ?, ?, ?)', [userId, sanitizedNiche, searchLabel, searchMode]);
+  const searchId = searchInsert.lastInsertRowid;
 
   // ── Normalize function for keyword filtering ──
   const norm = s => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -239,7 +246,7 @@ router.post('/', async (req, res) => {
   const prospects = [];
 
   // Get existing phones for this user to avoid duplicates
-  const existingPhones = db.prepare('SELECT phone FROM prospects WHERE user_id = ?').all(userId);
+  const existingPhones = await db.all('SELECT phone FROM prospects WHERE user_id = ?', [userId]);
   existingPhones.forEach(p => seenPhones.add(p.phone));
 
   // Collect target: owners mode over-fetches ×3 since we'll filter by found names
@@ -288,7 +295,60 @@ router.post('/', async (req, res) => {
   }
 
   try {
-    if (geoMode && geoLat && geoLng) {
+    // ── INSTAGRAM MODE: bypass Google Places, use CSE ──
+    if (searchMode === 'instagram') {
+      const GOOGLE_CSE_ID = process.env.GOOGLE_CSE_ID;
+      const searchLabel = geoMode ? 'geo' : countryCode;
+
+      // Check cache first
+      const cacheKey = getCacheKey(sanitizedNiche, searchLabel, 'instagram');
+      let igResults = await getCachedResults(cacheKey);
+
+      if (!igResults) {
+        // Build city list
+        const cityNames = geoMode
+          ? [''] // Empty string = no city filter for geo mode
+          : (CITIES[countryCode] || []).map(c => c.name);
+
+        igResults = await batchSearchInstagram(sanitizedNiche, cityNames, GOOGLE_API_KEY, GOOGLE_CSE_ID, collectMax);
+
+        // Cache results
+        if (igResults.length > 0) {
+          await setCachedResults(cacheKey, igResults);
+        }
+      }
+
+      // Deduplicate against user's existing Instagram prospects
+      const existingHandles = await db.all(
+        "SELECT instagram_handle FROM prospects WHERE user_id = ? AND instagram_handle != ''",
+        [userId]
+      );
+      const seenHandles = new Set(existingHandles.map(r => r.instagram_handle.toLowerCase()));
+
+      for (const ig of igResults) {
+        if (prospects.length >= maxProspects) break;
+        if (seenHandles.has(ig.instagram_handle.toLowerCase())) continue;
+        seenHandles.add(ig.instagram_handle.toLowerCase());
+
+        prospects.push({
+          name: ig.name || ig.instagram_handle,
+          phone: '',
+          address: '',
+          rating: null,
+          reviews: ig.followers || 0,
+          city: ig.city || '',
+          website_url: ig.external_url || ig.profile_url,
+          has_facebook: -1,
+          has_instagram: 1,
+          has_tiktok: -1,
+          owner_name: '',
+          instagram_handle: ig.instagram_handle,
+        });
+      }
+
+      console.log(`[SEARCH] Instagram mode: ${prospects.length} profiles for "${sanitizedNiche}"`);
+
+    } else if (geoMode && geoLat && geoLng) {
       // ── GEO MODE: search around user's location ──
       const radiusMeters = Math.max(1000, Math.min((parseInt(geoRadius, 10) || 30) * 1000, 100000));
       let pageToken = null;
@@ -469,36 +529,39 @@ Réponds UNIQUEMENT en JSON, un tableau avec le numéro et le nom trouvé (vide 
     // owners mode: only charge if names found; site/social = ×1, both = ×2
     const creditsToCharge = isAdmin ? 0 : prospects.length * creditMultiplier;
     if (creditsToCharge > 0) {
-      db.prepare('UPDATE users SET credits = credits - ? WHERE id = ?').run(creditsToCharge, userId);
+      // Atomic deduction with guard: never go below 0
+      const deductResult = await db.run(
+        'UPDATE users SET credits = GREATEST(credits - ?, 0) WHERE id = ? AND credits >= ?',
+        [creditsToCharge, userId, creditsToCharge]
+      );
+      // If no row matched (concurrent requests drained credits), charge what's left
+      if (deductResult.rowCount === 0) {
+        await db.run('UPDATE users SET credits = 0 WHERE id = ? AND credits > 0', [userId]);
+      }
     }
 
-    // ── Save prospects to DB (transaction) ──
-    const insert = db.prepare(`
-      INSERT INTO prospects (user_id, name, phone, address, rating, reviews, city, niche, search_id, website_url, has_facebook, has_instagram, has_tiktok, search_mode, owner_name)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `);
-
-    const insertMany = db.transaction((items) => {
-      for (const p of items) {
-        insert.run(userId, p.name, p.phone, p.address, p.rating, p.reviews, p.city, sanitizedNiche, searchId,
-          p.website_url || '', p.has_facebook, p.has_instagram, p.has_tiktok, searchMode, p.owner_name || '');
-      }
-    });
-    insertMany(prospects);
+    // ── Save prospects to DB (loop) ──
+    for (const p of prospects) {
+      await db.run(`
+        INSERT INTO prospects (user_id, name, phone, address, rating, reviews, city, niche, search_id, website_url, has_facebook, has_instagram, has_tiktok, search_mode, owner_name, instagram_handle)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `, [userId, p.name, p.phone, p.address, p.rating, p.reviews, p.city, sanitizedNiche, searchId,
+          p.website_url || '', p.has_facebook, p.has_instagram, p.has_tiktok, searchMode, p.owner_name || '', p.instagram_handle || '']);
+    }
 
     // Update search results count
-    db.prepare('UPDATE searches SET results_count = ? WHERE id = ?').run(prospects.length, searchId);
+    await db.run('UPDATE searches SET results_count = ? WHERE id = ?', [prospects.length, searchId]);
 
     // Log activity
-    try { db.prepare('INSERT INTO activity_log (user_id, action, details) VALUES (?, ?, ?)').run(userId, 'search', JSON.stringify({ niche: sanitizedNiche, count: prospects.length, searchMode })); } catch {}
+    try { await db.run('INSERT INTO activity_log (user_id, action, details) VALUES (?, ?, ?)', [userId, 'search', JSON.stringify({ niche: sanitizedNiche, count: prospects.length, searchMode })]); } catch {}
 
     // Get updated credits
-    const updated = db.prepare('SELECT credits FROM users WHERE id = ?').get(userId);
+    const updated = await db.get('SELECT credits FROM users WHERE id = ?', [userId]);
 
     res.json({
       ok: true,
       count: prospects.length,
-      credits: updated.credits,
+      credits: updated ? updated.credits : 0,
       searchMode,
       prospects: prospects.map((p, i) => ({
         id: i,
@@ -526,6 +589,7 @@ router.get('/modes', (req, res) => {
       { id: 'owners', label: 'Noms des gérants', icon: '👤', cost: 1, available: !!ANTHROPIC_API_KEY },
       { id: 'fewreviews', label: 'Peu d\'avis', icon: '⭐', cost: 1, available: true },
       { id: 'new', label: 'Nouveaux business', icon: '🆕', cost: 1, available: true },
+      { id: 'instagram', label: 'Profils Instagram', icon: '📸', cost: 1, available: isInstagramSearchAvailable() },
     ],
   });
 });
