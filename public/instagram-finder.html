@@ -348,7 +348,7 @@ td{padding:10px 14px;font-size:14px;vertical-align:middle}
           🖥️ Desktop <span class="badge">Chrome / Firefox / Safari</span>
         </div>
         <p class="bm-drag-hint">Glisse ce bouton dans ta barre de favoris :</p>
-        <a id="bm-link" class="bm-btn" href="#BOOKMARKLET_PLACEHOLDER#">📷 IG Finder</a>
+        <a id="bm-link" class="bm-btn" href="#">📷 IG Finder</a>
         <p class="bm-drag-hint" style="margin-top:10px;font-size:11px">
           Puis va sur instagram.com et clique le favori "IG Finder".
         </p>
@@ -498,115 +498,107 @@ var ov=document.createElement('div');
 ov.id='igf-overlay';
 ov.style.cssText='position:fixed;inset:0;z-index:2147483647;background:rgba(0,0,0,.96);overflow-y:auto;font-family:-apple-system,BlinkMacSystemFont,sans-serif;';
 
-ov.innerHTML=\`
-<div style="max-width:960px;margin:0 auto;padding:16px">
-<!-- Header -->
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #2a2a38">
-  <div>
-    <div style="font-size:20px;font-weight:800;letter-spacing:-.5px">
-      <span style="background:linear-gradient(135deg,#E1306C,#F77737);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Instagram</span>
-      <span style="color:#e0e0f0"> Finder</span>
-    </div>
-    <div style="font-size:11px;color:#5a5a70;margin-top:2px">Empire Leads — aucune API, 0 coût</div>
-  </div>
-  <button id="igf-close" style="background:none;border:1px solid #2a2a38;color:#9090a8;font-size:22px;cursor:pointer;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .2s">&times;</button>
-</div>
-
-<!-- Niche row -->
-<div style="display:flex;gap:8px;margin-bottom:12px;align-items:stretch">
-  <input id="igf-niche" placeholder="monteur video, coach sportif, magasin manga..."
-    style="flex:1;min-width:0;padding:13px 15px;background:#111118;border:1.5px solid #2a2a38;border-radius:10px;color:#e0e0f0;font-size:15px;outline:none">
-  <button id="igf-voice" title="Recherche vocale"
-    style="width:46px;min-height:46px;border-radius:10px;border:1.5px solid #E1306C;background:rgba(225,48,108,.1);color:#E1306C;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">🎤</button>
-</div>
-
-<!-- Filters -->
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
-  <div style="display:flex;flex-direction:column;gap:4px">
-    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Min abonnés</label>
-    <input id="igf-min" type="number" value="0" style="width:100px;padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:14px;outline:none">
-  </div>
-  <div style="display:flex;flex-direction:column;gap:4px">
-    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Max abonnés</label>
-    <input id="igf-max" type="number" value="100000" style="width:110px;padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:14px;outline:none">
-  </div>
-  <div style="display:flex;flex-direction:column;gap:4px">
-    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Résultats</label>
-    <input id="igf-count" type="number" value="50" style="width:80px;padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:14px;outline:none">
-  </div>
-  <div style="display:flex;flex-direction:column;gap:4px">
-    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Type</label>
-    <select id="igf-type" style="padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:13px;outline:none;cursor:pointer">
-      <option value="all">Tous</option>
-      <option value="verified">Vérifiés</option>
-      <option value="biz">Business</option>
-    </select>
-  </div>
-  <div style="display:flex;flex-direction:column;gap:4px">
-    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Trier par</label>
-    <select id="igf-sort" style="padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:13px;outline:none;cursor:pointer">
-      <option value="followers_desc">Abonnés ↓</option>
-      <option value="followers_asc">Abonnés ↑</option>
-      <option value="relevance">Pertinence</option>
-      <option value="name">Nom A-Z</option>
-    </select>
-  </div>
-</div>
-
-<!-- Action buttons -->
-<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
-  <button id="igf-go" style="flex:1;min-width:140px;padding:13px 22px;background:linear-gradient(135deg,#E1306C,#F77737);color:#fff;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;box-shadow:0 4px 14px rgba(225,48,108,.35)">
-    🔍 Rechercher
-  </button>
-  <button id="igf-stop" style="padding:13px 18px;background:#1a1a24;border:1.5px solid #ff4444;color:#ff4444;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;display:none">
-    ⏹ Stop
-  </button>
-  <button id="igf-csv" style="padding:13px 18px;background:#1a1a24;border:1.5px solid #00d084;color:#00d084;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;display:none">
-    ⬇ Export CSV
-  </button>
-</div>
-
-<!-- Progress -->
-<div id="igf-prog-wrap" style="margin-bottom:12px;display:none">
-  <div style="height:4px;background:#1a1a24;border-radius:2px;overflow:hidden">
-    <div id="igf-bar" style="height:100%;width:0;background:linear-gradient(90deg,#E1306C,#F77737);transition:width .4s ease;border-radius:2px"></div>
-  </div>
-  <div id="igf-status" style="font-size:13px;color:#9090a8;margin-top:6px;min-height:18px"></div>
-</div>
-
-<!-- Stats -->
-<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">
-  <div style="flex:1;min-width:110px;background:#111118;border:1px solid #2a2a38;border-radius:10px;padding:10px 14px">
-    <div style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Total trouvé</div>
-    <div id="igf-stat-total" style="font-size:20px;font-weight:700;color:#E1306C">0</div>
-  </div>
-  <div style="flex:1;min-width:110px;background:#111118;border:1px solid #2a2a38;border-radius:10px;padding:10px 14px">
-    <div style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Après filtres</div>
-    <div id="igf-stat-filt" style="font-size:20px;font-weight:700;color:#e0e0f0">0</div>
-  </div>
-  <div style="flex:1;min-width:110px;background:#111118;border:1px solid #2a2a38;border-radius:10px;padding:10px 14px">
-    <div style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Moy. abonnés</div>
-    <div id="igf-stat-avg" style="font-size:20px;font-weight:700;color:#e0e0f0">0</div>
-  </div>
-</div>
-
-<!-- Table -->
-<div style="overflow-x:auto;border-radius:10px;border:1px solid #2a2a38">
-  <table id="igf-table" style="width:100%;border-collapse:collapse;min-width:580px">
-    <thead>
-      <tr style="background:#111118">
-        <th style="padding:10px 12px;text-align:left;font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.06em;width:36px">#</th>
-        <th id="igf-th-profile" style="padding:10px 12px;text-align:left;font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;white-space:nowrap">Profil</th>
-        <th id="igf-th-followers" style="padding:10px 12px;text-align:left;font-size:10px;color:#E1306C;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;white-space:nowrap">Abonnés ↓</th>
-        <th style="padding:10px 12px;text-align:left;font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.06em">Bio</th>
-        <th style="padding:10px 12px;text-align:left;font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.06em">Lien</th>
-      </tr>
-    </thead>
-    <tbody id="igf-body"></tbody>
-  </table>
-</div>
-</div>
-\`;
+ov.innerHTML='<div style="max-width:960px;margin:0 auto;padding:16px">'+
+'<!-- Header -->'+
+'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #2a2a38">'+
+'  <div>'+
+'    <div style="font-size:20px;font-weight:800;letter-spacing:-.5px">'+
+'      <span style="background:linear-gradient(135deg,#E1306C,#F77737);-webkit-background-clip:text;-webkit-text-fill-color:transparent">Instagram</span>'+
+'      <span style="color:#e0e0f0"> Finder</span>'+
+'    </div>'+
+'    <div style="font-size:11px;color:#5a5a70;margin-top:2px">Empire Leads \u2014 aucune API, 0 co\u00fbt</div>'+
+'  </div>'+
+'  <button id="igf-close" style="background:none;border:1px solid #2a2a38;color:#9090a8;font-size:22px;cursor:pointer;width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:all .2s">&times;</button>'+
+'</div>'+
+'<!-- Niche row -->'+
+'<div style="display:flex;gap:8px;margin-bottom:12px;align-items:stretch">'+
+'  <input id="igf-niche" placeholder="monteur video, coach sportif, magasin manga..."'+
+'    style="flex:1;min-width:0;padding:13px 15px;background:#111118;border:1.5px solid #2a2a38;border-radius:10px;color:#e0e0f0;font-size:15px;outline:none">'+
+'  <button id="igf-voice" title="Recherche vocale"'+
+'    style="width:46px;min-height:46px;border-radius:10px;border:1.5px solid #E1306C;background:rgba(225,48,108,.1);color:#E1306C;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">\uD83C\uDF99</button>'+
+'</div>'+
+'<!-- Filters -->'+
+'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">'+
+'  <div style="display:flex;flex-direction:column;gap:4px">'+
+'    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Min abonn\u00e9s</label>'+
+'    <input id="igf-min" type="number" value="0" style="width:100px;padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:14px;outline:none">'+
+'  </div>'+
+'  <div style="display:flex;flex-direction:column;gap:4px">'+
+'    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Max abonn\u00e9s</label>'+
+'    <input id="igf-max" type="number" value="100000" style="width:110px;padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:14px;outline:none">'+
+'  </div>'+
+'  <div style="display:flex;flex-direction:column;gap:4px">'+
+'    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">R\u00e9sultats</label>'+
+'    <input id="igf-count" type="number" value="50" style="width:80px;padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:14px;outline:none">'+
+'  </div>'+
+'  <div style="display:flex;flex-direction:column;gap:4px">'+
+'    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Type</label>'+
+'    <select id="igf-type" style="padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:13px;outline:none;cursor:pointer">'+
+'      <option value="all">Tous</option>'+
+'      <option value="verified">V\u00e9rifi\u00e9s</option>'+
+'      <option value="biz">Business</option>'+
+'    </select>'+
+'  </div>'+
+'  <div style="display:flex;flex-direction:column;gap:4px">'+
+'    <label style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;font-weight:600">Trier par</label>'+
+'    <select id="igf-sort" style="padding:9px 11px;background:#111118;border:1.5px solid #2a2a38;border-radius:8px;color:#e0e0f0;font-size:13px;outline:none;cursor:pointer">'+
+'      <option value="followers_desc">Abonn\u00e9s \u2193</option>'+
+'      <option value="followers_asc">Abonn\u00e9s \u2191</option>'+
+'      <option value="relevance">Pertinence</option>'+
+'      <option value="name">Nom A-Z</option>'+
+'    </select>'+
+'  </div>'+
+'</div>'+
+'<!-- Action buttons -->'+
+'<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">'+
+'  <button id="igf-go" style="flex:1;min-width:140px;padding:13px 22px;background:linear-gradient(135deg,#E1306C,#F77737);color:#fff;font-size:15px;font-weight:700;border:none;border-radius:10px;cursor:pointer;box-shadow:0 4px 14px rgba(225,48,108,.35)">'+
+'    \uD83D\uDD0D Rechercher'+
+'  </button>'+
+'  <button id="igf-stop" style="padding:13px 18px;background:#1a1a24;border:1.5px solid #ff4444;color:#ff4444;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;display:none">'+
+'    \u23F9 Stop'+
+'  </button>'+
+'  <button id="igf-csv" style="padding:13px 18px;background:#1a1a24;border:1.5px solid #00d084;color:#00d084;font-size:14px;font-weight:600;border-radius:10px;cursor:pointer;display:none">'+
+'    \u2B07 Export CSV'+
+'  </button>'+
+'</div>'+
+'<!-- Progress -->'+
+'<div id="igf-prog-wrap" style="margin-bottom:12px;display:none">'+
+'  <div style="height:4px;background:#1a1a24;border-radius:2px;overflow:hidden">'+
+'    <div id="igf-bar" style="height:100%;width:0;background:linear-gradient(90deg,#E1306C,#F77737);transition:width .4s ease;border-radius:2px"></div>'+
+'  </div>'+
+'  <div id="igf-status" style="font-size:13px;color:#9090a8;margin-top:6px;min-height:18px"></div>'+
+'</div>'+
+'<!-- Stats -->'+
+'<div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap">'+
+'  <div style="flex:1;min-width:110px;background:#111118;border:1px solid #2a2a38;border-radius:10px;padding:10px 14px">'+
+'    <div style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Total trouv\u00e9</div>'+
+'    <div id="igf-stat-total" style="font-size:20px;font-weight:700;color:#E1306C">0</div>'+
+'  </div>'+
+'  <div style="flex:1;min-width:110px;background:#111118;border:1px solid #2a2a38;border-radius:10px;padding:10px 14px">'+
+'    <div style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Apr\u00e8s filtres</div>'+
+'    <div id="igf-stat-filt" style="font-size:20px;font-weight:700;color:#e0e0f0">0</div>'+
+'  </div>'+
+'  <div style="flex:1;min-width:110px;background:#111118;border:1px solid #2a2a38;border-radius:10px;padding:10px 14px">'+
+'    <div style="font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px">Moy. abonn\u00e9s</div>'+
+'    <div id="igf-stat-avg" style="font-size:20px;font-weight:700;color:#e0e0f0">0</div>'+
+'  </div>'+
+'</div>'+
+'<!-- Table -->'+
+'<div style="overflow-x:auto;border-radius:10px;border:1px solid #2a2a38">'+
+'  <table id="igf-table" style="width:100%;border-collapse:collapse;min-width:580px">'+
+'    <thead>'+
+'      <tr style="background:#111118">'+
+'        <th style="padding:10px 12px;text-align:left;font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.06em;width:36px">#</th>'+
+'        <th id="igf-th-profile" style="padding:10px 12px;text-align:left;font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;white-space:nowrap">Profil</th>'+
+'        <th id="igf-th-followers" style="padding:10px 12px;text-align:left;font-size:10px;color:#E1306C;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;white-space:nowrap">Abonn\u00e9s \u2193</th>'+
+'        <th style="padding:10px 12px;text-align:left;font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.06em">Bio</th>'+
+'        <th style="padding:10px 12px;text-align:left;font-size:10px;color:#5a5a70;text-transform:uppercase;letter-spacing:.06em">Lien</th>'+
+'      </tr>'+
+'    </thead>'+
+'    <tbody id="igf-body"></tbody>'+
+'  </table>'+
+'</div>'+
+'</div>';
 
 document.body.appendChild(ov);
 document.getElementById('igf-close').onclick=function(){ov.remove()};
