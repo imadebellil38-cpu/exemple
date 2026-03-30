@@ -228,6 +228,17 @@ header {
   background: var(--grad); color: #fff;
   box-shadow: 0 4px 15px var(--glow);
 }
+/* Icones outils dans le header (Instagram, Extensions) */
+.hdr-tool-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 8px;
+  background: var(--surface); border: 1px solid var(--border);
+  font-size: 1.15rem; text-decoration: none;
+  transition: background .2s, border-color .2s;
+  cursor: pointer;
+}
+.hdr-tool-btn:hover { background: var(--surface2); border-color: var(--accent); }
+
 .nav-notif-dot {
   position: absolute; top: 3px; right: 3px;
   width: 7px; height: 7px; border-radius: 50%;
