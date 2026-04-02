@@ -51,7 +51,7 @@
       🔔 Agenda
       <span class="agenda-count" id="agenda-count" style="display:none"></span>
     </button>
-    <a class="app-nav-btn" href="#" onclick="var t=localStorage.getItem('token')||'';window.location.href='/monteur-video?token='+encodeURIComponent(t);return false;">🧩 Extensions</a>
+    <button class="app-nav-btn" data-view="extensions" onclick="switchView('extensions')">🧩 Extensions</button>
   </nav>
 
   <!-- ── AGENDA PANEL ── -->
@@ -79,6 +79,7 @@
       <span class="plan-badge-upgrade">Abonnement ↗</span>
     </a>
     <span class="user-email hdr-desktop-only" id="user-email-display"></span>
+    <a href="/admin" class="hdr-btn hdr-desktop-only" id="btn-admin" style="display:none;background:linear-gradient(135deg,#a855f7,#ec4899);color:#fff;text-decoration:none;padding:.35rem .9rem;border-radius:8px;font-weight:700;font-size:.78rem">⚙️ Admin</a>
     <button class="hdr-btn hdr-btn-logout hdr-desktop-only" onclick="logout()">Déconnexion</button>
     <!-- Mobile : menu ⋯ -->
     <div class="hdr-menu-wrap hdr-mobile-only">
@@ -86,8 +87,9 @@
       <div class="hdr-dropdown" id="hdr-dropdown" style="display:none">
         <a href="/pricing" class="hdr-drop-item">📦 Abonnement</a>
         <a href="/instagram-finder" class="hdr-drop-item">📷 Instagram Finder</a>
-        <a href="#" onclick="var t=localStorage.getItem('token')||'';window.location.href='/monteur-video?token='+encodeURIComponent(t)" class="hdr-drop-item">🧩 Extensions</a>
+        <a href="#" onclick="switchView('extensions');toggleHdrMenu()" class="hdr-drop-item">🧩 Extensions</a>
         <a id="btn-theme-perso-mobile" href="#" class="hdr-drop-item" style="display:none">🎨 Mon thème perso</a>
+        <a href="/admin" id="btn-admin-mobile" class="hdr-drop-item" style="display:none">⚙️ Admin</a>
         <button class="hdr-drop-item" onclick="logout()">🚪 Déconnexion</button>
       </div>
     </div>
@@ -110,7 +112,7 @@
       <div class="scan-step">
         <div class="scan-step-header">
           <span class="scan-step-num">①</span>
-          <span class="scan-step-label">Secteur d'activité</span>
+          <span class="scan-step-label">Secteurs d'activité</span>
         </div>
         <div class="niche-cats">
           <button class="niche-cat-btn active" data-cat="batiment"   onclick="switchNicheCat(this)">🏗️ Bâtiment</button>
@@ -479,6 +481,98 @@
     <div id="activity-log" class="activity-log"></div>
   </div>
 </main>
+
+<!-- ── VUE EXTENSIONS ── -->
+<main id="view-extensions" style="display:none;padding:2rem 1rem;max-width:900px;margin:0 auto">
+  <div style="text-align:center;margin-bottom:2.5rem">
+    <div style="font-size:3rem;margin-bottom:.75rem">🧩</div>
+    <h2 style="font-size:1.6rem;font-weight:900;margin-bottom:.5rem">Extensions Empire Leads</h2>
+    <p style="color:var(--text2);font-size:.95rem">Des outils spéciaux pour booster ta prospection</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem">
+
+    <!-- Monteur Vidéo — SEUL ACTIF -->
+    <div class="ext-card ext-card-active" onclick="openExtension('monteur-video')" style="cursor:pointer">
+      <div class="ext-card-lock">🔐</div>
+      <div class="ext-card-icon">🎬</div>
+      <div class="ext-card-badge ext-card-badge-active">Disponible</div>
+      <h3 class="ext-card-title">Chercheur Monteurs Vidéo</h3>
+      <p class="ext-card-desc">Trouve des monteurs vidéo freelance sur Instagram dans toute la France, Suisse et Belgique.</p>
+      <div class="ext-card-btn ext-card-btn-active">Accéder →</div>
+    </div>
+
+    <!-- Instagram Finder — EN COURS -->
+    <div class="ext-card ext-card-wip" style="cursor:default">
+      <div class="ext-card-icon">📷</div>
+      <div class="ext-card-badge ext-card-badge-wip">En cours</div>
+      <h3 class="ext-card-title">Instagram Finder</h3>
+      <p class="ext-card-desc">Trouve des profils Instagram par niche et par ville. Bookmarklet à installer en 1 clic.</p>
+      <div class="ext-card-btn ext-card-btn-soon">En cours de développement</div>
+    </div>
+
+    <!-- LinkedIn -->
+    <div class="ext-card ext-card-soon" style="cursor:default">
+      <div class="ext-card-icon">💼</div>
+      <div class="ext-card-badge ext-card-badge-soon">Bientôt</div>
+      <h3 class="ext-card-title">LinkedIn Prospector</h3>
+      <p class="ext-card-desc">Prospection automatisée sur LinkedIn par secteur, ville et taille d'entreprise.</p>
+      <div class="ext-card-btn ext-card-btn-soon">Disponible prochainement</div>
+    </div>
+
+    <!-- Email Finder -->
+    <div class="ext-card ext-card-soon" style="cursor:default">
+      <div class="ext-card-icon">📧</div>
+      <div class="ext-card-badge ext-card-badge-soon">Bientôt</div>
+      <h3 class="ext-card-title">Email Finder</h3>
+      <p class="ext-card-desc">Trouve les emails professionnels des dirigeants à partir du nom de l'entreprise.</p>
+      <div class="ext-card-btn ext-card-btn-soon">Disponible prochainement</div>
+    </div>
+
+    <!-- WhatsApp -->
+    <div class="ext-card ext-card-soon" style="cursor:default">
+      <div class="ext-card-icon">💬</div>
+      <div class="ext-card-badge ext-card-badge-soon">Bientôt</div>
+      <h3 class="ext-card-title">WhatsApp Outreach</h3>
+      <p class="ext-card-desc">Envoie des messages WhatsApp personnalisés à tes prospects en 1 clic depuis le CRM.</p>
+      <div class="ext-card-btn ext-card-btn-soon">Disponible prochainement</div>
+    </div>
+
+    <!-- TikTok -->
+    <div class="ext-card ext-card-soon" style="cursor:default">
+      <div class="ext-card-icon">🎵</div>
+      <div class="ext-card-badge ext-card-badge-soon">Bientôt</div>
+      <h3 class="ext-card-title">TikTok Business Finder</h3>
+      <p class="ext-card-desc">Détecte les business actifs sur TikTok sans site web — un marché encore inexploité.</p>
+      <div class="ext-card-btn ext-card-btn-soon">Disponible prochainement</div>
+    </div>
+
+  </div>
+</main>
+
+<style>
+.ext-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:1.5rem;position:relative;transition:border-color .2s,transform .2s,box-shadow .2s}
+.ext-card:hover{border-color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 30px var(--glow)}
+.ext-card-locked:hover{border-color:#E1306C;box-shadow:0 8px 30px rgba(225,48,108,.2)}
+.ext-card-icon{font-size:2.2rem;margin-bottom:.75rem}
+.ext-card-badge{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.5px;padding:.25rem .75rem;border-radius:100px;background:rgba(34,197,94,.12);color:var(--accent);margin-bottom:.75rem;text-transform:uppercase}
+.ext-card-badge-locked{background:rgba(225,48,108,.12);color:#E1306C}
+.ext-card-title{font-size:1.05rem;font-weight:800;margin-bottom:.5rem}
+.ext-card-desc{font-size:.85rem;color:var(--text2);line-height:1.6;margin-bottom:1.25rem}
+.ext-card-btn{font-size:.82rem;font-weight:700;color:var(--accent)}
+.ext-card-btn-locked{color:#E1306C}
+.ext-card-active{border:1.5px solid rgba(168,85,247,.45);background:linear-gradient(135deg,rgba(168,85,247,.08),rgba(236,72,153,.05),rgba(59,130,246,.05));position:relative;overflow:hidden}
+.ext-card-active::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#a855f7,#ec4899,#3b82f6);border-radius:16px 16px 0 0}
+.ext-card-active:hover{border-color:rgba(168,85,247,.7);transform:translateY(-4px);box-shadow:0 12px 40px rgba(168,85,247,.2),0 4px 15px rgba(236,72,153,.1)}
+.ext-card-badge-active{background:linear-gradient(135deg,rgba(168,85,247,.2),rgba(236,72,153,.15));color:#c084fc;font-weight:800;border:1px solid rgba(168,85,247,.25)}
+.ext-card-btn-active{background:linear-gradient(135deg,#a855f7,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:.88rem}
+.ext-card-lock{position:absolute;top:12px;right:14px;font-size:1.1rem;opacity:.6}
+.ext-card-wip{opacity:.45;pointer-events:none;filter:grayscale(.3);border:1.5px solid rgba(245,158,11,.25);background:rgba(245,158,11,.03)}
+.ext-card-badge-wip{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.3)}
+.ext-card-soon{opacity:.35;pointer-events:none;filter:grayscale(.5)}
+.ext-card-badge-soon{background:rgba(100,100,140,.12);color:#606080}
+.ext-card-btn-soon{color:#505070}
+</style>
 
 <!-- ── OBJECTION MODAL ── -->
 <div class="modal-overlay" id="objection-overlay">
