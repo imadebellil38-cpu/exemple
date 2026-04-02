@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Extensions — Empire Leads</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#1a1a24;--bg4:#222230;
+  --border:#2a2a38;--text:#e0e0f0;--text2:#9090a8;--text3:#5a5a70;
+  --green:#00d084;--green2:#00b873;--accent:#00d084;
+  --radius:14px;--shadow:0 8px 32px rgba(0,0,0,.4);
+}
+html{font-size:16px;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* Header */
+.header{
+  background:linear-gradient(180deg,rgba(17,17,24,.98) 0%,rgba(10,10,15,.95) 100%);
+  border-bottom:1px solid var(--border);padding:14px 20px;
+  display:flex;align-items:center;gap:16px;
+  position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);
+}
+.header-logo{font-size:18px;font-weight:900;letter-spacing:-.5px;
+  background:linear-gradient(135deg,#fff,#aaa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap}
+.header-logo em{background:linear-gradient(135deg,var(--green),var(--green2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-style:normal}
+.header-title{flex:1;font-size:17px;font-weight:700;
+  background:linear-gradient(135deg,var(--green),var(--green2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.back-link{font-size:13px;color:var(--text2);text-decoration:none;padding:7px 12px;
+  border:1px solid var(--border);border-radius:8px;white-space:nowrap;transition:all .2s;
+  display:flex;align-items:center;gap:5px}
+.back-link:hover{border-color:var(--green);color:var(--green)}
+
+/* Hero */
+.hero{text-align:center;padding:50px 20px 30px;max-width:700px;margin:0 auto}
+.hero h1{font-size:28px;font-weight:900;margin-bottom:10px;
+  background:linear-gradient(135deg,#fff 30%,var(--green));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:15px;color:var(--text2);line-height:1.6}
+
+/* Grid */
+.ext-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;
+  max-width:1000px;margin:0 auto;padding:0 20px 60px}
+
+/* Card */
+.ext-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:28px 24px;transition:all .3s;position:relative;overflow:hidden}
+.ext-card:hover{border-color:var(--green);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,208,132,.08)}
+.ext-card.coming-soon{opacity:.55;pointer-events:none}
+.ext-card .badge{position:absolute;top:14px;right:14px;font-size:10px;font-weight:700;
+  padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
+.badge-active{background:rgba(0,208,132,.15);color:var(--green)}
+.badge-soon{background:rgba(144,144,168,.15);color:var(--text2)}
+.ext-icon{font-size:36px;margin-bottom:14px;display:block}
+.ext-card h3{font-size:17px;font-weight:700;margin-bottom:6px;color:#fff}
+.ext-card p{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:18px}
+.ext-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.ext-tag{font-size:11px;padding:3px 10px;border-radius:20px;background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.ext-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;
+  background:linear-gradient(135deg,var(--green),var(--green2));color:#000;
+  font-size:13px;font-weight:700;border:none;border-radius:10px;cursor:pointer;
+  text-decoration:none;transition:all .2s}
+.ext-btn:hover{filter:brightness(1.1);transform:scale(1.03)}
+.ext-btn-disabled{background:var(--bg3);color:var(--text3);cursor:default;pointer-events:none}
+
+/* Footer */
+.footer{text-align:center;padding:30px 20px;color:var(--text3);font-size:12px;border-top:1px solid var(--border)}
+
+@media(max-width:600px){
+  .hero h1{font-size:22px}
+  .ext-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-logo">Empire <em>Leads</em></div>
+  <div class="header-title">Extensions</div>
+  <a href="/app" class="back-link">&#8592; App</a>
+</div>
+
+<div class="hero">
+  <h1>Extensions</h1>
+  <p>Des outils puissants pour booster ta prospection. Active les extensions dont tu as besoin.</p>
+</div>
+
+<div class="ext-grid">
+
+  <!-- Email Finder -->
+  <div class="ext-card">
+    <span class="badge badge-active">Actif</span>
+    <span class="ext-icon">&#128231;</span>
+    <h3>Email Finder</h3>
+    <p>Trouve les adresses email d'une entreprise a partir de son site web, du nom du gerant. Scraping + patterns + score de confiance.</p>
+    <div class="ext-tags">
+      <span class="ext-tag">Scraping</span>
+      <span class="ext-tag">Patterns</span>
+      <span class="ext-tag">Hunter.io</span>
+    </div>
+    <a href="/email-finder.html" class="ext-btn">Ouvrir &#8594;</a>
+  </div>
+
+  <!-- LinkedIn Prospector -->
+  <div class="ext-card coming-soon">
+    <span class="badge badge-soon">Bientot</span>
+    <span class="ext-icon">&#128188;</span>
+    <h3>LinkedIn Prospector</h3>
+    <p>Trouve des prospects qualifies directement depuis LinkedIn. Extraction automatique des profils et contacts.</p>
+    <div class="ext-tags">
+      <span class="ext-tag">LinkedIn</span>
+      <span class="ext-tag">B2B</span>
+      <span class="ext-tag">Scraping</span>
+    </div>
+    <span class="ext-btn ext-btn-disabled">Bientot disponible</span>
+  </div>
+
+  <!-- WhatsApp Outreach -->
+  <div class="ext-card coming-soon">
+    <span class="badge badge-soon">Bientot</span>
+    <span class="ext-icon">&#128172;</span>
+    <h3>WhatsApp Outreach</h3>
+    <p>Envoie des messages personnalises en masse via WhatsApp Business. Templates et suivi automatique.</p>
+    <div class="ext-tags">
+      <span class="ext-tag">WhatsApp</span>
+      <span class="ext-tag">Messaging</span>
+      <span class="ext-tag">Automation</span>
+    </div>
+    <span class="ext-btn ext-btn-disabled">Bientot disponible</span>
+  </div>
+
+  <!-- Google Maps Enricher -->
+  <div class="ext-card coming-soon">
+    <span class="badge badge-soon">Bientot</span>
+    <span class="ext-icon">&#128205;</span>
+    <h3>Google Maps Enricher</h3>
+    <p>Enrichis tes prospects avec des donnees Google Maps : avis, horaires, photos, site web, telephone.</p>
+    <div class="ext-tags">
+      <span class="ext-tag">Google Maps</span>
+      <span class="ext-tag">Enrichment</span>
+      <span class="ext-tag">Data</span>
+    </div>
+    <span class="ext-btn ext-btn-disabled">Bientot disponible</span>
+  </div>
+
+  <!-- SMS Campaigns -->
+  <div class="ext-card coming-soon">
+    <span class="badge badge-soon">Bientot</span>
+    <span class="ext-icon">&#128241;</span>
+    <h3>SMS Campaigns</h3>
+    <p>Lance des campagnes SMS personnalisees vers tes prospects. Suivi des reponses et relances automatiques.</p>
+    <div class="ext-tags">
+      <span class="ext-tag">SMS</span>
+      <span class="ext-tag">Campaigns</span>
+      <span class="ext-tag">Automation</span>
+    </div>
+    <span class="ext-btn ext-btn-disabled">Bientot disponible</span>
+  </div>
+
+  <!-- AI Pitch Generator -->
+  <div class="ext-card coming-soon">
+    <span class="badge badge-soon">Bientot</span>
+    <span class="ext-icon">&#129302;</span>
+    <h3>AI Pitch Generator v2</h3>
+    <p>Generation avancee de pitchs commerciaux avec IA. Personnalisation par secteur, ton et objectif.</p>
+    <div class="ext-tags">
+      <span class="ext-tag">IA</span>
+      <span class="ext-tag">Claude</span>
+      <span class="ext-tag">Pitch</span>
+    </div>
+    <span class="ext-btn ext-btn-disabled">Bientot disponible</span>
+  </div>
+
+</div>
+
+<div class="footer">Empire Leads &mdash; Extensions Marketplace</div>
+
+</body>
+</html>
